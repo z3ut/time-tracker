@@ -6,12 +6,14 @@ namespace TimeTracker.BusinessLogic.Users
 {
     public interface IUserService
     {
-        User CreateUser(User user);
+        User Authenticate(string username, string password);
 
-        User GetUser(int id);
+        User Create(User user, string password);
 
-        void UpdateUser(User user);
+        User Get(int id);
 
-        void DeleteUser(int id);
+        void Update(User user, string password = null);
+
+        void Delete(int id);
     }
 }

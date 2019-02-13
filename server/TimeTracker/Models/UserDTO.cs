@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
+using System.Threading.Tasks;
 
-namespace TimeTracker.BusinessLogic.Users
+namespace TimeTracker.Web.Models
 {
-    public class User
+    public class UserDTO
     {
         public int Id { get; set; }
         public string Name { get; set; }
         public string Username { get; set; }
+        public string Token { get; set; }
     }
 }
