@@ -23,7 +23,6 @@ namespace TimeTracker.Web.Controllers
         private readonly IUserService _userService;
         private readonly IMapper _mapper;
 
-        private const int USER_ID = 1;
         public const string secret = "SOME SECRET AFKAPFJPOAI SHFOPIASHFOPABGSFJ HASOFHASOIUJFGHASJIKFAJSHFOAHSFOUAHSFOIUHASUIOFHAIUOSFHGSIUOFG";
 
         public UsersController(IUserService userService, IMapper mapper)

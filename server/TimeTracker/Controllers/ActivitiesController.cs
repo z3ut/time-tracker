@@ -17,8 +17,6 @@ namespace TimeTracker.Web.Controllers
     {
         private IActivityService _activityService;
 
-        private const int USER_ID = 1;
-
         public ActivitiesController(IActivityService activityService)
         {
             _activityService = activityService;
@@ -27,13 +25,13 @@ namespace TimeTracker.Web.Controllers
         [HttpPost]
         public Activity CreateActivity(Activity activity)
         {
-            return _activityService.CreateActivity(activity, USER_ID);
+            return _activityService.CreateActivity(activity, UserId);
         }
 
         [HttpDelete]
         public void DeleteActivity(int id)
         {
-            _activityService.DeleteActivity(id, USER_ID);
+            _activityService.DeleteActivity(id, UserId);
         }
 
         [HttpGet]
@@ -41,9 +39,7 @@ namespace TimeTracker.Web.Controllers
         public IEnumerable<Activity> GetActivities(DateTime dateTimeFrom,
             DateTime dateTimeTo)
         {
-            var userId = int.Parse(User.FindFirst("sub")?.Value);
-
-            return _activityService.GetActivities(dateTimeFrom, dateTimeTo, USER_ID);
+            return _activityService.GetActivities(dateTimeFrom, dateTimeTo, UserId);
         }
 
         [HttpGet]
@@ -51,27 +47,32 @@ namespace TimeTracker.Web.Controllers
         [Route("{id}")]
         public ActionResult<Activity> GetActivity(int id)
         {
-            var activity = _activityService.GetActivity(id, USER_ID);
+            var activity = _activityService.GetActivity(id, UserId);
 
-            if (activity != null)
+            if (activity == null)
             {
-                return activity;
+                return NotFound();
             }
 
-            return NotFound();
+            return activity;
         }
 
         [HttpGet]
         [Route("running")]
         public IEnumerable<Activity> GetNotEndedActivities()
         {
-            return _activityService.GetNotEndedActivities(USER_ID);
+            return _activityService.GetNotEndedActivities(UserId);
         }
 
         [HttpPut]
         public void UpdateActivity(Activity activity)
         {
-            _activityService.UpdateActivity(activity, USER_ID);
+            _activityService.UpdateActivity(activity, UserId);
+        }
+
+        private int UserId
+        {
+            get { return int.Parse(User.FindFirst("sub")?.Value); }
         }
     }
 }
