@@ -1,13 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TimeTracker.BusinessLogic.Activities;
 
 namespace TimeTracker.Web.Controllers
 {
+    [Authorize]
     [Route("api/v1/[controller]")]
     [ApiController]
     public class ActivitiesController : ControllerBase
@@ -38,6 +41,8 @@ namespace TimeTracker.Web.Controllers
         public IEnumerable<Activity> GetActivities(DateTime dateTimeFrom,
             DateTime dateTimeTo)
         {
+            var userId = int.Parse(User.FindFirst("sub")?.Value);
+
             return _activityService.GetActivities(dateTimeFrom, dateTimeTo, USER_ID);
         }
 

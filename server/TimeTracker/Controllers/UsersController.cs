@@ -61,7 +61,6 @@ namespace TimeTracker.Web.Controllers
             {
                 return BadRequest(new { message = "Username or password is incorrect" });
             }
-                
 
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(secret);
@@ -69,7 +68,7 @@ namespace TimeTracker.Web.Controllers
             {
                 Subject = new ClaimsIdentity(new Claim[]
                 {
-                    new Claim(ClaimTypes.Name, user.Id.ToString())
+                    new Claim("sub", user.Id.ToString())
                 }),
                 Expires = DateTime.UtcNow.AddDays(7),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key),
@@ -78,7 +77,6 @@ namespace TimeTracker.Web.Controllers
             var token = tokenHandler.CreateToken(tokenDescriptor);
             var tokenString = tokenHandler.WriteToken(token);
 
-            // return basic user info (without password) and token to store client side
             return Ok(new UserDTO
             {
                 Id = user.Id,

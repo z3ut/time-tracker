@@ -5,6 +5,7 @@ using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using TimeTracker.BusinessLogic.Configuration;
@@ -39,7 +40,11 @@ namespace TimeTracker.Web.Configuration
                     OnTokenValidated = context =>
                     {
                         var userService = context.HttpContext.RequestServices.GetRequiredService<IUserService>();
-                        var userId = int.Parse(context.Principal.Identity.Name);
+
+                        var identity = context.Principal.Identity as ClaimsIdentity;
+                        var sub = identity.FindFirst("sub").Value;
+                        var userId = int.Parse(sub);
+
                         var user = userService.Get(userId);
                         if (user == null)
                         {
