@@ -7,7 +7,10 @@ const routes: Routes = [
   {
     path: 'current-activities',
     component: CurrentActivitiesComponent,
-    canActivate: [AuthGuard]
+    canActivate: [AuthGuard],
+
+    // run auth guard after logout
+    runGuardsAndResolvers: 'always'
   },
   { path: '', redirectTo: '/current-activities', pathMatch: 'full' },
 ];

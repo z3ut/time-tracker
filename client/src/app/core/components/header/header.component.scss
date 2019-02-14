@@ -1,0 +1,31 @@
+.header {
+  height: 2em;
+  line-height: 2em;
+  background-color: #2080ff;
+  overflow: hidden;
+}
+
+.header-user {
+  float: right;
+  padding-right: 1em;
+  color: white;
+}
+
+.logout {
+  height: 2em;
+  cursor: pointer;
+}
+
+.link {
+  padding: .5em 1em;
+  cursor: pointer;
+  color: white;
+  
+  &:hover:not(.active) {
+    background-color: #1864c9;
+  }
+
+  &.active {
+    background-color: #1968ce;
+  }
+}
