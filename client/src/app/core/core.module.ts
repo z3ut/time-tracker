@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 import { ActivityService } from './services/activity.service';
+import { AuthGuard } from './guards/auth.guard';
 
 @NgModule({
   declarations: [],
@@ -10,7 +11,8 @@ import { ActivityService } from './services/activity.service';
     HttpClientModule
   ],
   providers: [
-    ActivityService
+    ActivityService,
+    AuthGuard
   ]
 })
 export class CoreModule { }
