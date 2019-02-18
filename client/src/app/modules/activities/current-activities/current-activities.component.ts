@@ -41,7 +41,7 @@ export class CurrentActivitiesComponent implements OnInit {
     this.activityService
       .createActivity(this.newActivity)
       .subscribe(a => {
-        this.activities.unshift(a);
+        this.activities = [a, ...this.activities];
         this.generateNewActivity();
       }, err => {
         console.log('error creating new activity');
