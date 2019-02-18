@@ -18,19 +18,15 @@ export class CurrentActivitiesComponent implements OnInit {
 
   USER_ID = 2;
 
+  loadedFrom: Date;
+
   ngOnInit() {
     this.generateNewActivity();
 
-    const dateTimeFrom = new Date();
-    dateTimeFrom.setDate(dateTimeFrom.getDate() - 7);
-    const dateTimeTo = new Date();
-    this.activityService.getActivities(dateTimeFrom, dateTimeTo)
-      .subscribe(activities => {
-        this.activities = activities;
-      }, err => {
-        console.log(err);
-        this.isErrorLoading = true;
-      });
+    this.loadedFrom = new Date();
+    this.activities = [];
+
+    this.loadMore();
   }
 
   getTimeDiff(dateFrom: Date, dateTo: Date): number {
@@ -65,6 +61,18 @@ export class CurrentActivitiesComponent implements OnInit {
         this.activities = [...this.activities.filter(a => a !== activity)];
       }, err => {
         console.log('error deleting activity');
+      });
+  }
+
+  loadMore() {
+    const loadedTo = new Date(this.loadedFrom.getTime());
+    this.loadedFrom.setDate(this.loadedFrom.getDate() - 7);
+    this.activityService.getActivities(this.loadedFrom, loadedTo)
+      .subscribe(activities => {
+        this.activities = [...this.activities, ...activities];
+      }, err => {
+        console.log(err);
+        this.isErrorLoading = true;
       });
   }
 
