@@ -24,6 +24,12 @@ export class ActivityService {
     );
   }
 
+  updateActivity(activity: Activity): Observable<Activity> {
+    return this.http.put<Activity>(this.apiUrl, activity).pipe(
+      map(a => this.extractActivity(a))
+    );
+  }
+
   getActivity(id: number): Observable<Activity> {
     return this.http.get<Activity>(this.apiUrl, {
       params: {

@@ -65,9 +65,10 @@ namespace TimeTracker.Web.Controllers
         }
 
         [HttpPut]
-        public void UpdateActivity(Activity activity)
+        public ActionResult<Activity> UpdateActivity(Activity activity)
         {
             _activityService.UpdateActivity(activity, UserId);
+            return activity;
         }
 
         private int UserId

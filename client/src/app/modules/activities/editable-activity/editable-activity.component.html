@@ -1,6 +1,4 @@
-
 <div class="activity-container">
-
   <div class="activity-title-container">
     <input class="activity-title-input"
       type="text"
@@ -9,42 +7,30 @@
       (blur)="saveChanges()">
   </div>
 
-  <!-- <div class="time-interval-container">
-    {{ activity.dateTimeEnd - activity.dateTimeStart | timeInterval }}
-  </div> -->
-
   <div class="time-interval-container">
-    <!-- <input type="text"
-      class="activity-title-input"
-      [textMask]="{mask: mask}"
-      [(ngModel)]="interval"
-      (ngModelChange)="updateTime(intervalSeconds)"> -->
-
-      <app-time-amount
-        [intervalSeconds]="intervalSeconds"
-        (updateTime)="updateTime($event)"
-        (leaveFocus)="saveChanges()">
-      </app-time-amount>
+    <app-time-amount
+      [intervalSeconds]="intervalSeconds"
+      (updateTime)="updateTime($event)"
+      (leaveFocus)="saveChanges()">
+    </app-time-amount>
   </div>
 
   <div class="date-range-interval-container">
-      <input [owlDateTime]="dateTimeStart"
-        [owlDateTimeTrigger]="dateTimeStart"
-        placeholder="Start"
-        class="activity-date-input"
-        [(ngModel)]="activity.dateTimeStart"
-        (ngModelChange)="timeChange()">
-      <owl-date-time #dateTimeStart ></owl-date-time>
+    <input [owlDateTime]="dateTimeStart"
+      [owlDateTimeTrigger]="dateTimeStart"
+      placeholder="Start"
+      class="activity-date-input"
+      [(ngModel)]="activity.dateTimeStart"
+      (ngModelChange)="timeChange()">
+    <owl-date-time #dateTimeStart ></owl-date-time>
 
-      <input [owlDateTime]="dateTimeEnd"
-        [owlDateTimeTrigger]="dateTimeEnd"
-        placeholder="End"
-        class="activity-date-input"
-        [(ngModel)]="activity.dateTimeEnd"
-        (ngModelChange)="timeChange()">
-      <owl-date-time #dateTimeEnd ></owl-date-time>
+    <input [owlDateTime]="dateTimeEnd"
+      [owlDateTimeTrigger]="dateTimeEnd"
+      placeholder="End"
+      class="activity-date-input"
+      [(ngModel)]="activity.dateTimeEnd"
+      (ngModelChange)="timeChange()">
+    <owl-date-time #dateTimeEnd ></owl-date-time>
 
-    <!-- {{ activity.dateTimeStart | date : 'shortTime' }} - {{ activity.dateTimeEnd | date : 'shortTime' }} -->
   </div>
-
 </div>

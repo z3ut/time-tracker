@@ -9,12 +9,9 @@ import { Activity } from 'src/app/models/activity';
 export class EditableActivityComponent implements OnInit, OnChanges {
 
   @Input() activity: Activity;
-  @Output() saveChangedActivity = new EventEmitter<Activity>();
+  @Output() activityChanged = new EventEmitter<Activity>();
 
   intervalSeconds: number;
-
-  interval = '';
-  mask = [ /\d/, /\d/, ':', /[0-5]/, /\d/, ':', /[0-5]/, /\d/ ];
 
   private passedActivity: Activity;
 
@@ -24,10 +21,8 @@ export class EditableActivityComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges() {
-    if (this.passedActivity !== this.activity) {
-      this.passedActivity = Object.assign({}, this.activity);
-      this.calculateInterval();
-    }
+    this.passedActivity = Object.assign({}, this.activity);
+    this.calculateInterval();
   }
 
   saveChanges() {
@@ -37,9 +32,9 @@ export class EditableActivityComponent implements OnInit, OnChanges {
       this.activity.dateTimeStart !== this.passedActivity.dateTimeStart ||
       this.activity.title !== this.passedActivity.title) {
 
-      console.log('need to save changes');
-      this.passedActivity = Object.assign({}, this.activity);
-      this.saveChangedActivity.emit(this.activity);
+      // console.log('need to save changes');
+      // this.passedActivity = Object.assign({}, this.activity);
+      this.activityChanged.emit(this.activity);
     }
   }
 
@@ -49,6 +44,7 @@ export class EditableActivityComponent implements OnInit, OnChanges {
     }
     this.activity.dateTimeEnd = new Date(this.activity.dateTimeStart.getTime() + intervalSeconds * 1000);
     // TODO: user mutate actions stream with debounce for saving data?
+    this.saveChanges();
   }
 
   timeChange() {
@@ -61,7 +57,6 @@ export class EditableActivityComponent implements OnInit, OnChanges {
     if (this.activity && this.activity.dateTimeEnd && this.activity.dateTimeStart) {
       this.intervalSeconds = Math.floor((this.activity.dateTimeEnd.getTime() -
         this.activity.dateTimeStart.getTime()) / 1000);
-      this.interval = '01:22:15';
     } else {
       this.intervalSeconds = 0;
     }

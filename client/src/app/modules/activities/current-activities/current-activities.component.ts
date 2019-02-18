@@ -38,7 +38,6 @@ export class CurrentActivitiesComponent implements OnInit {
   }
 
   saveActivity() {
-    console.log(this.newActivity);
     this.activityService
       .createActivity(this.newActivity)
       .subscribe(a => {
@@ -46,6 +45,16 @@ export class CurrentActivitiesComponent implements OnInit {
         this.generateNewActivity();
       }, err => {
         console.log('error creating new activity');
+      });
+  }
+
+  activityChanged(activity: Activity) {
+    this.activityService
+      .updateActivity(activity)
+      .subscribe(a => {
+        this.activities = [...this.activities];
+      }, err => {
+        console.log('error updating activity');
       });
   }
 

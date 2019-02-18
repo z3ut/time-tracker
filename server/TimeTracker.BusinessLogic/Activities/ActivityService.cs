@@ -92,13 +92,24 @@ namespace TimeTracker.BusinessLogic.Activities
 
         public void UpdateActivity(Activity activity, int userId)
         {
-            if (activity.UserId != userId)
+            var savedActivity = _activityContext.Activities.Find(activity.Id);
+
+            if (savedActivity == null)
+            {
+                throw new Exception("Activity not found");
+            }
+
+            if (savedActivity.UserId != userId)
             {
                 throw new Exception("Activity doesn't belong to user");
             }
 
-            var activityDA = _mapper.Map<DataAccess.Models.Activity>(activity);
-            _activityContext.Activities.Update(activityDA);
+            savedActivity.DateTimeEnd = activity.DateTimeEnd;
+            savedActivity.DateTimeStart = activity.DateTimeStart;
+            savedActivity.Title = activity.Title;
+            savedActivity.UserId = activity.UserId;
+
+            _activityContext.Activities.Update(savedActivity);
             _activityContext.SaveChanges();
         }
     }

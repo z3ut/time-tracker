@@ -3,6 +3,8 @@
 
 <p></p>
 
-<app-activities-by-day-list [activities]="activities">
+<app-activities-by-day-list
+  [activities]="activities"
+  (activityChanged)="activityChanged($event)">
 
 </app-activities-by-day-list>

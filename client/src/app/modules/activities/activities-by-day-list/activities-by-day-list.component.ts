@@ -9,7 +9,7 @@ import { Activity } from 'src/app/models/activity';
 export class ActivitiesByDayListComponent implements OnInit, OnChanges {
 
   @Input() activities: Activity[];
-  @Output() activityChange = new EventEmitter<Activity>();
+  @Output() activityChanged = new EventEmitter<Activity>();
 
   activitiesByDay: DayActivity[];
 
@@ -54,6 +54,10 @@ export class ActivitiesByDayListComponent implements OnInit, OnChanges {
 
       this.activitiesByDay = dayActivities;
     }
+  }
+
+  listActivityChanged(activity: Activity) {
+    this.activityChanged.emit(activity);
   }
 
   private isSameDay(date: Date, dayDate: DayDate): boolean {

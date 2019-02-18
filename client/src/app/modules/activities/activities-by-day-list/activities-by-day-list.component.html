@@ -4,7 +4,8 @@
       {{ dayActivities.dayDate.month }} /
       {{ dayActivities.dayDate.year }}
     <div class="activities" *ngFor="let a of dayActivities.activities">
-      <app-editable-activity [activity]="a">
+      <app-editable-activity [activity]="a"
+        (activityChanged)="listActivityChanged($event)">
       </app-editable-activity>
     </div>
   </div>
