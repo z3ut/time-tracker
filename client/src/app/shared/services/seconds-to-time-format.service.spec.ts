@@ -18,6 +18,14 @@ describe('SecondsToTimeFormatService', () => {
     expect(seconds).toBe(10 * 60 * 60 + 5 * 60 + 13);
   });
 
+  it('should convert seconds to time', () => {
+    const service: SecondsToTimeFormatService = TestBed.get(SecondsToTimeFormatService);
+
+    const seconds = 10 * 60 * 60 + 5 * 60 + 13;
+    const time = service.convertSecondsToTime(seconds);
+    expect(time).toBe('10:05:13');
+  });
+
   it('should return null for wrong time format', () => {
     const service: SecondsToTimeFormatService = TestBed.get(SecondsToTimeFormatService);
 

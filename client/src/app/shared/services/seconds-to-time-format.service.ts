@@ -13,11 +13,11 @@ export class SecondsToTimeFormatService {
     }
 
     const hours = Math.floor(intervalSeconds / 60 / 60);
-    const minutes = Math.floor((intervalSeconds - hours * 60) / 60);
-    const seconds = Math.floor(intervalSeconds - hours * 60 * 60 - minutes * 60);
+    const minutes = Math.floor((intervalSeconds / 60) % 60);
+    const seconds = Math.floor(intervalSeconds % 60);
 
     const twoDigitNum: (num: number) => string =
-      num => hours.toString().padStart(2, '0');
+      num => num.toString().padStart(2, '0');
 
     return `${twoDigitNum(hours)}:${twoDigitNum(minutes)}:${twoDigitNum(seconds)}`;
   }
