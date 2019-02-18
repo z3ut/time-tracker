@@ -10,4 +10,15 @@
 
 </app-activities-by-day-list>
 
-<button (click)="loadMore()">Load more</button>
+
+<button
+    *ngIf="!isLoadingMore"
+    (click)="loadMore()">
+  Load more
+</button>
+
+<div 
+    *ngIf="isLoadingMore"
+    class="loading-more-indicator">
+  Loading
+</div>

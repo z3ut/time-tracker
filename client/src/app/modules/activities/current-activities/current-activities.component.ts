@@ -12,13 +12,10 @@ export class CurrentActivitiesComponent implements OnInit {
   constructor(private activityService: ActivityService) { }
 
   activities: Activity[];
-  isErrorLoading = false;
-
   newActivity: Activity;
-
   USER_ID = 2;
-
   loadedFrom: Date;
+  isLoadingMore = false;
 
   ngOnInit() {
     this.generateNewActivity();
@@ -27,10 +24,6 @@ export class CurrentActivitiesComponent implements OnInit {
     this.activities = [];
 
     this.loadMore();
-  }
-
-  getTimeDiff(dateFrom: Date, dateTo: Date): number {
-    return (dateTo.getTime() - dateFrom.getTime());
   }
 
   saveActivity() {
@@ -65,14 +58,16 @@ export class CurrentActivitiesComponent implements OnInit {
   }
 
   loadMore() {
+    this.isLoadingMore = true;
     const loadedTo = new Date(this.loadedFrom.getTime());
     this.loadedFrom.setDate(this.loadedFrom.getDate() - 7);
     this.activityService.getActivities(this.loadedFrom, loadedTo)
       .subscribe(activities => {
+        this.isLoadingMore = false;
         this.activities = [...this.activities, ...activities];
       }, err => {
         console.log(err);
-        this.isErrorLoading = true;
+        this.isLoadingMore = false;
       });
   }
 
