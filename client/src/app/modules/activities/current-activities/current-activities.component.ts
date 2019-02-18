@@ -16,7 +16,7 @@ export class CurrentActivitiesComponent implements OnInit {
 
   newActivity: Activity;
 
-  USER_ID = 1;
+  USER_ID = 2;
 
   ngOnInit() {
     this.generateNewActivity();

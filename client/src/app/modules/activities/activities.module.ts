@@ -7,11 +7,13 @@ import { EditableActivityComponent } from './editable-activity/editable-activity
 import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
+import { ActivitiesByDayListComponent } from './activities-by-day-list/activities-by-day-list.component';
 
 @NgModule({
   declarations: [
     CurrentActivitiesComponent,
-    EditableActivityComponent
+    EditableActivityComponent,
+    ActivitiesByDayListComponent
   ],
   imports: [
     CommonModule,

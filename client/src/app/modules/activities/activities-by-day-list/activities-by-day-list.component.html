@@ -1,0 +1,11 @@
+<div class="list">
+  <div class="day" *ngFor="let dayActivities of activitiesByDay">
+      {{ dayActivities.dayDate.date }} /
+      {{ dayActivities.dayDate.month }} /
+      {{ dayActivities.dayDate.year }}
+    <div class="activities" *ngFor="let a of dayActivities.activities">
+      <app-editable-activity [activity]="a">
+      </app-editable-activity>
+    </div>
+  </div>
+</div>

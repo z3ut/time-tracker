@@ -1,17 +1,8 @@
-
-<!--
-<div *ngIf="activities">
-  <app-editable-activity [activity]="activities[0]"></app-editable-activity>
-</div>
--->
-
-
 <app-editable-activity [activity]="newActivity"></app-editable-activity>
 <button (click)="saveActivity()">Save</button>
 
-<br>
+<p></p>
 
+<app-activities-by-day-list [activities]="activities">
 
-<div class="activity-container" *ngFor="let activity of activities">
-  <app-editable-activity [activity]="activity"></app-editable-activity>
-</div>
+</app-activities-by-day-list>
