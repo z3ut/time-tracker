@@ -58,6 +58,16 @@ export class CurrentActivitiesComponent implements OnInit {
       });
   }
 
+  deleteActivity(activity: Activity) {
+    this.activityService
+      .deleteActivity(activity.id)
+      .subscribe(() => {
+        this.activities = [...this.activities.filter(a => a !== activity)];
+      }, err => {
+        console.log('error deleting activity');
+      });
+  }
+
   private generateNewActivity() {
     this.newActivity = {
       userId: this.USER_ID,

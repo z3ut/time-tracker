@@ -1,3 +1,22 @@
+$delete-button-size: 1.5em;
+
 .day {
   margin-bottom: 2em;
+}
+
+.activity-container {
+}
+
+.activity {
+  width: calc(100% - #{$delete-button-size});
+  display: inline-block;
+}
+
+.delete {
+  display: inline-block;
+  height: $delete-button-size;
+  width: $delete-button-size;
+  text-align: center;
+  line-height: $delete-button-size;
+  cursor: pointer;
 }
