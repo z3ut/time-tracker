@@ -40,11 +40,17 @@ export class ActivitiesByDayListComponent implements OnInit, OnChanges {
         }
       });
 
-      const dayActivities: DayActivity[] = dayDates.map(da => ({
-        dayDate: da,
-        activities: this.activities
-          .filter(a => this.isSameDay(a.dateTimeStart, da))
-      }));
+      const dayActivities: DayActivity[] = dayDates
+        .sort((dd1, dd2) => {
+          return dd2.year - dd1.year ||
+            dd2.month - dd1.month ||
+            dd2.date - dd1.date;
+        })
+        .map(da => ({
+          dayDate: da,
+          activities: this.activities
+            .filter(a => this.isSameDay(a.dateTimeStart, da))
+        }));
 
       this.activitiesByDay = dayActivities;
     }
