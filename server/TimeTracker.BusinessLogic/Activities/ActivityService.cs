@@ -18,7 +18,7 @@ namespace TimeTracker.BusinessLogic.Activities
             _mapper = mapper;
         }
 
-        public Activity CreateActivity(Activity activity, int userId)
+        public Activity Create(Activity activity, int userId)
         {
             if (activity.UserId != userId)
             {
@@ -33,7 +33,7 @@ namespace TimeTracker.BusinessLogic.Activities
             return insertedActivity;
         }
 
-        public void DeleteActivity(int id, int userId)
+        public void Delete(int id, int userId)
         {
             var activity = _activityContext.Activities
                 .FirstOrDefault(a => a.Id == id);
@@ -52,7 +52,7 @@ namespace TimeTracker.BusinessLogic.Activities
             _activityContext.SaveChanges();
         }
 
-        public IEnumerable<Activity> GetActivities(DateTime dateTimeFrom,
+        public IEnumerable<Activity> Get(DateTime dateTimeFrom,
             DateTime dateTimeTo, int userId)
         {
             var activities = _activityContext.Activities
@@ -62,27 +62,32 @@ namespace TimeTracker.BusinessLogic.Activities
             return _mapper.Map<List<Activity>>(activities);
         }
 
-        public Activity GetActivity(int id)
+        public Activity Get(int id)
         {
             var activity = _activityContext.Activities
                 .FirstOrDefault(a => a.Id == id);
             return _mapper.Map<Activity>(activity);
         }
 
-        public Activity GetActivity(int id, int userId)
+        public Activity Get(int id, int userId)
         {
             var activity = _activityContext.Activities
                 .FirstOrDefault(a => a.Id == id);
 
+            if (activity == null)
+            {
+                throw new Exception("Activity not found");
+            }
+
             if (activity.UserId != userId)
             {
-                return null;
+                throw new Exception("Activity doesn't belong to user");
             }
 
             return _mapper.Map<Activity>(activity);
         }
 
-        public IEnumerable<Activity> GetNotEndedActivities(int userId)
+        public IEnumerable<Activity> GetNotEnded(int userId)
         {
             var activities = _activityContext.Activities
                 .Where(a => a.UserId == userId &&
@@ -90,7 +95,7 @@ namespace TimeTracker.BusinessLogic.Activities
             return _mapper.Map<List<Activity>>(activities);
         }
 
-        public void UpdateActivity(Activity activity, int userId)
+        public void Update(Activity activity, int userId)
         {
             var savedActivity = _activityContext.Activities.Find(activity.Id);
 
@@ -108,6 +113,7 @@ namespace TimeTracker.BusinessLogic.Activities
             savedActivity.DateTimeStart = activity.DateTimeStart;
             savedActivity.Title = activity.Title;
             savedActivity.UserId = activity.UserId;
+            savedActivity.ProjectId = activity.ProjectId;
 
             _activityContext.Activities.Update(savedActivity);
             _activityContext.SaveChanges();

@@ -14,12 +14,7 @@ export class ActivityService {
   constructor(private http: HttpClient) { }
 
   createActivity(activity: Activity): Observable<Activity> {
-    return this.http.post<Activity>(this.apiUrl, {
-      title: activity.title,
-      dateTimeStart: activity.dateTimeStart.toISOString(),
-      dateTimeEnd: activity.dateTimeEnd && activity.dateTimeEnd.toISOString(),
-      userId: activity.userId
-    }).pipe(
+    return this.http.post<Activity>(this.apiUrl, activity).pipe(
       map(a => this.extractActivity(a))
     );
   }
@@ -36,7 +31,7 @@ export class ActivityService {
         id: id.toString()
       }
     }).pipe(
-      map(activity => this.extractActivity(activity))
+      map(a => this.extractActivity(a))
     );
   }
 
@@ -47,7 +42,7 @@ export class ActivityService {
         dateTimeTo: dateTimeTo && dateTimeTo.toISOString()
       }
     }).pipe(
-      map(activities => this.extractActivities(activities))
+      map(a => this.extractActivities(a))
     );
   }
 

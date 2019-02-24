@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter, OnChanges } from '@angular/core';
 import { Activity } from 'src/app/models/activity';
+import { Project } from 'src/app/models/project';
 
 @Component({
   selector: 'app-editable-activity',
@@ -9,6 +10,7 @@ import { Activity } from 'src/app/models/activity';
 export class EditableActivityComponent implements OnInit, OnChanges {
 
   @Input() activity: Activity;
+  @Input() projects: Project[];
   @Output() activityChanged = new EventEmitter<Activity>();
 
   intervalSeconds: number;
@@ -26,14 +28,11 @@ export class EditableActivityComponent implements OnInit, OnChanges {
   }
 
   saveChanges() {
-    // console.log('saveChanges');
-    // this.saveChangedActivity.emit(this.activity);
     if (this.activity.dateTimeEnd !== this.passedActivity.dateTimeEnd ||
       this.activity.dateTimeStart !== this.passedActivity.dateTimeStart ||
-      this.activity.title !== this.passedActivity.title) {
+      this.activity.title !== this.passedActivity.title ||
+      this.activity.projectId !== this.passedActivity.projectId) {
 
-      // console.log('need to save changes');
-      // this.passedActivity = Object.assign({}, this.activity);
       this.activityChanged.emit(this.activity);
     }
   }
@@ -49,8 +48,16 @@ export class EditableActivityComponent implements OnInit, OnChanges {
 
   timeChange() {
     this.calculateInterval();
-    // console.log('timeChange');
     this.saveChanges();
+  }
+
+  selectProject(project: Project) {
+    this.activity.projectId = project && project.id;
+    this.saveChanges();
+  }
+
+  createNewProject() {
+    console.log('createNewProject');
   }
 
   private calculateInterval() {

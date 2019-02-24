@@ -15,7 +15,7 @@ namespace TimeTracker.Web.Controllers
     [ApiController]
     public class ActivitiesController : ControllerBase
     {
-        private IActivityService _activityService;
+        private readonly IActivityService _activityService;
 
         public ActivitiesController(IActivityService activityService)
         {
@@ -25,13 +25,13 @@ namespace TimeTracker.Web.Controllers
         [HttpPost]
         public Activity CreateActivity(Activity activity)
         {
-            return _activityService.CreateActivity(activity, UserId);
+            return _activityService.Create(activity, UserId);
         }
 
         [HttpDelete]
         public void DeleteActivity(int id)
         {
-            _activityService.DeleteActivity(id, UserId);
+            _activityService.Delete(id, UserId);
         }
 
         [HttpGet]
@@ -39,7 +39,7 @@ namespace TimeTracker.Web.Controllers
         public IEnumerable<Activity> GetActivities(DateTime dateTimeFrom,
             DateTime dateTimeTo)
         {
-            return _activityService.GetActivities(dateTimeFrom, dateTimeTo, UserId);
+            return _activityService.Get(dateTimeFrom, dateTimeTo, UserId);
         }
 
         [HttpGet]
@@ -47,7 +47,7 @@ namespace TimeTracker.Web.Controllers
         [Route("{id}")]
         public ActionResult<Activity> GetActivity(int id)
         {
-            var activity = _activityService.GetActivity(id, UserId);
+            var activity = _activityService.Get(id, UserId);
 
             if (activity == null)
             {
@@ -61,13 +61,13 @@ namespace TimeTracker.Web.Controllers
         [Route("running")]
         public IEnumerable<Activity> GetNotEndedActivities()
         {
-            return _activityService.GetNotEndedActivities(UserId);
+            return _activityService.GetNotEnded(UserId);
         }
 
         [HttpPut]
         public ActionResult<Activity> UpdateActivity(Activity activity)
         {
-            _activityService.UpdateActivity(activity, UserId);
+            _activityService.Update(activity, UserId);
             return activity;
         }
 

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using TimeTracker.BusinessLogic.Activities;
+using TimeTracker.BusinessLogic.Projects;
 using TimeTracker.BusinessLogic.Users;
 using TimeTracker.DataAccess.Configuration;
 
@@ -16,6 +17,7 @@ namespace TimeTracker.BusinessLogic.Configuration
 
             services.AddScoped<IActivityService, ActivityService>();
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IProjectService, ProjectService>();
 
             return services;
         }

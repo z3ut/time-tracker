@@ -7,6 +7,16 @@
       (blur)="saveChanges()">
   </div>
 
+  <div class="activity-project">
+    <app-project-selector
+      [projects]="projects"
+      [selectedProjectId]="activity.projectId"
+      (selectProject)="selectProject($event)"
+      (createNewProject)="createNewProject()">
+
+    </app-project-selector>
+  </div>
+
   <div class="time-interval-container">
     <app-time-amount
       [intervalSeconds]="intervalSeconds"

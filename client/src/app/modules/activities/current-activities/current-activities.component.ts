@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivityService } from 'src/app/core/services/activity.service';
 import { Activity } from 'src/app/models/activity';
+import { ProjectService } from 'src/app/core/services/project.service';
+import { Project } from 'src/app/models/project';
 
 @Component({
   selector: 'app-current-activities',
@@ -9,13 +11,16 @@ import { Activity } from 'src/app/models/activity';
 })
 export class CurrentActivitiesComponent implements OnInit {
 
-  constructor(private activityService: ActivityService) { }
+  constructor(private activityService: ActivityService,
+              private projectService: ProjectService) { }
 
   activities: Activity[];
   newActivity: Activity;
   USER_ID = 2;
   loadedFrom: Date;
   isLoadingMore = false;
+
+  projects: Project[];
 
   ngOnInit() {
     this.generateNewActivity();
@@ -24,6 +29,12 @@ export class CurrentActivitiesComponent implements OnInit {
     this.activities = [];
 
     this.loadMore();
+
+    this.projectService.getUserProjects().subscribe(projects => {
+      this.projects = projects;
+    }, err => {
+      console.log('Error while trying to load user projects');
+    });
   }
 
   saveActivity() {

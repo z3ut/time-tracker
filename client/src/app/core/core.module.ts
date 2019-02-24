@@ -5,6 +5,8 @@ import { ActivityService } from './services/activity.service';
 import { AuthGuard } from './guards/auth.guard';
 import { HeaderComponent } from './components/header/header.component';
 import { RouterModule } from '@angular/router';
+import { ProjectService } from './services/project.service';
+import { AuthService } from './services/auth.service';
 
 @NgModule({
   declarations: [
@@ -17,6 +19,8 @@ import { RouterModule } from '@angular/router';
   ],
   providers: [
     ActivityService,
+    ProjectService,
+    AuthService,
     AuthGuard
   ],
   exports: [

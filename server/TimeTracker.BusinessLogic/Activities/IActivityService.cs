@@ -6,15 +6,15 @@ namespace TimeTracker.BusinessLogic.Activities
 {
     public interface IActivityService
     {
-        Activity CreateActivity(Activity activity, int userId);
+        Activity Create(Activity activity, int userId);
 
-        Activity GetActivity(int id);
-        Activity GetActivity(int id, int userId);
-        IEnumerable<Activity> GetActivities(DateTime dateTimeFrom, DateTime dateTimeTo, int userId);
-        IEnumerable<Activity> GetNotEndedActivities(int userId);
+        Activity Get(int id);
+        Activity Get(int id, int userId);
+        IEnumerable<Activity> Get(DateTime dateTimeFrom, DateTime dateTimeTo, int userId);
+        IEnumerable<Activity> GetNotEnded(int userId);
 
-        void UpdateActivity(Activity activity, int userId);
+        void Update(Activity activity, int userId);
 
-        void DeleteActivity(int id, int userId);
+        void Delete(int id, int userId);
     }
 }

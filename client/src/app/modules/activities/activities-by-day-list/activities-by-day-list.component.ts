@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
 import { Activity } from 'src/app/models/activity';
+import { Project } from 'src/app/models/project';
 
 @Component({
   selector: 'app-activities-by-day-list',
@@ -9,6 +10,7 @@ import { Activity } from 'src/app/models/activity';
 export class ActivitiesByDayListComponent implements OnInit, OnChanges {
 
   @Input() activities: Activity[];
+  @Input() projects: Project[];
   @Output() activityChanged = new EventEmitter<Activity>();
   @Output() deleteActivity = new EventEmitter<Activity>();
 

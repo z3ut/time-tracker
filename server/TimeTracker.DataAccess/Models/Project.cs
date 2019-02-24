@@ -5,18 +5,15 @@ using System.Text;
 
 namespace TimeTracker.DataAccess.Models
 {
-    public class Activity
+    public class Project
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
-        public string Title { get; set; }
-        public DateTime DateTimeStart { get; set; }
-        public DateTime? DateTimeEnd { get; set; }
+        public string Name { get; set; }
+        public string Color { get; set; }
+        public DateTime DateTimeCreated { get; set; }
 
         public int UserId { get; set; }
         public User User { get; set; }
-
-        public int? ProjectId { get; set; }
-        public Project Project { get; set; }
     }
 }

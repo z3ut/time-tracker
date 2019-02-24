@@ -1,0 +1,30 @@
+<div class="container">
+  <div class="header" (click)="toggleProjects()">
+    <app-project-list-item
+      [project]="selectedProject">
+    </app-project-list-item>
+  </div>
+  
+  <div class="dropdown"
+      *ngIf="isProjectsDropdownShown">
+
+    <div class="project"
+        (click)="projectClick()">
+      <app-project-list-item
+        [project]="emptyProject">
+      </app-project-list-item>
+    </div>
+
+    <div class="project"
+        (click)="projectClick(p)"
+        *ngFor="let p of projects">
+      <app-project-list-item
+        [project]="p">
+      </app-project-list-item>
+    </div>
+
+    <div class="project" (click)="createNewProjectClick()">
+      New project
+    </div>
+  </div>   
+</div>

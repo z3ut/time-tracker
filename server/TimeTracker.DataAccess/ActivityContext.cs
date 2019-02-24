@@ -16,18 +16,6 @@ namespace TimeTracker.DataAccess
 
         public DbSet<Activity> Activities { get; set; }
         public DbSet<User> Users { get; set; }
-
-        /*
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            // modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
-
-            // use singular table names
-            foreach (var entityType in modelBuilder.Model.GetEntityTypes())
-            {
-                entityType.Relational().TableName = entityType.DisplayName();
-            }
-        }
-        */
+        public DbSet<Project> Projects { get; set; }
     }
 }
