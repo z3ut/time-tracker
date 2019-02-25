@@ -5,11 +5,13 @@ import { FormsModule } from '@angular/forms';
 import { TextMaskModule } from 'angular2-text-mask';
 import { TimeAmountComponent } from './components/time-amount/time-amount.component';
 import { SecondsToTimeFormatService } from './services/seconds-to-time-format.service';
+import { PopupComponent } from './components/popup/popup.component';
 
 @NgModule({
   declarations: [
     TimeIntervalPipe,
-    TimeAmountComponent
+    TimeAmountComponent,
+    PopupComponent
   ],
   imports: [
     CommonModule,
@@ -18,7 +20,8 @@ import { SecondsToTimeFormatService } from './services/seconds-to-time-format.se
   ],
   exports: [
     TimeIntervalPipe,
-    TimeAmountComponent
+    TimeAmountComponent,
+    PopupComponent
   ],
   providers: [
     SecondsToTimeFormatService

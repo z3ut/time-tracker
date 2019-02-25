@@ -1,0 +1,27 @@
+.container {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.popup {
+  max-width: 900px;
+  pointer-events: none;
+  border: 1px solid grey;
+  padding: 1em;
+}
+
+.content {
+  margin-bottom: 1em;
+}
+
+.footer {
+
+}
