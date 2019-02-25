@@ -10,6 +10,7 @@ import { FormsModule } from '@angular/forms';
 import { ActivitiesByDayListComponent } from './activities-by-day-list/activities-by-day-list.component';
 import { ProjectSelectorComponent } from './project-selector/project-selector.component';
 import { ProjectListItemComponent } from './project-list-item/project-list-item.component';
+import { ProjectsModule } from '../projects/projects.module';
 
 @NgModule({
   declarations: [
@@ -23,6 +24,7 @@ import { ProjectListItemComponent } from './project-list-item/project-list-item.
     CommonModule,
     ActivitiesRoutingModule,
     SharedModule,
+    ProjectsModule,
     FormsModule,
     BrowserAnimationsModule,
     OwlDateTimeModule,

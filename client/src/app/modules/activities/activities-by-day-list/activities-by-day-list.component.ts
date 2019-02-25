@@ -13,6 +13,7 @@ export class ActivitiesByDayListComponent implements OnInit, OnChanges {
   @Input() projects: Project[];
   @Output() activityChanged = new EventEmitter<Activity>();
   @Output() deleteActivity = new EventEmitter<Activity>();
+  @Output() createNewProject = new EventEmitter();
 
   activitiesByDay: DayActivity[];
 
@@ -65,6 +66,10 @@ export class ActivitiesByDayListComponent implements OnInit, OnChanges {
 
   deleteActivityClick(activity: Activity) {
     this.deleteActivity.emit(activity);
+  }
+
+  createNewProjectEvent() {
+    this.createNewProject.emit();
   }
 
   private isSameDay(date: Date, dayDate: DayDate): boolean {

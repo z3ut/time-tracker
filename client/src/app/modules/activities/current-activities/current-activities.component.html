@@ -1,4 +1,8 @@
-<app-editable-activity [activity]="newActivity"></app-editable-activity>
+<app-editable-activity
+  [activity]="newActivity"
+  [projects]="projects"
+  (createNewProject)="createNewProjectEvent()">
+</app-editable-activity>
 <button (click)="saveActivity()">Save</button>
 
 <p></p>
@@ -7,7 +11,8 @@
   [activities]="activities"
   [projects]="projects"
   (activityChanged)="activityChanged($event)"
-  (deleteActivity)="deleteActivity($event)">
+  (deleteActivity)="deleteActivity($event)"
+  (createNewProject)="createNewProjectEvent()">
 
 </app-activities-by-day-list>
 
@@ -23,3 +28,11 @@
     class="loading-more-indicator">
   Loading
 </div>
+
+<app-popup *ngIf="isCreatingNewProject"
+    (ok)="closeNewProjectPopup()"
+    (close)="closeNewProjectPopup()">
+  <app-create-new-project
+    (created)="newProjectCreated($event)">
+  </app-create-new-project>
+</app-popup>

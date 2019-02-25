@@ -12,6 +12,7 @@ export class EditableActivityComponent implements OnInit, OnChanges {
   @Input() activity: Activity;
   @Input() projects: Project[];
   @Output() activityChanged = new EventEmitter<Activity>();
+  @Output() createNewProject = new EventEmitter();
 
   intervalSeconds: number;
 
@@ -56,8 +57,9 @@ export class EditableActivityComponent implements OnInit, OnChanges {
     this.saveChanges();
   }
 
-  createNewProject() {
-    console.log('createNewProject');
+  createNewProjectClick() {
+    // console.log('createNewProject');
+    this.createNewProject.emit();
   }
 
   private calculateInterval() {

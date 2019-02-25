@@ -1,7 +1,7 @@
 export interface Project {
-  id: number;
+  id?: number;
   name: string;
   color: string;
-  dateTimeCreated: Date;
+  dateTimeCreated?: Date;
   userId: number;
 }

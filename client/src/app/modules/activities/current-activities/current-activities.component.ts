@@ -19,6 +19,7 @@ export class CurrentActivitiesComponent implements OnInit {
   USER_ID = 2;
   loadedFrom: Date;
   isLoadingMore = false;
+  isCreatingNewProject = false;
 
   projects: Project[];
 
@@ -28,20 +29,16 @@ export class CurrentActivitiesComponent implements OnInit {
     this.loadedFrom = new Date();
     this.activities = [];
 
-    this.loadMore();
-
-    this.projectService.getUserProjects().subscribe(projects => {
-      this.projects = projects;
-    }, err => {
-      console.log('Error while trying to load user projects');
-    });
+    this.loadMoreActivities();
+    this.updateUserProjects();
   }
 
   saveActivity() {
     this.activityService
       .createActivity(this.newActivity)
       .subscribe(a => {
-        this.activities = [a, ...this.activities];
+        // this.activities = [a, ...this.activities];
+        this.activities = this.activities.concat(a);
         this.generateNewActivity();
       }, err => {
         console.log('error creating new activity');
@@ -62,24 +59,40 @@ export class CurrentActivitiesComponent implements OnInit {
     this.activityService
       .deleteActivity(activity.id)
       .subscribe(() => {
-        this.activities = [...this.activities.filter(a => a !== activity)];
+        // this.activities = [...this.activities.filter(a => a !== activity)];
+        this.activities = this.activities.filter(a => a !== activity);
       }, err => {
         console.log('error deleting activity');
       });
   }
 
-  loadMore() {
+  loadMoreActivities() {
     this.isLoadingMore = true;
     const loadedTo = new Date(this.loadedFrom.getTime());
     this.loadedFrom.setDate(this.loadedFrom.getDate() - 7);
     this.activityService.getActivities(this.loadedFrom, loadedTo)
-      .subscribe(activities => {
+      .subscribe(a => {
         this.isLoadingMore = false;
-        this.activities = [...this.activities, ...activities];
+        // this.activities = [...this.activities, ...activities];
+        this.activities = this.activities.concat(a);
       }, err => {
         console.log(err);
         this.isLoadingMore = false;
       });
+  }
+
+  createNewProjectEvent() {
+    this.isCreatingNewProject = true;
+  }
+
+  newProjectCreated(project: Project) {
+    console.log(project);
+    this.isCreatingNewProject = false;
+    this.updateUserProjects();
+  }
+
+  closeNewProjectPopup() {
+    this.isCreatingNewProject = false;
   }
 
   private generateNewActivity() {
@@ -88,5 +101,13 @@ export class CurrentActivitiesComponent implements OnInit {
       title: '',
       dateTimeStart: new Date()
     };
+  }
+
+  private updateUserProjects() {
+    this.projectService.getUserProjects().subscribe(projects => {
+      this.projects = projects;
+    }, err => {
+      console.log('Error while trying to load user projects');
+    });
   }
 }
