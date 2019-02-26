@@ -11,6 +11,7 @@ import { User } from 'src/app/models/user';
 export class AuthService {
 
   private apiUrl = 'http://localhost:49998/api/v1/users/authenticate';
+  private apiRegisterUrl = 'http://localhost:49998/api/v1/users/register';
   private userLocalStorageKey = 'user';
   private behaviorSubject = new BehaviorSubject(false);
 
@@ -19,13 +20,15 @@ export class AuthService {
   login(credentials: UserCredentials): Observable<User> {
     return this.http.post<User>(this.apiUrl, credentials)
       .pipe(map(user => {
+        this.saveUser(user);
+        return user;
+      }));
+  }
 
-        if (user && user.token) {
-          localStorage.setItem(this.userLocalStorageKey, JSON.stringify(user));
-        }
-
-        this.behaviorSubject.next(true);
-
+  register(credentials: UserCredentials) {
+    return this.http.post<User>(this.apiRegisterUrl, credentials)
+      .pipe(map(user => {
+        this.saveUser(user);
         return user;
       }));
   }
@@ -45,5 +48,13 @@ export class AuthService {
 
   getIsLoggedObservable(): Observable<boolean> {
     return this.behaviorSubject.asObservable();
+  }
+
+  private saveUser(user: User) {
+    if (user && user.token) {
+      localStorage.setItem(this.userLocalStorageKey, JSON.stringify(user));
+    }
+
+    this.behaviorSubject.next(true);
   }
 }

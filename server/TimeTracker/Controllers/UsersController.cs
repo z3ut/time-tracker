@@ -61,6 +61,44 @@ namespace TimeTracker.Web.Controllers
                 return BadRequest(new { message = "Username or password is incorrect" });
             }
 
+            var tokenString = CreateToken(user);
+
+            return Ok(new UserDTO
+            {
+                Id = user.Id,
+                Username = user.Username,
+                Name = user.Name,
+                Token = tokenString
+            });
+        }
+
+        [AllowAnonymous]
+        [HttpPost("register")]
+        public IActionResult Register([FromBody] UserCredentialsDTO userCredentials)
+        {
+            var user = _mapper.Map<User>(userCredentials);
+
+            try
+            {
+                var createdUser = _userService.Create(user, userCredentials.Password);
+                var tokenString = CreateToken(createdUser);
+
+                return Ok(new UserDTO
+                {
+                    Id = createdUser.Id,
+                    Username = createdUser.Username,
+                    Name = createdUser.Name,
+                    Token = tokenString
+                });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
+
+        private string CreateToken(User user)
+        {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(secret);
             var tokenDescriptor = new SecurityTokenDescriptor
@@ -76,33 +114,7 @@ namespace TimeTracker.Web.Controllers
             var token = tokenHandler.CreateToken(tokenDescriptor);
             var tokenString = tokenHandler.WriteToken(token);
 
-            return Ok(new UserDTO
-            {
-                Id = user.Id,
-                Username = user.Username,
-                Name = user.Name,
-                Token = tokenString
-            });
-        }
-
-        [AllowAnonymous]
-        [HttpPost("register")]
-        public IActionResult Register([FromBody] UserCredentialsDTO userCredentials)
-        {
-            // map dto to entity
-            var user = _mapper.Map<User>(userCredentials);
-
-            try
-            {
-                // save 
-                _userService.Create(user, userCredentials.Password);
-                return Ok();
-            }
-            catch (Exception ex)
-            {
-                // return error message if there was an exception
-                return BadRequest(new { message = ex.Message });
-            }
+            return tokenString;
         }
     }
 }
