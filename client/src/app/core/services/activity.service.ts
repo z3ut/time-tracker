@@ -67,6 +67,11 @@ export class ActivityService {
       activity.dateTimeEnd = new Date(activity.dateTimeEnd);
     }
 
+    if (activity.dateTimeStart && activity.dateTimeEnd) {
+      activity.amountSeconds = (activity.dateTimeEnd.getTime() -
+        activity.dateTimeStart.getTime()) / 1000;
+    }
+
     return activity;
   }
 }

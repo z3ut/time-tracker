@@ -5,4 +5,5 @@ export interface Activity {
   title: string;
   dateTimeStart: Date;
   dateTimeEnd?: Date;
+  amountSeconds?: number;
 }

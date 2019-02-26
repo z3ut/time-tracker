@@ -44,19 +44,24 @@ export class ActivitiesByDayListComponent implements OnInit, OnChanges {
         }
       });
 
-      const dayActivities: DayActivity[] = dayDates
+      const activitiesByDay: DayActivity[] = dayDates
         .sort((dd1, dd2) => {
           return dd2.year - dd1.year ||
             dd2.month - dd1.month ||
             dd2.date - dd1.date;
         })
-        .map(da => ({
-          dayDate: da,
-          activities: this.activities
-            .filter(a => this.isSameDay(a.dateTimeStart, da))
-        }));
+        .map(dayDate => {
+          const dayActivities = this.activities
+            .filter(a => this.isSameDay(a.dateTimeStart, dayDate));
+          return {
+            dayDate,
+            totalTimeSeconds: Math.floor(dayActivities
+              .reduce((acc, cur) => acc += cur.amountSeconds, 0)),
+            activities: dayActivities
+          };
+        });
 
-      this.activitiesByDay = dayActivities;
+      this.activitiesByDay = activitiesByDay;
     }
   }
 

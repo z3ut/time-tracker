@@ -69,5 +69,6 @@ export class EditableActivityComponent implements OnInit, OnChanges {
     } else {
       this.intervalSeconds = 0;
     }
+    this.activity.amountSeconds = this.intervalSeconds;
   }
 }

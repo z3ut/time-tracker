@@ -1,7 +1,7 @@
 <input type="text"
   class="time-amount"
   [textMask]="{mask: mask, keepCharPositions: true}"
+  [readonly]="isReadonly"
   [(ngModel)]="intervalString"
-  (ngModelChange)="updateTimeAmount()"
   (keyup.enter)="inputLeaveFocus()"
   (blur)="inputLeaveFocus()">

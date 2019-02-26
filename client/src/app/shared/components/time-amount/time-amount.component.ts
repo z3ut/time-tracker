@@ -12,24 +12,20 @@ export class TimeAmountComponent implements OnChanges {
   mask = [ /\d/, /\d/, ':', /[0-5]/, /\d/, ':', /[0-5]/, /\d/ ];
 
   @Input() intervalSeconds: number;
+  @Input() isReadonly: boolean;
   @Output() updateTime = new EventEmitter<number>();
   @Output() leaveFocus = new EventEmitter();
 
-  constructor(private secondsToTimeFormatService: SecondsToTimeFormatService) {
-
-  }
+  constructor(private secondsToTimeFormatService: SecondsToTimeFormatService) { }
 
   ngOnChanges() {
     this.intervalString = this.secondsToTimeFormatService
       .convertSecondsToTime(this.intervalSeconds);
   }
 
-  updateTimeAmount() {
-    this.updateTime.emit(this.secondsToTimeFormatService
-      .converTimeToSeconds(this.intervalString));
-  }
-
   inputLeaveFocus() {
     this.leaveFocus.emit();
+    this.updateTime.emit(this.secondsToTimeFormatService
+      .converTimeToSeconds(this.intervalString));
   }
 }

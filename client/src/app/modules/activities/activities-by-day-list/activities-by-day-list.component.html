@@ -3,8 +3,13 @@
       {{ dayActivities.dayDate.date }} /
       {{ dayActivities.dayDate.month }} /
       {{ dayActivities.dayDate.year }}
+      <app-time-amount
+        [intervalSeconds]="dayActivities.totalTimeSeconds"
+        [isReadonly]="true">
+      </app-time-amount>
     <div class="activities" >
-      <div class="activity-container" *ngFor="let a of dayActivities.activities">
+      <div class="activity-container"
+          *ngFor="let a of dayActivities.activities">
         <div class="activity">
           <app-editable-activity
             [activity]="a"
