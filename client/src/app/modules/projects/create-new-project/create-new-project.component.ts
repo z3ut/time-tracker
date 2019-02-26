@@ -1,6 +1,7 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, ViewChild, ElementRef } from '@angular/core';
 import { ProjectService } from 'src/app/core/services/project.service';
 import { Project } from 'src/app/models/project';
+import Pickr from '@simonwep/pickr/dist/pickr.min';
 
 @Component({
   selector: 'app-create-new-project',
@@ -10,13 +11,38 @@ import { Project } from 'src/app/models/project';
 export class CreateNewProjectComponent implements OnInit {
 
   name = '';
-  color = '';
+  color = '#FF0000';
+
+  @ViewChild('colorPicker') colorPicker: ElementRef;
 
   @Output() created = new EventEmitter<Project>();
 
   constructor(private projectService: ProjectService) { }
 
   ngOnInit() {
+    const pickr = Pickr.create({
+      el: this.colorPicker.nativeElement,
+      default: this.color,
+      components: {
+          preview: true,
+          opacity: true,
+          hue: true,
+          interaction: {
+              hex: true,
+              rgba: true,
+              hsla: true,
+              hsva: true,
+              cmyk: true,
+              input: true,
+              clear: true,
+              save: true
+          }
+      }
+    });
+
+    pickr.on('save', hsvColorObject => {
+      this.color = hsvColorObject.toHEX().toString();
+    });
   }
 
   create() {
