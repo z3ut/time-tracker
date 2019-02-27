@@ -1,0 +1,23 @@
+
+
+<div class="project"
+  *ngFor="let projectData of activitesByProject">
+  {{ projectData.project.name }}
+  <div class="project-color"
+    [style.backgroundColor]="projectData.project.color"></div>
+  
+  <app-time-amount
+    [intervalSeconds]="projectData.totalTimeSeconds"
+    [isReadonly]="true">
+  </app-time-amount>
+
+  <div class="activities">
+    <div class="activity" *ngFor="let a of projectData.activities">
+      {{ a.title }}
+      <app-time-amount
+        [intervalSeconds]="a.amountSeconds"
+        [isReadonly]="true">
+      </app-time-amount>
+    </div>
+  </div>
+</div>

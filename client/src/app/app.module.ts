@@ -6,6 +6,7 @@ import { AppComponent } from './app.component';
 import { CoreModule } from './core/core.module';
 import { ActivitiesModule } from './modules/activities/activities.module';
 import { LoginModule } from './modules/login/login.module';
+import { ReportsModule } from './modules/reports/reports.module';
 
 @NgModule({
   declarations: [
@@ -16,6 +17,7 @@ import { LoginModule } from './modules/login/login.module';
     AppRoutingModule,
     CoreModule,
     ActivitiesModule,
+    ReportsModule,
     LoginModule
   ],
   providers: [],

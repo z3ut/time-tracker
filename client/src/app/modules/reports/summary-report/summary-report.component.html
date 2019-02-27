@@ -1,0 +1,22 @@
+<div class="date-range-interval-container">
+  <input [owlDateTime]="dateTimeFromContainer"
+    [owlDateTimeTrigger]="dateTimeFromContainer"
+    placeholder="From"
+    class="activity-date-input"
+    [(ngModel)]="dateTimeFrom"
+    (ngModelChange)="timeChange()">
+  <owl-date-time #dateTimeFromContainer ></owl-date-time>
+
+  <input [owlDateTime]="dateTimeToContainer"
+    [owlDateTimeTrigger]="dateTimeToContainer"
+    placeholder="To"
+    class="activity-date-input"
+    [(ngModel)]="dateTimeTo"
+    (ngModelChange)="timeChange()">
+  <owl-date-time #dateTimeToContainer ></owl-date-time>
+</div>
+
+<button (click)="generateReport()">Generate</button>
+<br>
+
+<app-summary-report-table [activities]="activities"></app-summary-report-table>
