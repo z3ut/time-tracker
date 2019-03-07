@@ -56,4 +56,10 @@ export class ProjectSelectorComponent implements OnInit {
     this.createNewProject.emit();
   }
 
+  deleteProject(project: Project) {
+    const isDeleteConfirmed = confirm(`Delete project "${project.name}"?`);
+    if (isDeleteConfirmed) {
+      console.log('delete', project);
+    }
+  }
 }

@@ -16,10 +16,13 @@
     </div>
 
     <div class="project"
-        (click)="projectClick(p)"
+        
         *ngFor="let p of projects">
       <app-project-list-item
-        [project]="p">
+        [project]="p"
+        [isDeletable]="true"
+        (select)="projectClick(p)"
+        (delete)="deleteProject(p)">
       </app-project-list-item>
     </div>
 

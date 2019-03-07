@@ -1,6 +1,18 @@
+.project-container {
+  position: relative;
+  padding-right: 2em;
+}
+
 .circle {
   width: 1em;
   height: 1em;
   border-radius: .5em;
   display: inline-block;
+}
+
+.delete {
+  position: absolute;
+  right: 0;
+  top: 0;
+  color: red;
 }

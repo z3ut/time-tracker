@@ -1,4 +1,11 @@
-<div class="project">
-  <div class="circle" [style.backgroundColor]="project.color"></div>
-  {{ project.name }}
+<div class="project-container">
+  <div class="project" (click)="selectClick()">
+    <div class="circle" [style.backgroundColor]="project.color"></div>
+    <span>{{ project.name }}</span>
+  </div>
+  <div class="delete"
+      *ngIf="isDeletable"
+      (click)="deleteClick()">
+    &#10060;
+  </div>
 </div>
