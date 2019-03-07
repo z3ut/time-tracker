@@ -7,6 +7,7 @@ import { CoreModule } from './core/core.module';
 import { ActivitiesModule } from './modules/activities/activities.module';
 import { LoginModule } from './modules/login/login.module';
 import { ReportsModule } from './modules/reports/reports.module';
+import { SharedModule } from './shared/shared.module';
 
 @NgModule({
   declarations: [
@@ -18,7 +19,8 @@ import { ReportsModule } from './modules/reports/reports.module';
     CoreModule,
     ActivitiesModule,
     ReportsModule,
-    LoginModule
+    LoginModule,
+    SharedModule
   ],
   providers: [],
   bootstrap: [AppComponent]

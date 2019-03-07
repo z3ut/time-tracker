@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService } from 'src/app/core/services/auth.service';
 import { UserCredentials } from 'src/app/models/user-credentials';
 import { Router, ActivatedRoute } from '@angular/router';
+import { SpinnerService } from 'src/app/shared/components/spinner/spinner.service';
 
 @Component({
   selector: 'app-login',
@@ -17,6 +18,7 @@ export class LoginComponent implements OnInit {
 
   constructor(
     private authService: AuthService,
+    private spinnerService: SpinnerService,
     private route: ActivatedRoute,
     private router: Router) { }
 
@@ -37,9 +39,13 @@ export class LoginComponent implements OnInit {
       username: this.username,
       password: this.password
     };
+
+    this.spinnerService.show();
     this.authService.login(userCredentials).subscribe(user => {
+      this.spinnerService.hide();
       this.router.navigate([this.returnUrl]);
     }, err => {
+      this.spinnerService.hide();
       alert(err);
     });
   }

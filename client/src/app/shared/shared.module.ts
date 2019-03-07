@@ -6,12 +6,15 @@ import { TextMaskModule } from 'angular2-text-mask';
 import { TimeAmountComponent } from './components/time-amount/time-amount.component';
 import { SecondsToTimeFormatService } from './services/seconds-to-time-format.service';
 import { PopupComponent } from './components/popup/popup.component';
+import { SpinnerComponent } from './components/spinner/spinner.component';
+import { SpinnerService } from './components/spinner/spinner.service';
 
 @NgModule({
   declarations: [
     TimeIntervalPipe,
     TimeAmountComponent,
-    PopupComponent
+    PopupComponent,
+    SpinnerComponent
   ],
   imports: [
     CommonModule,
@@ -21,10 +24,12 @@ import { PopupComponent } from './components/popup/popup.component';
   exports: [
     TimeIntervalPipe,
     TimeAmountComponent,
-    PopupComponent
+    PopupComponent,
+    SpinnerComponent
   ],
   providers: [
-    SecondsToTimeFormatService
+    SecondsToTimeFormatService,
+    SpinnerService
   ]
 })
 export class SharedModule { }
