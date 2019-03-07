@@ -15,7 +15,11 @@ export class AuthService {
   private userLocalStorageKey = 'user';
   private behaviorSubject = new BehaviorSubject(false);
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {
+    if (this.isLogged) {
+      this.behaviorSubject.next(true);
+    }
+  }
 
   login(credentials: UserCredentials): Observable<User> {
     return this.http.post<User>(this.apiUrl, credentials)
