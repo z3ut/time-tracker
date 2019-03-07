@@ -50,6 +50,14 @@ namespace TimeTracker.BusinessLogic.Projects
                 throw new Exception("Project doesn't belong to user");
             }
 
+            var projectActivities = _activityContext.Activities
+                .Where(a => a.ProjectId == project.Id);
+
+            foreach (var p in projectActivities)
+            {
+                p.ProjectId = null;
+            }
+
             _activityContext.Projects.Remove(project);
             _activityContext.SaveChanges();
         }
