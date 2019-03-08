@@ -9,6 +9,8 @@ import { AddCurrentActivities } from 'src/app/store/actions/add-current-activiti
 import { AddActivity } from 'src/app/store/actions/add-activity';
 import { UpdateActivity } from 'src/app/store/actions/update-activity';
 import { RemoveActivity } from 'src/app/store/actions/remove-activity';
+import { AddProject } from 'src/app/store/actions/add-project';
+import { RemoveProject } from 'src/app/store/actions/remove-project';
 
 @Component({
   selector: 'app-current-activities',
@@ -22,18 +24,18 @@ export class CurrentActivitiesComponent implements OnInit {
               private store: Store) { }
 
   activities$: Observable<Activity[]>;
+  projects$: Observable<Project>;
   newActivity: Activity;
   userId: number;
   isLoadingMore = false;
   isCreatingNewProject = false;
-
-  projects: Project[];
 
   ngOnInit() {
     const store = this.store.snapshot();
     this.userId = store.app.user.id;
 
     this.activities$ = this.store.select(state => state.app.currentActivities);
+    this.projects$ = this.store.select(state => state.app.projects);
 
     if (!store.app.currentActivities.length) {
       this.loadMoreActivities();
@@ -94,8 +96,15 @@ export class CurrentActivitiesComponent implements OnInit {
     this.isCreatingNewProject = true;
   }
 
+  deleteProject(project: Project) {
+    this.projectService.deleteProject(project.id).subscribe(() => {
+      this.store.dispatch(new RemoveProject(project));
+    }, err => {
+      console.log('error deleting project', err);
+    });
+  }
+
   newProjectCreated(project: Project) {
-    console.log(project);
     this.isCreatingNewProject = false;
     this.updateUserProjects();
   }
@@ -114,7 +123,7 @@ export class CurrentActivitiesComponent implements OnInit {
 
   private updateUserProjects() {
     this.projectService.getUserProjects().subscribe(projects => {
-      this.projects = projects;
+      this.store.dispatch(projects.map(p => new AddProject(p)));
     }, err => {
       console.log('Error while trying to load user projects');
     });

@@ -12,7 +12,8 @@
       [projects]="projects"
       [selectedProjectId]="activity.projectId"
       (selectProject)="selectProject($event)"
-      (createNewProject)="createNewProjectClick()">
+      (createNewProject)="createNewProjectClick()"
+      (deleteProject)="deleteProjectClick($event)">
 
     </app-project-selector>
   </div>

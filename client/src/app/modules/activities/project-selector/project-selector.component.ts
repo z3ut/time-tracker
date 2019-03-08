@@ -9,10 +9,10 @@ import { Project } from 'src/app/models/project';
 export class ProjectSelectorComponent implements OnInit {
 
   @Input() projects: Project[];
-  // @Input() selectedProject: Project;
   @Input() selectedProjectId: number;
   @Output() selectProject = new EventEmitter<Project>();
   @Output() createNewProject = new EventEmitter();
+  @Output() deleteProject = new EventEmitter<Project>();
 
   isProjectsDropdownShown = false;
   emptyProject: Project = {
@@ -33,7 +33,8 @@ export class ProjectSelectorComponent implements OnInit {
       return this.emptyProject;
     }
 
-    return this.projects.find(p => p.id === this.selectedProjectId);
+    return this.projects
+      .find(p => p.id === this.selectedProjectId) || this.emptyProject;
   }
 
   toggleProjects() {
@@ -56,10 +57,10 @@ export class ProjectSelectorComponent implements OnInit {
     this.createNewProject.emit();
   }
 
-  deleteProject(project: Project) {
+  deleteProjectClick(project: Project) {
     const isDeleteConfirmed = confirm(`Delete project "${project.name}"?`);
     if (isDeleteConfirmed) {
-      console.log('delete', project);
+      this.deleteProject.emit(project);
     }
   }
 }

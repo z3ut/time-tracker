@@ -15,7 +15,8 @@
             [activity]="a"
             [projects]="projects"
             (activityChanged)="listActivityChanged($event)"
-            (createNewProject)="createNewProjectEvent()">
+            (createNewProject)="createNewProjectEvent()"
+            (deleteProject)="deleteProjectEvent($event)">
           </app-editable-activity>
         </div>
         

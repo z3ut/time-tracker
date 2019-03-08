@@ -13,6 +13,7 @@ export class EditableActivityComponent implements OnInit, OnChanges {
   @Input() projects: Project[];
   @Output() activityChanged = new EventEmitter<Activity>();
   @Output() createNewProject = new EventEmitter();
+  @Output() deleteProject = new EventEmitter<Project>();
 
   intervalSeconds: number;
 
@@ -60,6 +61,10 @@ export class EditableActivityComponent implements OnInit, OnChanges {
   createNewProjectClick() {
     // console.log('createNewProject');
     this.createNewProject.emit();
+  }
+
+  deleteProjectClick(project: Project) {
+    this.deleteProject.emit(project);
   }
 
   private calculateInterval() {

@@ -1,7 +1,8 @@
 <app-editable-activity
   [activity]="newActivity"
-  [projects]="projects"
-  (createNewProject)="createNewProjectEvent()">
+  [projects]="projects$ | async"
+  (createNewProject)="createNewProjectEvent()"
+  (deleteProject)="deleteProject($event)">
 </app-editable-activity>
 <button (click)="saveActivity()">Save</button>
 
@@ -9,10 +10,11 @@
 
 <app-activities-by-day-list
   [activities]="activities$ | async"
-  [projects]="projects"
+  [projects]="projects$ | async"
   (activityChanged)="activityChanged($event)"
   (deleteActivity)="deleteActivity($event)"
-  (createNewProject)="createNewProjectEvent()">
+  (createNewProject)="createNewProjectEvent()"
+  (deleteProject)="deleteProject($event)">
 
 </app-activities-by-day-list>
 
