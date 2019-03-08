@@ -7,6 +7,8 @@ import { RemoveActivity } from './actions/remove-activity';
 import { AddCurrentActivities } from './actions/add-current-activities';
 import { AddProject } from './actions/add-project';
 import { RemoveProject } from './actions/remove-project';
+import { UpdateActivity } from './actions/update-activity';
+import { UpdateProject } from './actions/update-project';
 
 @State<AppStateModel>({
   name: 'app',
@@ -78,6 +80,34 @@ export class AppState {
           a.projectId = null;
         }
         return a;
+      })
+    });
+  }
+
+  @Action(UpdateActivity)
+  updateActivity(ctx: StateContext<AppStateModel>, action: UpdateActivity) {
+    const state = ctx.getState();
+    ctx.setState({
+      ...state,
+      currentActivities: state.currentActivities.map(a => {
+        if (a.id === action.activity.id) {
+          return action.activity;
+        }
+        return a;
+      })
+    });
+  }
+
+  @Action(UpdateProject)
+  updateProject(ctx: StateContext<AppStateModel>, action: UpdateProject) {
+    const state = ctx.getState();
+    ctx.setState({
+      ...state,
+      projects: state.projects.map(p => {
+        if (p.id === action.project.id) {
+          return action.project;
+        }
+        return p;
       })
     });
   }

@@ -8,7 +8,7 @@
 <p></p>
 
 <app-activities-by-day-list
-  [activities]="activities"
+  [activities]="activities$ | async"
   [projects]="projects"
   (activityChanged)="activityChanged($event)"
   (deleteActivity)="deleteActivity($event)"

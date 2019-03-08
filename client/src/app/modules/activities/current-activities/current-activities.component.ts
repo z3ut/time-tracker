@@ -3,6 +3,12 @@ import { ActivityService } from 'src/app/core/services/activity.service';
 import { Activity } from 'src/app/models/activity';
 import { ProjectService } from 'src/app/core/services/project.service';
 import { Project } from 'src/app/models/project';
+import { Store } from '@ngxs/store';
+import { Observable } from 'rxjs';
+import { AddCurrentActivities } from 'src/app/store/actions/add-current-activities';
+import { AddActivity } from 'src/app/store/actions/add-activity';
+import { UpdateActivity } from 'src/app/store/actions/update-activity';
+import { RemoveActivity } from 'src/app/store/actions/remove-activity';
 
 @Component({
   selector: 'app-current-activities',
@@ -12,24 +18,28 @@ import { Project } from 'src/app/models/project';
 export class CurrentActivitiesComponent implements OnInit {
 
   constructor(private activityService: ActivityService,
-              private projectService: ProjectService) { }
+              private projectService: ProjectService,
+              private store: Store) { }
 
-  activities: Activity[];
+  activities$: Observable<Activity[]>;
   newActivity: Activity;
-  USER_ID = 2;
-  loadedFrom: Date;
+  userId: number;
   isLoadingMore = false;
   isCreatingNewProject = false;
 
   projects: Project[];
 
   ngOnInit() {
+    const store = this.store.snapshot();
+    this.userId = store.app.user.id;
+
+    this.activities$ = this.store.select(state => state.app.currentActivities);
+
+    if (!store.app.currentActivities.length) {
+      this.loadMoreActivities();
+    }
+
     this.generateNewActivity();
-
-    this.loadedFrom = new Date();
-    this.activities = [];
-
-    this.loadMoreActivities();
     this.updateUserProjects();
   }
 
@@ -37,8 +47,7 @@ export class CurrentActivitiesComponent implements OnInit {
     this.activityService
       .createActivity(this.newActivity)
       .subscribe(a => {
-        // this.activities = [a, ...this.activities];
-        this.activities = this.activities.concat(a);
+        this.store.dispatch(new AddActivity(a));
         this.generateNewActivity();
       }, err => {
         console.log('error creating new activity');
@@ -49,7 +58,7 @@ export class CurrentActivitiesComponent implements OnInit {
     this.activityService
       .updateActivity(activity)
       .subscribe(a => {
-        this.activities = [...this.activities];
+        this.store.dispatch(new UpdateActivity(activity));
       }, err => {
         console.log('error updating activity');
       });
@@ -59,8 +68,7 @@ export class CurrentActivitiesComponent implements OnInit {
     this.activityService
       .deleteActivity(activity.id)
       .subscribe(() => {
-        // this.activities = [...this.activities.filter(a => a !== activity)];
-        this.activities = this.activities.filter(a => a !== activity);
+        this.store.dispatch(new RemoveActivity(activity));
       }, err => {
         console.log('error deleting activity');
       });
@@ -68,13 +76,14 @@ export class CurrentActivitiesComponent implements OnInit {
 
   loadMoreActivities() {
     this.isLoadingMore = true;
-    const loadedTo = new Date(this.loadedFrom.getTime());
-    this.loadedFrom.setDate(this.loadedFrom.getDate() - 7);
-    this.activityService.getActivities(this.loadedFrom, loadedTo)
-      .subscribe(a => {
+    const store = this.store.snapshot();
+    const loadedFrom = store.app.currentActivitiesLoadedFrom || new Date();
+    const loadedTo = new Date(loadedFrom.getTime());
+    loadedFrom.setDate(loadedFrom.getDate() - 7);
+    this.activityService.getActivities(loadedFrom, loadedTo)
+      .subscribe(activities => {
         this.isLoadingMore = false;
-        // this.activities = [...this.activities, ...activities];
-        this.activities = this.activities.concat(a);
+        this.store.dispatch(new AddCurrentActivities(activities, loadedFrom, loadedTo));
       }, err => {
         console.log(err);
         this.isLoadingMore = false;
@@ -97,7 +106,7 @@ export class CurrentActivitiesComponent implements OnInit {
 
   private generateNewActivity() {
     this.newActivity = {
-      userId: this.USER_ID,
+      userId: this.userId,
       title: '',
       dateTimeStart: new Date()
     };
