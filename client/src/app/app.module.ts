@@ -8,6 +8,8 @@ import { ActivitiesModule } from './modules/activities/activities.module';
 import { LoginModule } from './modules/login/login.module';
 import { ReportsModule } from './modules/reports/reports.module';
 import { SharedModule } from './shared/shared.module';
+import { AppState } from './store/app-state';
+import { NgxsModule } from '@ngxs/store';
 
 @NgModule({
   declarations: [
@@ -20,7 +22,10 @@ import { SharedModule } from './shared/shared.module';
     ActivitiesModule,
     ReportsModule,
     LoginModule,
-    SharedModule
+    SharedModule,
+    NgxsModule.forRoot([
+      AppState
+    ])
   ],
   providers: [],
   bootstrap: [AppComponent]

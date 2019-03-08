@@ -4,6 +4,9 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { User } from 'src/app/models/user';
+import { Store } from '@ngxs/store';
+import { UserLogin } from 'src/app/store/actions/user-login';
+import { UserLogout } from 'src/app/store/actions/user-logout';
 
 @Injectable({
   providedIn: 'root'
@@ -15,8 +18,9 @@ export class AuthService {
   private userLocalStorageKey = 'user';
   private behaviorSubject = new BehaviorSubject(false);
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private store: Store) {
     if (this.isLogged()) {
+      this.store.dispatch(new UserLogin(this.getUser()));
       this.behaviorSubject.next(true);
     }
   }
@@ -38,27 +42,25 @@ export class AuthService {
   }
 
   logout() {
-    this.behaviorSubject.next(false);
     localStorage.removeItem(this.userLocalStorageKey);
+    this.store.dispatch(new UserLogout());
+    this.behaviorSubject.next(false);
   }
 
-  isLogged(): boolean {
+  private isLogged(): boolean {
     return !!localStorage.getItem(this.userLocalStorageKey);
   }
 
-  getUser(): User {
+  private getUser(): User {
     return this.isLogged() ?
       JSON.parse(localStorage.getItem(this.userLocalStorageKey)) :
       null;
   }
 
-  getIsLoggedObservable(): Observable<boolean> {
-    return this.behaviorSubject.asObservable();
-  }
-
   private saveUser(user: User) {
     if (user && user.token) {
       localStorage.setItem(this.userLocalStorageKey, JSON.stringify(user));
+      this.store.dispatch(new UserLogin(user));
       this.behaviorSubject.next(true);
     }
   }

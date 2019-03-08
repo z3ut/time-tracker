@@ -20,6 +20,7 @@
     "@angular/platform-browser": "~7.2.0",
     "@angular/platform-browser-dynamic": "~7.2.0",
     "@angular/router": "~7.2.0",
+    "@ngxs/store": "^3.4.2",
     "@simonwep/pickr": "^0.4.0",
     "angular2-text-mask": "^9.0.0",
     "core-js": "^2.5.4",

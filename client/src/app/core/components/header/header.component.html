@@ -6,9 +6,9 @@
   <a class="link"
     routerLink="/summary-report"
     routerLinkActive="active">Summary report</a>
-
-  <div class="header-user" *ngIf="isLogged">
-    {{ name }}
+  
+  <div class="header-user" *ngIf="isLogged$ | async">
+    {{ username$ | async }}
 
     <button (click)="logout()" class="logout">Logout</button>
   </div>

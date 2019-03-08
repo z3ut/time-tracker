@@ -1,28 +1,25 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
-import { Router, NavigationEnd } from '@angular/router';
-import { filter } from 'rxjs/operators';
+import { Router } from '@angular/router';
+import { Store } from '@ngxs/store';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss']
 })
-export class HeaderComponent implements OnInit {
+export class HeaderComponent {
 
-  name = '';
-  isLogged = false;
+  isLogged$: Observable<boolean>;
+  username$: Observable<string>;
 
-  constructor(private authService: AuthService,
-              private router: Router) { }
-
-  ngOnInit() {
-    this.authService.getIsLoggedObservable().subscribe(isLogged => {
-      this.isLogged = isLogged;
-      this.name = isLogged ?
-        this.authService.getUser().name :
-        '';
-    });
+  constructor(
+      private authService: AuthService,
+      private router: Router,
+      private store: Store) {
+    this.isLogged$ = this.store.select(state => state.app.isLogged);
+    this.username$ = this.store.select(state => state.app.user.username);
   }
 
   logout() {
