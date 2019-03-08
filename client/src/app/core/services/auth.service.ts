@@ -16,7 +16,7 @@ export class AuthService {
   private behaviorSubject = new BehaviorSubject(false);
 
   constructor(private http: HttpClient) {
-    if (this.isLogged) {
+    if (this.isLogged()) {
       this.behaviorSubject.next(true);
     }
   }
@@ -47,7 +47,9 @@ export class AuthService {
   }
 
   getUser(): User {
-    return JSON.parse(localStorage.getItem(this.userLocalStorageKey));
+    return this.isLogged() ?
+      JSON.parse(localStorage.getItem(this.userLocalStorageKey)) :
+      null;
   }
 
   getIsLoggedObservable(): Observable<boolean> {
@@ -57,8 +59,7 @@ export class AuthService {
   private saveUser(user: User) {
     if (user && user.token) {
       localStorage.setItem(this.userLocalStorageKey, JSON.stringify(user));
+      this.behaviorSubject.next(true);
     }
-
-    this.behaviorSubject.next(true);
   }
 }
