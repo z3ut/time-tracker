@@ -11,6 +11,8 @@ import { ActivitiesByDayListComponent } from './activities-by-day-list/activitie
 import { ProjectSelectorComponent } from './project-selector/project-selector.component';
 import { ProjectListItemComponent } from './project-list-item/project-list-item.component';
 import { ProjectsModule } from '../projects/projects.module';
+import { CreateActivityWithTimerComponent } from './create-activity-with-timer/create-activity-with-timer.component';
+import { CreateActivityComponent } from './create-activity/create-activity.component';
 
 @NgModule({
   declarations: [
@@ -18,7 +20,9 @@ import { ProjectsModule } from '../projects/projects.module';
     EditableActivityComponent,
     ActivitiesByDayListComponent,
     ProjectSelectorComponent,
-    ProjectListItemComponent
+    ProjectListItemComponent,
+    CreateActivityWithTimerComponent,
+    CreateActivityComponent
   ],
   imports: [
     CommonModule,

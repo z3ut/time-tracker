@@ -53,7 +53,8 @@ export class ActivitiesByDayListComponent implements OnInit, OnChanges {
         })
         .map(dayDate => {
           const dayActivities = this.activities
-            .filter(a => this.isSameDay(a.dateTimeStart, dayDate));
+            .filter(a => this.isSameDay(a.dateTimeStart, dayDate))
+            .sort((a1, a2) => a2.dateTimeStart.getTime() - a1.dateTimeStart.getTime());
           return {
             dayDate,
             totalTimeSeconds: Math.floor(dayActivities

@@ -59,7 +59,6 @@ export class EditableActivityComponent implements OnInit, OnChanges {
   }
 
   createNewProjectClick() {
-    // console.log('createNewProject');
     this.createNewProject.emit();
   }
 

@@ -1,0 +1,33 @@
+<div class="activity-container">
+  <div class="activity-title-container">
+    <input class="activity-title-input"
+      type="text"
+      [(ngModel)]="activity.title"
+      (keyup.enter)="saveChanges()"
+      (blur)="saveChanges()">
+  </div>
+
+  <div class="activity-project">
+    <app-project-selector
+      [projects]="projects"
+      [selectedProjectId]="activity.projectId"
+      (selectProject)="selectProject($event)"
+      (createNewProject)="createNewProjectClick()"
+      (deleteProject)="deleteProjectClick($event)">
+
+    </app-project-selector>
+  </div>
+
+  <div class="time-interval-container">
+    <app-time-amount
+      [intervalSeconds]="intervalSeconds"
+      [isReadonly]="true">
+    </app-time-amount>
+  </div>
+
+  <button class="run-button" (click)="runClick()">
+    <span *ngIf="isStarted">Stop</span>
+    <span *ngIf="!isStarted">Start</span>
+  </button>
+
+</div>

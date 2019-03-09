@@ -4,7 +4,7 @@ import { Activity } from 'src/app/models/activity';
 import { ProjectService } from 'src/app/core/services/project.service';
 import { Project } from 'src/app/models/project';
 import { Store } from '@ngxs/store';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { AddCurrentActivities } from 'src/app/store/actions/add-current-activities';
 import { AddActivity } from 'src/app/store/actions/add-activity';
 import { UpdateActivity } from 'src/app/store/actions/update-activity';
@@ -111,6 +111,17 @@ export class CurrentActivitiesComponent implements OnInit {
 
   closeNewProjectPopup() {
     this.isCreatingNewProject = false;
+  }
+
+  createActivity(activity: Activity) {
+    this.activityService
+      .createActivity(activity)
+      .subscribe(a => {
+        this.store.dispatch(new AddActivity(a));
+        this.generateNewActivity();
+      }, err => {
+        console.log('error creating new activity');
+      });
   }
 
   private generateNewActivity() {
