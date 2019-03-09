@@ -13,8 +13,8 @@ import { UserLogout } from 'src/app/store/actions/user-logout';
 })
 export class AuthService {
 
-  private apiUrl = 'http://localhost:49998/api/v1/users/authenticate';
-  private apiRegisterUrl = 'http://localhost:49998/api/v1/users/register';
+  private apiAuthencticateUrl = 'api/v1/users/authenticate';
+  private apiRegisterUrl = 'api/v1/users/register';
   private userLocalStorageKey = 'user';
   private behaviorSubject = new BehaviorSubject(false);
 
@@ -26,7 +26,7 @@ export class AuthService {
   }
 
   login(credentials: UserCredentials): Observable<User> {
-    return this.http.post<User>(this.apiUrl, credentials)
+    return this.http.post<User>(this.apiAuthencticateUrl, credentials)
       .pipe(map(user => {
         this.saveUser(user);
         return user;

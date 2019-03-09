@@ -9,7 +9,7 @@ import { map } from 'rxjs/operators';
 })
 export class ActivityService {
 
-  private apiUrl = 'http://localhost:49998/api/v1/activities';
+  private apiUrl = 'api/v1/activities';
 
   constructor(private http: HttpClient) { }
 
