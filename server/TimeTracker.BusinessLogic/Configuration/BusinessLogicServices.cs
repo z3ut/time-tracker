@@ -5,6 +5,7 @@ using System.Text;
 using TimeTracker.BusinessLogic.Activities;
 using TimeTracker.BusinessLogic.Projects;
 using TimeTracker.BusinessLogic.Users;
+using TimeTracker.BusinessLogic.Users.Passwords;
 using TimeTracker.DataAccess.Configuration;
 
 namespace TimeTracker.BusinessLogic.Configuration
@@ -18,6 +19,7 @@ namespace TimeTracker.BusinessLogic.Configuration
             services.AddScoped<IActivityService, ActivityService>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IProjectService, ProjectService>();
+            services.AddScoped<IPasswordService, PasswordService>();
 
             return services;
         }
