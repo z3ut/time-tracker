@@ -57,13 +57,6 @@ namespace TimeTracker.Web.Controllers
             return activity;
         }
 
-        [HttpGet]
-        [Route("running")]
-        public IEnumerable<Activity> GetNotEndedActivities()
-        {
-            return _activityService.GetNotEnded(UserId);
-        }
-
         [HttpPut]
         public ActionResult<Activity> UpdateActivity(Activity activity)
         {

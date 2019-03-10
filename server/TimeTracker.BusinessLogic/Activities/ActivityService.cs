@@ -87,14 +87,6 @@ namespace TimeTracker.BusinessLogic.Activities
             return _mapper.Map<Activity>(activity);
         }
 
-        public IEnumerable<Activity> GetNotEnded(int userId)
-        {
-            var activities = _activityContext.Activities
-                .Where(a => a.UserId == userId &&
-                    a.DateTimeEnd == null);
-            return _mapper.Map<List<Activity>>(activities);
-        }
-
         public void Update(Activity activity, int userId)
         {
             var savedActivity = _activityContext.Activities.Find(activity.Id);

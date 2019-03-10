@@ -48,7 +48,6 @@ namespace TimeTracker.Web.Configuration
                         var user = userService.Get(userId);
                         if (user == null)
                         {
-                            // return unauthorized if user no longer exists
                             context.Fail("Unauthorized");
                         }
                         return Task.CompletedTask;
