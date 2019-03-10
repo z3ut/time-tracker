@@ -34,7 +34,7 @@ namespace TimeTracker
                     .AllowCredentials());
             });
 
-            services.ConfigureWebServices();
+            services.ConfigureWebServices(Configuration);
 
             // prevent overriding jwt "sub" claim
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();

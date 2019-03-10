@@ -9,6 +9,7 @@ using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using TimeTracker.BusinessLogic.Users;
 using TimeTracker.Web.Models;
@@ -22,13 +23,16 @@ namespace TimeTracker.Web.Controllers
     {
         private readonly IUserService _userService;
         private readonly IMapper _mapper;
+        private readonly IConfiguration _config;
+        private readonly string secret;
 
-        public const string secret = "SOME SECRET AFKAPFJPOAI SHFOPIASHFOPABGSFJ HASOFHASOIUJFGHASJIKFAJSHFOAHSFOUAHSFOIUHASUIOFHAIUOSFHGSIUOFG";
 
-        public UsersController(IUserService userService, IMapper mapper)
+        public UsersController(IUserService userService, IMapper mapper, IConfiguration config)
         {
             _userService = userService;
             _mapper = mapper;
+            _config = config;
+            secret = config["Secret"];
         }
 
         [AllowAnonymous]
@@ -59,23 +63,16 @@ namespace TimeTracker.Web.Controllers
         {
             var user = _mapper.Map<User>(userCredentials);
 
-            try
-            {
-                var createdUser = _userService.Create(user, userCredentials.Password);
-                var tokenString = CreateToken(createdUser);
+            var createdUser = _userService.Create(user, userCredentials.Password);
+            var tokenString = CreateToken(createdUser);
 
-                return Ok(new UserDTO
-                {
-                    Id = createdUser.Id,
-                    Username = createdUser.Username,
-                    Name = createdUser.Name,
-                    Token = tokenString
-                });
-            }
-            catch (Exception ex)
+            return Ok(new UserDTO
             {
-                return BadRequest(new { message = ex.Message });
-            }
+                Id = createdUser.Id,
+                Username = createdUser.Username,
+                Name = createdUser.Name,
+                Token = tokenString
+            });
         }
 
         private string CreateToken(User user)

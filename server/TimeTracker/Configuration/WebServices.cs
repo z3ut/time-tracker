@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using System;
@@ -10,13 +11,13 @@ using System.Text;
 using System.Threading.Tasks;
 using TimeTracker.BusinessLogic.Configuration;
 using TimeTracker.BusinessLogic.Users;
-using TimeTracker.Web.Controllers;
 
 namespace TimeTracker.Web.Configuration
 {
     public static class WebServices
     {
-        public static IServiceCollection ConfigureWebServices(this IServiceCollection services)
+        public static IServiceCollection ConfigureWebServices(
+            this IServiceCollection services, IConfiguration configuration)
         {
             services.ConfigureBusinessLogicServices();
 
@@ -39,7 +40,8 @@ namespace TimeTracker.Web.Configuration
                 {
                     OnTokenValidated = context =>
                     {
-                        var userService = context.HttpContext.RequestServices.GetRequiredService<IUserService>();
+                        var userService = context.HttpContext.RequestServices
+                            .GetRequiredService<IUserService>();
 
                         var identity = context.Principal.Identity as ClaimsIdentity;
                         var sub = identity.FindFirst("sub").Value;
@@ -55,10 +57,14 @@ namespace TimeTracker.Web.Configuration
                 };
                 x.RequireHttpsMetadata = false;
                 x.SaveToken = true;
+
+                var secret = configuration["Secret"];
+
                 x.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(UsersController.secret)),
+                    IssuerSigningKey = new SymmetricSecurityKey(
+                        Encoding.ASCII.GetBytes(secret)),
                     ValidateIssuer = false,
                     ValidateAudience = false
                 };
