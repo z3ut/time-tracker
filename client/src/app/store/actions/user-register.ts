@@ -1,5 +1,5 @@
-export class UserLogin {
-  static readonly type = '[User] UserLogin';
+export class UserRegister {
+  static readonly type = '[User] UserRegister';
 
   constructor(
     public username: string,

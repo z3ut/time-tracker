@@ -18,12 +18,7 @@ export class AuthService {
   private userLocalStorageKey = 'user';
   private behaviorSubject = new BehaviorSubject(false);
 
-  constructor(private http: HttpClient, private store: Store) {
-    if (this.isLogged()) {
-      this.store.dispatch(new UserLogin(this.getUser()));
-      this.behaviorSubject.next(true);
-    }
-  }
+  constructor(private http: HttpClient) { }
 
   login(credentials: UserCredentials): Observable<User> {
     return this.http.post<User>(this.apiAuthencticateUrl, credentials)
@@ -43,15 +38,14 @@ export class AuthService {
 
   logout() {
     localStorage.removeItem(this.userLocalStorageKey);
-    this.store.dispatch(new UserLogout());
     this.behaviorSubject.next(false);
   }
 
-  private isLogged(): boolean {
+  isLogged(): boolean {
     return !!localStorage.getItem(this.userLocalStorageKey);
   }
 
-  private getUser(): User {
+  getUser(): User {
     return this.isLogged() ?
       JSON.parse(localStorage.getItem(this.userLocalStorageKey)) :
       null;
@@ -60,7 +54,6 @@ export class AuthService {
   private saveUser(user: User) {
     if (user && user.token) {
       localStorage.setItem(this.userLocalStorageKey, JSON.stringify(user));
-      this.store.dispatch(new UserLogin(user));
       this.behaviorSubject.next(true);
     }
   }

@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from 'src/app/core/services/auth.service';
-import { UserCredentials } from 'src/app/models/user-credentials';
 import { Router } from '@angular/router';
+import { UserRegister } from 'src/app/store/actions/user-register';
+import { Store, Actions, ofActionDispatched } from '@ngxs/store';
+import { RegisterSuccess } from 'src/app/store/actions/register-success';
+import { RegisterFailed } from 'src/app/store/actions/register-failed';
+import { SpinnerService } from 'src/app/shared/components/spinner/spinner.service';
 
 @Component({
   selector: 'app-register',
@@ -14,7 +17,9 @@ export class RegisterComponent implements OnInit {
   password: '';
 
   constructor(
-    private authService: AuthService,
+    private spinnerService: SpinnerService,
+    private store: Store,
+    private actions$: Actions,
     private router: Router) { }
 
   ngOnInit() {
@@ -26,14 +31,21 @@ export class RegisterComponent implements OnInit {
       return;
     }
 
-    const userCredentials: UserCredentials = {
-      username: this.username,
-      password: this.password
-    };
-    this.authService.register(userCredentials).subscribe(user => {
-      this.router.navigate(['']);
-    }, err => {
-      alert(err);
-    });
+    this.spinnerService.show();
+    this.store.dispatch(new UserRegister(this.username, this.password));
+
+    this.actions$
+      .pipe(ofActionDispatched(RegisterSuccess))
+      .subscribe(({ payload }) => {
+        this.spinnerService.hide();
+        this.router.navigate(['']);
+      });
+
+    this.actions$
+      .pipe(ofActionDispatched(RegisterFailed))
+      .subscribe(({ payload }) => {
+        this.spinnerService.hide();
+        alert('Register error');
+      });
   }
 }

@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from 'src/app/core/services/auth.service';
-import { UserCredentials } from 'src/app/models/user-credentials';
 import { Router, ActivatedRoute } from '@angular/router';
 import { SpinnerService } from 'src/app/shared/components/spinner/spinner.service';
+import { Store, Actions, ofActionDispatched } from '@ngxs/store';
+import { UserLogin } from 'src/app/store/actions/user-login';
+import { LoginSuccess } from 'src/app/store/actions/login-success';
+import { LoginFailed } from 'src/app/store/actions/login-failed';
 
 @Component({
   selector: 'app-login',
@@ -17,14 +19,13 @@ export class LoginComponent implements OnInit {
   private returnUrl: string;
 
   constructor(
-    private authService: AuthService,
     private spinnerService: SpinnerService,
     private route: ActivatedRoute,
-    private router: Router) { }
+    private router: Router,
+    private store: Store,
+    private actions$: Actions) { }
 
   ngOnInit() {
-    this.authService.logout();
-
     // tslint:disable-next-line:no-string-literal
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
   }
@@ -35,19 +36,21 @@ export class LoginComponent implements OnInit {
       return;
     }
 
-    const userCredentials: UserCredentials = {
-      username: this.username,
-      password: this.password
-    };
+    this.store.dispatch(new UserLogin(this.username, this.password));
 
-    this.spinnerService.show();
-    this.authService.login(userCredentials).subscribe(user => {
-      this.spinnerService.hide();
-      this.router.navigate([this.returnUrl]);
-    }, err => {
-      this.spinnerService.hide();
-      alert(err);
-    });
+    this.actions$
+      .pipe(ofActionDispatched(LoginSuccess))
+      .subscribe(({ payload }) => {
+        this.spinnerService.hide();
+        this.router.navigate([this.returnUrl]);
+      });
+
+    this.actions$
+      .pipe(ofActionDispatched(LoginFailed))
+      .subscribe(({ payload }) => {
+        this.spinnerService.hide();
+        alert('Auth error');
+      });
   }
 
 }

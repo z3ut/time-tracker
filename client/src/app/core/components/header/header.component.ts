@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
-import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
 import { Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
+import { UserLogout } from 'src/app/store/actions/user-logout';
 
 @Component({
   selector: 'app-header',
@@ -15,7 +15,6 @@ export class HeaderComponent {
   username$: Observable<string>;
 
   constructor(
-      private authService: AuthService,
       private router: Router,
       private store: Store) {
     this.isLogged$ = this.store.select(state => state.app.isLogged);
@@ -23,7 +22,7 @@ export class HeaderComponent {
   }
 
   logout() {
-    this.authService.logout();
+    this.store.dispatch(new UserLogout());
     this.router.navigate(['/']);
   }
 }

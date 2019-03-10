@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from 'src/app/core/services/auth.service';
 import { Activity } from 'src/app/models/activity';
 import { ActivityService } from 'src/app/core/services/activity.service';
 
@@ -16,7 +15,6 @@ export class SummaryReportComponent implements OnInit {
   activities: Activity[];
 
   constructor(
-    private authService: AuthService,
     private activityService: ActivityService) { }
 
   ngOnInit() {
