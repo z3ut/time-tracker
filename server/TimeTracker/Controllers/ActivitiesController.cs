@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using TimeTracker.BusinessLogic.Activities;
+using TimeTracker.Web.Models;
 
 namespace TimeTracker.Web.Controllers
 {
@@ -16,16 +18,21 @@ namespace TimeTracker.Web.Controllers
     public class ActivitiesController : ControllerBase
     {
         private readonly IActivityService _activityService;
+        private readonly IMapper _mapper;
 
-        public ActivitiesController(IActivityService activityService)
+        public ActivitiesController(IActivityService activityService,
+            IMapper mapper)
         {
             _activityService = activityService;
+            _mapper = mapper;
         }
 
         [HttpPost]
-        public Activity CreateActivity(Activity activity)
+        public ActivityDTO CreateActivity(ActivityDTO activity)
         {
-            return _activityService.Create(activity, UserId);
+            var activityBL = _mapper.Map<Activity>(activity);
+            var createdActivity = _activityService.Create(activityBL, UserId);
+            return _mapper.Map<ActivityDTO>(createdActivity);
         }
 
         [HttpDelete]
@@ -36,16 +43,17 @@ namespace TimeTracker.Web.Controllers
 
         [HttpGet]
         [ActionName("GetActivities")]
-        public IEnumerable<Activity> GetActivities(DateTime dateTimeFrom,
+        public IEnumerable<ActivityDTO> GetActivities(DateTime dateTimeFrom,
             DateTime dateTimeTo)
         {
-            return _activityService.Get(dateTimeFrom, dateTimeTo, UserId);
+            var activities = _activityService.Get(dateTimeFrom, dateTimeTo, UserId);
+            return _mapper.Map<IEnumerable<ActivityDTO>>(activities);
         }
 
         [HttpGet]
         [ActionName("GetActivity")]
         [Route("{id}")]
-        public ActionResult<Activity> GetActivity(int id)
+        public ActionResult<ActivityDTO> GetActivity(int id)
         {
             var activity = _activityService.Get(id, UserId);
 
@@ -54,13 +62,14 @@ namespace TimeTracker.Web.Controllers
                 return NotFound();
             }
 
-            return activity;
+            return _mapper.Map<ActivityDTO>(activity);
         }
 
         [HttpPut]
-        public ActionResult<Activity> UpdateActivity(Activity activity)
+        public ActionResult<ActivityDTO> UpdateActivity(ActivityDTO activity)
         {
-            _activityService.Update(activity, UserId);
+            var activityBL = _mapper.Map<Activity>(activity);
+            _activityService.Update(activityBL, UserId);
             return activity;
         }
 

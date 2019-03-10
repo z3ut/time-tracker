@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using TimeTracker.BusinessLogic.Projects;
+using TimeTracker.Web.Models;
 
 namespace TimeTracker.Web.Controllers
 {
@@ -14,16 +16,21 @@ namespace TimeTracker.Web.Controllers
     public class ProjectsController : Controller
     {
         private readonly IProjectService _projectService;
+        private readonly IMapper _mapper;
 
-        public ProjectsController(IProjectService projectService)
+        public ProjectsController(IProjectService projectService,
+            IMapper mapper)
         {
             _projectService = projectService;
+            _mapper = mapper;
         }
 
         [HttpPost]
-        public Project CreateActivity(Project project)
+        public ProjectDTO CreateActivity(ProjectDTO project)
         {
-            return _projectService.Create(project, UserId);
+            var projectBL = _mapper.Map<Project>(project);
+            var projectCreated = _projectService.Create(projectBL, UserId);
+            return _mapper.Map<ProjectDTO>(projectCreated);
         }
 
         [HttpDelete]
@@ -34,30 +41,32 @@ namespace TimeTracker.Web.Controllers
 
         [HttpGet]
         [ActionName("GetProjects")]
-        public IEnumerable<Project> GetActivities()
+        public IEnumerable<ProjectDTO> GetProjects()
         {
-            return _projectService.GetUserProjects(UserId);
+            var projects = _projectService.GetUserProjects(UserId);
+            return _mapper.Map<IEnumerable<ProjectDTO>>(projects);
         }
 
         [HttpGet]
         [ActionName("GetActivity")]
         [Route("{id}")]
-        public ActionResult<Project> GetActivity(int id)
+        public ActionResult<ProjectDTO> GetActivity(int id)
         {
-            var activity = _projectService.Get(id, UserId);
+            var project = _projectService.Get(id, UserId);
 
-            if (activity == null)
+            if (project == null)
             {
                 return NotFound();
             }
 
-            return activity;
+            return _mapper.Map<ProjectDTO>(project); ;
         }
 
         [HttpPut]
-        public ActionResult<Project> UpdateProject(Project project)
+        public ActionResult<ProjectDTO> UpdateProject(ProjectDTO project)
         {
-            _projectService.Update(project, UserId);
+            var projectBL = _mapper.Map<Project>(project);
+            _projectService.Update(projectBL, UserId);
             return project;
         }
 

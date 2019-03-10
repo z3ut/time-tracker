@@ -31,25 +31,6 @@ namespace TimeTracker.Web.Controllers
             _mapper = mapper;
         }
 
-        // TODO: authorization
-        //[HttpPost]
-        //public User CreateActivity(User user)
-        //{
-        //    return _userService.CreateUser(user);
-        //}
-
-        //[HttpGet("{id}")]
-        //public User GetUser(int id)
-        //{
-        //    return _userService.Get(USER_ID);
-        //}
-
-        //public User UpdateUser(User user)
-        //{
-        //    _userService.Update(user);
-        //    return user;
-        //}
-
         [AllowAnonymous]
         [HttpPost("authenticate")]
         public IActionResult Authenticate([FromBody] UserCredentialsDTO userCredentials)
