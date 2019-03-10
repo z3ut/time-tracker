@@ -10,9 +10,9 @@ import { FormsModule } from '@angular/forms';
 import { ActivitiesByDayListComponent } from './activities-by-day-list/activities-by-day-list.component';
 import { ProjectSelectorComponent } from './project-selector/project-selector.component';
 import { ProjectListItemComponent } from './project-list-item/project-list-item.component';
-import { ProjectsModule } from '../projects/projects.module';
 import { CreateActivityWithTimerComponent } from './create-activity-with-timer/create-activity-with-timer.component';
 import { CreateActivityComponent } from './create-activity/create-activity.component';
+import { CreateNewProjectComponent } from './create-new-project/create-new-project.component';
 
 @NgModule({
   declarations: [
@@ -22,13 +22,13 @@ import { CreateActivityComponent } from './create-activity/create-activity.compo
     ProjectSelectorComponent,
     ProjectListItemComponent,
     CreateActivityWithTimerComponent,
-    CreateActivityComponent
+    CreateActivityComponent,
+    CreateNewProjectComponent
   ],
   imports: [
     CommonModule,
     ActivitiesRoutingModule,
     SharedModule,
-    ProjectsModule,
     FormsModule,
     BrowserAnimationsModule,
     OwlDateTimeModule,

@@ -1,22 +1,3 @@
-<!-- <app-editable-activity
-  [activity]="newActivity"
-  [projects]="projects$ | async"
-  (createNewProject)="createNewProjectEvent()"
-  (deleteProject)="deleteProject($event)">
-</app-editable-activity>
-<button (click)="saveActivity()">Save</button>
-
-<p></p>
-
-<app-create-activity-with-timer
-  [activity]="newActivity"
-  [projects]="projects$ | async"
-  (createActivity)="saveActivity()"
-  (createNewProject)="createNewProjectEvent()"
-  (deleteProject)="deleteProject($event)">
-</app-create-activity-with-timer> -->
-
-
 <app-create-activity
   [projects]="projects$ | async"
   (create)="createActivity($event)"
