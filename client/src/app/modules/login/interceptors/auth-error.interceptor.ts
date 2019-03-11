@@ -14,7 +14,6 @@ export class AuthErrorInterceptor implements HttpInterceptor {
     return next.handle(request).pipe(catchError(err => {
       if (err.status === 401) {
         this.store.dispatch(new UserLogout());
-        location.reload(true);
       }
 
       const error = err.error.message || err.statusText;
