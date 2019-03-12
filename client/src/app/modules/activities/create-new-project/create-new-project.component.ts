@@ -1,7 +1,8 @@
 import { Component, OnInit, Output, EventEmitter, ViewChild, ElementRef } from '@angular/core';
-import { ProjectService } from 'src/app/core/services/project.service';
 import { Project } from 'src/app/models/project';
 import Pickr from '@simonwep/pickr/dist/pickr.min';
+import { Store, Actions } from '@ngxs/store';
+import { CreateProject } from 'src/app/store/actions/project';
 
 @Component({
   selector: 'app-create-new-project',
@@ -17,7 +18,8 @@ export class CreateNewProjectComponent implements OnInit {
 
   @Output() created = new EventEmitter<Project>();
 
-  constructor(private projectService: ProjectService) { }
+  constructor(private store: Store,
+              private actions$: Actions) { }
 
   ngOnInit() {
     const pickr = Pickr.create({
@@ -51,17 +53,17 @@ export class CreateNewProjectComponent implements OnInit {
       return;
     }
 
-    this.projectService.createProjecty({
+    const state = this.store.snapshot();
+
+    this.store.dispatch(new CreateProject({
       name: this.name,
       color: this.color,
-      userId: 2
-    }).subscribe(p => {
-      this.name = '';
-      this.color = '';
-      this.created.emit(p);
-    }, err => {
-      console.log(err);
-    });
+      userId: state.app.user.user.id
+    }));
+
+    this.name = '';
+    this.color = '';
+    this.created.emit();
   }
 
 }

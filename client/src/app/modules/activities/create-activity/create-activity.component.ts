@@ -24,7 +24,7 @@ export class CreateActivityComponent implements OnInit {
 
   ngOnInit() {
     const store = this.store.snapshot();
-    this.userId = store.app.user.id;
+    this.userId = store.app.user.user.id;
 
     this.generateNewActivity();
   }

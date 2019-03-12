@@ -10,7 +10,7 @@ export class AuthInterceptor implements HttpInterceptor {
 
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     const store = this.store.snapshot();
-    const currentUser = store.app.user;
+    const currentUser = store.app.user.user;
     if (currentUser && currentUser.token) {
       request = request.clone({
         setHeaders: {

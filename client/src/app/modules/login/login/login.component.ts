@@ -2,9 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { SpinnerService } from 'src/app/shared/components/spinner/spinner.service';
 import { Store, Actions, ofActionDispatched } from '@ngxs/store';
-import { UserLogin } from 'src/app/store/actions/user-login';
-import { LoginSuccess } from 'src/app/store/actions/login-success';
-import { LoginFailed } from 'src/app/store/actions/login-failed';
+import { UserLogin, LoginSuccess, LoginFailed } from 'src/app/store/actions/user';
 
 @Component({
   selector: 'app-login',
@@ -36,6 +34,7 @@ export class LoginComponent implements OnInit {
       return;
     }
 
+    this.spinnerService.show();
     this.store.dispatch(new UserLogin(this.username, this.password));
 
     this.actions$

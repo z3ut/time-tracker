@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
-import { UserLogout } from 'src/app/store/actions/user-logout';
+import { UserLogout } from 'src/app/store/actions/user';
 
 @Component({
   selector: 'app-header',
@@ -17,8 +17,8 @@ export class HeaderComponent {
   constructor(
       private router: Router,
       private store: Store) {
-    this.isLogged$ = this.store.select(state => state.app.isLogged);
-    this.username$ = this.store.select(state => state.app.user.username);
+    this.isLogged$ = this.store.select(state => state.app.user.isLogged);
+    this.username$ = this.store.select(state => state.app.user.user.username);
   }
 
   logout() {

@@ -1,16 +1,15 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivityService } from 'src/app/core/services/activity.service';
 import { Activity } from 'src/app/models/activity';
-import { ProjectService } from 'src/app/core/services/project.service';
 import { Project } from 'src/app/models/project';
-import { Store } from '@ngxs/store';
-import { Observable, Subject } from 'rxjs';
-import { AddCurrentActivities } from 'src/app/store/actions/add-current-activities';
-import { AddActivity } from 'src/app/store/actions/add-activity';
-import { UpdateActivity } from 'src/app/store/actions/update-activity';
-import { RemoveActivity } from 'src/app/store/actions/remove-activity';
-import { AddProject } from 'src/app/store/actions/add-project';
-import { RemoveProject } from 'src/app/store/actions/remove-project';
+import { Store, Actions, ofActionDispatched } from '@ngxs/store';
+import { Observable } from 'rxjs';
+import {
+  LoadMoreCurrentActivities, LoadMoreCurrentActivitiesSuccess, LoadMoreCurrentActivitiesError,
+  CreateActivity, CreateActivitySuccess, CreateActivityError,
+  UpdateActivityError, UpdateActivity,
+  DeleteActivityError, DeleteActivity
+} from 'src/app/store/actions/activity';
+import { CreateProject, LoadUserProjects, DeleteProject, DeleteProjectError, CreateProjectError } from 'src/app/store/actions/project';
 
 @Component({
   selector: 'app-current-activities',
@@ -19,9 +18,8 @@ import { RemoveProject } from 'src/app/store/actions/remove-project';
 })
 export class CurrentActivitiesComponent implements OnInit {
 
-  constructor(private activityService: ActivityService,
-              private projectService: ProjectService,
-              private store: Store) { }
+  constructor(private store: Store,
+              private actions$: Actions) { }
 
   activities$: Observable<Activity[]>;
   projects$: Observable<Project>;
@@ -32,64 +30,87 @@ export class CurrentActivitiesComponent implements OnInit {
 
   ngOnInit() {
     const store = this.store.snapshot();
-    this.userId = store.app.user.id;
+    this.userId = store.app.user.user.id;
 
-    this.activities$ = this.store.select(state => state.app.currentActivities);
-    this.projects$ = this.store.select(state => state.app.projects);
+    this.activities$ = this.store.select(state => state.app.activities.currentActivities);
+    this.projects$ = this.store.select(state => state.app.projects.projects);
 
-    if (!store.app.currentActivities.length) {
+    if (!store.app.activities.isCurrentActivitiesInited) {
       this.loadMoreActivities();
     }
 
     this.generateNewActivity();
-    this.updateUserProjects();
+    this.store.dispatch(new LoadUserProjects());
+
+
+    this.actions$
+      .pipe(ofActionDispatched(LoadMoreCurrentActivitiesSuccess))
+      .subscribe(({ payload }) => {
+        this.isLoadingMore = false;
+      });
+
+    this.actions$
+      .pipe(ofActionDispatched(LoadMoreCurrentActivitiesError))
+      .subscribe(({ payload }) => {
+        console.log('Error loading more activities');
+        this.isLoadingMore = false;
+      });
+
+
+    this.actions$
+      .pipe(ofActionDispatched(CreateActivitySuccess))
+      .subscribe(({ payload }) => {
+        this.generateNewActivity();
+      });
+
+    this.actions$
+      .pipe(ofActionDispatched(CreateActivityError))
+      .subscribe(({ payload }) => {
+        console.log('Error creating new activity');
+      });
+
+
+    this.actions$
+      .pipe(ofActionDispatched(UpdateActivityError))
+      .subscribe(({ payload }) => {
+        console.log('Error updating activity');
+      });
+
+
+    this.actions$
+      .pipe(ofActionDispatched(DeleteActivityError))
+      .subscribe(({ payload }) => {
+        console.log('Error deleting activity');
+      });
+
+    this.actions$
+      .pipe(ofActionDispatched(DeleteProjectError))
+      .subscribe(({ payload }) => {
+        console.log('Error deleting project');
+      });
+
+    this.actions$
+      .pipe(ofActionDispatched(CreateProjectError))
+      .subscribe(({ payload }) => {
+        console.log('Error creating project');
+      });
   }
 
   saveActivity() {
-    this.activityService
-      .createActivity(this.newActivity)
-      .subscribe(a => {
-        this.store.dispatch(new AddActivity(a));
-        this.generateNewActivity();
-      }, err => {
-        console.log('error creating new activity');
-      });
+    this.store.dispatch(new CreateActivity(this.newActivity));
   }
 
   activityChanged(activity: Activity) {
-    this.activityService
-      .updateActivity(activity)
-      .subscribe(a => {
-        this.store.dispatch(new UpdateActivity(activity));
-      }, err => {
-        console.log('error updating activity');
-      });
+    this.store.dispatch(new UpdateActivity(activity));
   }
 
   deleteActivity(activity: Activity) {
-    this.activityService
-      .deleteActivity(activity.id)
-      .subscribe(() => {
-        this.store.dispatch(new RemoveActivity(activity));
-      }, err => {
-        console.log('error deleting activity');
-      });
+    this.store.dispatch(new DeleteActivity(activity.id));
   }
 
   loadMoreActivities() {
     this.isLoadingMore = true;
-    const store = this.store.snapshot();
-    const loadedFrom = store.app.currentActivitiesLoadedFrom || new Date();
-    const loadedTo = new Date(loadedFrom.getTime());
-    loadedFrom.setDate(loadedFrom.getDate() - 7);
-    this.activityService.getActivities(loadedFrom, loadedTo)
-      .subscribe(activities => {
-        this.isLoadingMore = false;
-        this.store.dispatch(new AddCurrentActivities(activities, loadedFrom, loadedTo));
-      }, err => {
-        console.log(err);
-        this.isLoadingMore = false;
-      });
+    this.store.dispatch(new LoadMoreCurrentActivities());
   }
 
   createNewProjectEvent() {
@@ -97,16 +118,11 @@ export class CurrentActivitiesComponent implements OnInit {
   }
 
   deleteProject(project: Project) {
-    this.projectService.deleteProject(project.id).subscribe(() => {
-      this.store.dispatch(new RemoveProject(project));
-    }, err => {
-      console.log('error deleting project', err);
-    });
+    this.store.dispatch(new DeleteProject(project.id));
   }
 
-  newProjectCreated(project: Project) {
+  newProjectCreated() {
     this.isCreatingNewProject = false;
-    this.updateUserProjects();
   }
 
   closeNewProjectPopup() {
@@ -114,14 +130,7 @@ export class CurrentActivitiesComponent implements OnInit {
   }
 
   createActivity(activity: Activity) {
-    this.activityService
-      .createActivity(activity)
-      .subscribe(a => {
-        this.store.dispatch(new AddActivity(a));
-        this.generateNewActivity();
-      }, err => {
-        console.log('error creating new activity');
-      });
+    this.store.dispatch(new CreateActivity(activity));
   }
 
   private generateNewActivity() {
@@ -130,13 +139,5 @@ export class CurrentActivitiesComponent implements OnInit {
       title: '',
       dateTimeStart: new Date()
     };
-  }
-
-  private updateUserProjects() {
-    this.projectService.getUserProjects().subscribe(projects => {
-      this.store.dispatch(projects.map(p => new AddProject(p)));
-    }, err => {
-      console.log('Error while trying to load user projects');
-    });
   }
 }

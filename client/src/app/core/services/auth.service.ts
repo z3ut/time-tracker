@@ -4,9 +4,6 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { User } from 'src/app/models/user';
-import { Store } from '@ngxs/store';
-import { UserLogin } from 'src/app/store/actions/user-login';
-import { UserLogout } from 'src/app/store/actions/user-logout';
 
 @Injectable({
   providedIn: 'root'

@@ -1,10 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { UserRegister } from 'src/app/store/actions/user-register';
 import { Store, Actions, ofActionDispatched } from '@ngxs/store';
-import { RegisterSuccess } from 'src/app/store/actions/register-success';
-import { RegisterFailed } from 'src/app/store/actions/register-failed';
 import { SpinnerService } from 'src/app/shared/components/spinner/spinner.service';
+import { UserRegister, RegisterSuccess, RegisterFailed } from 'src/app/store/actions/user';
 
 @Component({
   selector: 'app-register',

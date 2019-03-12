@@ -10,6 +10,9 @@ import { ReportsModule } from './modules/reports/reports.module';
 import { SharedModule } from './shared/shared.module';
 import { AppState } from './store/app-state';
 import { NgxsModule } from '@ngxs/store';
+import { ActivitiesState } from './store/states/activities';
+import { UserState } from './store/states/user';
+import { ProjectsState } from './store/states/projects';
 
 @NgModule({
   declarations: [
@@ -24,7 +27,10 @@ import { NgxsModule } from '@ngxs/store';
     LoginModule,
     SharedModule,
     NgxsModule.forRoot([
-      AppState
+      AppState,
+      ActivitiesState,
+      ProjectsState,
+      UserState
     ])
   ],
   providers: [],

@@ -13,7 +13,7 @@ export class ProjectService {
 
   constructor(private http: HttpClient) { }
 
-  createProjecty(project: Project): Observable<Project> {
+  createProject(project: Project): Observable<Project> {
     return this.http.post<Project>(this.apiUrl, project).pipe(
       map(p => this.extractProject(p))
     );
