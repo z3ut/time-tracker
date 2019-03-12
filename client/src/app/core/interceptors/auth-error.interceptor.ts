@@ -3,7 +3,7 @@ import { HttpRequest, HttpHandler, HttpEvent, HttpInterceptor } from '@angular/c
 import { Observable, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { Store } from '@ngxs/store';
-import { UserLogout } from 'src/app/store/actions/user';
+import { UserLogout } from 'src/app/store/actions/auth';
 
 @Injectable()
 export class AuthErrorInterceptor implements HttpInterceptor {

@@ -1,31 +1,31 @@
 import { User } from 'src/app/models/user';
 
 export class CheckIsLogged {
-  static readonly type = '[User] CheckIsLogged';
+  static readonly type = '[Auth] CheckIsLogged';
 }
 
 export class LoginFailed {
-  static readonly type = '[User] LoginFailed';
+  static readonly type = '[Auth] LoginFailed';
 }
 
 export class LoginSuccess {
-  static readonly type = '[User] LoginSuccess';
+  static readonly type = '[Auth] LoginSuccess';
 
   constructor(public user: User) {}
 }
 
 export class RegisterFailed {
-  static readonly type = '[User] RegisterFailed';
+  static readonly type = '[Auth] RegisterFailed';
 }
 
 export class RegisterSuccess {
-  static readonly type = '[User] RegisterSuccess';
+  static readonly type = '[Auth] RegisterSuccess';
 
   constructor(public user: User) {}
 }
 
 export class UserLogin {
-  static readonly type = '[User] UserLogin';
+  static readonly type = '[Auth] UserLogin';
 
   constructor(
     public username: string,
@@ -34,11 +34,11 @@ export class UserLogin {
 }
 
 export class UserLogout {
-  static readonly type = '[User] UserLogout';
+  static readonly type = '[Auth] UserLogout';
 }
 
 export class UserRegister {
-  static readonly type = '[User] UserRegister';
+  static readonly type = '[Auth] UserRegister';
 
   constructor(
     public username: string,

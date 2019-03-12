@@ -60,7 +60,7 @@ export class CreateNewProjectComponent implements OnInit {
     this.store.dispatch(new CreateProject({
       name: this.name,
       color: this.color,
-      userId: state.app.user.user.id
+      userId: state.app.auth.user.id
     }));
 
     this.name = '';

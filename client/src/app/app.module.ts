@@ -11,7 +11,7 @@ import { SharedModule } from './shared/shared.module';
 import { AppState } from './store/app-state';
 import { NgxsModule } from '@ngxs/store';
 import { ActivitiesState } from './store/states/activities';
-import { UserState } from './store/states/user';
+import { AuthState } from './store/states/auth';
 import { ProjectsState } from './store/states/projects';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToasterModule } from 'angular2-toaster';
@@ -34,7 +34,7 @@ import { ToasterModule } from 'angular2-toaster';
       AppState,
       ActivitiesState,
       ProjectsState,
-      UserState
+      AuthState
     ])
   ],
   providers: [],

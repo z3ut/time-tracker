@@ -10,7 +10,7 @@ export class AuthGuard implements CanActivate {
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
     const store = this.store.snapshot();
-    if (store.app.user.isLogged) {
+    if (store.app.auth.isLogged) {
       return true;
     }
 

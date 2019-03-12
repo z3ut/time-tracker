@@ -32,7 +32,7 @@ export class CurrentActivitiesComponent implements OnInit {
 
   ngOnInit() {
     const store = this.store.snapshot();
-    this.userId = store.app.user.user.id;
+    this.userId = store.app.auth.user.id;
 
     this.activities$ = this.store.select(state => state.app.activities.currentActivities);
     this.projects$ = this.store.select(state => state.app.projects.projects);

@@ -1,7 +1,7 @@
 import { State, StateContext, NgxsOnInit } from '@ngxs/store';
 
 import { ActivitiesState } from './states/activities';
-import { UserState } from './states/user';
+import { AuthState } from './states/auth';
 import { ProjectsState } from './states/projects';
 
 // tslint:disable-next-line:no-empty-interface
@@ -15,7 +15,7 @@ export interface AppStateModel {}
   children: [
     ActivitiesState,
     ProjectsState,
-    UserState
+    AuthState
   ]
 })
 export class AppState implements NgxsOnInit  {

@@ -3,32 +3,32 @@ import {
   CheckIsLogged,
   UserLogin, LoginSuccess, LoginFailed, UserLogout,
   UserRegister, RegisterSuccess, RegisterFailed
-} from '../actions/user';
+} from '../actions/auth';
 import { User } from 'src/app/models/user';
 import { AuthService } from 'src/app/core/services/auth.service';
 
-export interface UserStateModel {
+export interface AuthStateModel {
   user: User;
   isLogged: boolean;
 }
 
-@State<UserStateModel>({
-  name: 'user',
+@State<AuthStateModel>({
+  name: 'auth',
   defaults: {
     user: null,
     isLogged: false
   }
 })
-export class UserState implements NgxsOnInit  {
+export class AuthState implements NgxsOnInit  {
 
   constructor(private authService: AuthService) {}
 
-  ngxsOnInit(ctx: StateContext<UserStateModel>) {
+  ngxsOnInit(ctx: StateContext<AuthStateModel>) {
     ctx.dispatch(new CheckIsLogged());
   }
 
   @Action(CheckIsLogged)
-  checkIsLogged(ctx: StateContext<UserStateModel>) {
+  checkIsLogged(ctx: StateContext<AuthStateModel>) {
     if (this.authService.isLogged()) {
       const user = this.authService.getUser();
       ctx.dispatch(new LoginSuccess(user));
@@ -36,7 +36,7 @@ export class UserState implements NgxsOnInit  {
   }
 
   @Action(UserLogin)
-  userLogin(ctx: StateContext<UserStateModel>, action: UserLogin) {
+  userLogin(ctx: StateContext<AuthStateModel>, action: UserLogin) {
     this.authService
       .login({ username: action.username, password: action.password })
       .subscribe(user => {
@@ -47,7 +47,7 @@ export class UserState implements NgxsOnInit  {
   }
 
   @Action(UserLogout)
-  userLogout(ctx: StateContext<UserStateModel>) {
+  userLogout(ctx: StateContext<AuthStateModel>) {
     ctx.patchState({
       user: null,
       isLogged: false
@@ -55,7 +55,7 @@ export class UserState implements NgxsOnInit  {
   }
 
   @Action(LoginSuccess)
-  loginSuccess(ctx: StateContext<UserStateModel>, action: LoginSuccess) {
+  loginSuccess(ctx: StateContext<AuthStateModel>, action: LoginSuccess) {
     ctx.patchState({
       user: action.user,
       isLogged: true
@@ -63,7 +63,7 @@ export class UserState implements NgxsOnInit  {
   }
 
   @Action(UserRegister)
-  userRegister(ctx: StateContext<UserStateModel>, action: UserRegister) {
+  userRegister(ctx: StateContext<AuthStateModel>, action: UserRegister) {
     return this.authService
       .register({ username: action.username, password: action.password })
       .subscribe(user => {
@@ -74,7 +74,7 @@ export class UserState implements NgxsOnInit  {
   }
 
   @Action(RegisterSuccess)
-  registerSuccess(ctx: StateContext<UserStateModel>, action: RegisterSuccess) {
+  registerSuccess(ctx: StateContext<AuthStateModel>, action: RegisterSuccess) {
     ctx.patchState({
       user: action.user,
       isLogged: true
