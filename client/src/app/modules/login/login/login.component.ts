@@ -3,6 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { SpinnerService } from 'src/app/shared/components/spinner/spinner.service';
 import { Store, Actions, ofActionDispatched } from '@ngxs/store';
 import { UserLogin, LoginSuccess, LoginFailed } from 'src/app/store/actions/user';
+import { ToasterService } from 'angular2-toaster';
 
 @Component({
   selector: 'app-login',
@@ -18,6 +19,7 @@ export class LoginComponent implements OnInit {
 
   constructor(
     private spinnerService: SpinnerService,
+    private toasterService: ToasterService,
     private route: ActivatedRoute,
     private router: Router,
     private store: Store,
@@ -30,7 +32,7 @@ export class LoginComponent implements OnInit {
 
   login() {
     if (!this.username || !this.password) {
-      alert('validate input');
+      this.toasterService.pop('warning', 'Enter username/password');
       return;
     }
 
@@ -48,7 +50,7 @@ export class LoginComponent implements OnInit {
       .pipe(ofActionDispatched(LoginFailed))
       .subscribe(({ payload }) => {
         this.spinnerService.hide();
-        alert('Auth error');
+        this.toasterService.pop('error', 'Login error');
       });
   }
 

@@ -3,6 +3,7 @@ import { Project } from 'src/app/models/project';
 import Pickr from '@simonwep/pickr/dist/pickr.min';
 import { Store, Actions } from '@ngxs/store';
 import { CreateProject } from 'src/app/store/actions/project';
+import { ToasterService } from 'angular2-toaster';
 
 @Component({
   selector: 'app-create-new-project',
@@ -18,7 +19,8 @@ export class CreateNewProjectComponent implements OnInit {
 
   @Output() created = new EventEmitter<Project>();
 
-  constructor(private store: Store,
+  constructor(private toasterService: ToasterService,
+              private store: Store,
               private actions$: Actions) { }
 
   ngOnInit() {
@@ -49,7 +51,7 @@ export class CreateNewProjectComponent implements OnInit {
 
   create() {
     if (!this.name || !this.color) {
-      alert('validate input');
+      this.toasterService.pop('warning', 'Enter project name and select color');
       return;
     }
 

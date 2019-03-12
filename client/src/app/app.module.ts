@@ -13,6 +13,8 @@ import { NgxsModule } from '@ngxs/store';
 import { ActivitiesState } from './store/states/activities';
 import { UserState } from './store/states/user';
 import { ProjectsState } from './store/states/projects';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { ToasterModule } from 'angular2-toaster';
 
 @NgModule({
   declarations: [
@@ -20,6 +22,8 @@ import { ProjectsState } from './store/states/projects';
   ],
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
+    ToasterModule.forRoot(),
     AppRoutingModule,
     CoreModule,
     ActivitiesModule,

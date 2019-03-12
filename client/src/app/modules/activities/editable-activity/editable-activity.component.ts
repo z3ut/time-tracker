@@ -43,8 +43,8 @@ export class EditableActivityComponent implements OnInit, OnChanges {
     if (typeof intervalSeconds !== 'number') {
       return;
     }
-    this.activity.dateTimeEnd = new Date(this.activity.dateTimeStart.getTime() + intervalSeconds * 1000);
-    // TODO: user mutate actions stream with debounce for saving data?
+    this.activity.dateTimeEnd = new Date(
+      this.activity.dateTimeStart.getTime() + intervalSeconds * 1000);
     this.saveChanges();
   }
 

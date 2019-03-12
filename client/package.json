@@ -23,6 +23,7 @@
     "@ngxs/store": "^3.4.2",
     "@simonwep/pickr": "^0.4.0",
     "angular2-text-mask": "^9.0.0",
+    "angular2-toaster": "^7.0.0",
     "core-js": "^2.5.4",
     "ng-pick-datetime": "^7.0.0",
     "rxjs": "~6.3.3",

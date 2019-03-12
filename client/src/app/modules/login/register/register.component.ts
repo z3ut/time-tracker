@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { Store, Actions, ofActionDispatched } from '@ngxs/store';
 import { SpinnerService } from 'src/app/shared/components/spinner/spinner.service';
 import { UserRegister, RegisterSuccess, RegisterFailed } from 'src/app/store/actions/user';
+import { ToasterService } from 'angular2-toaster';
 
 @Component({
   selector: 'app-register',
@@ -16,6 +17,7 @@ export class RegisterComponent implements OnInit {
 
   constructor(
     private spinnerService: SpinnerService,
+    private toasterService: ToasterService,
     private store: Store,
     private actions$: Actions,
     private router: Router) { }
@@ -25,7 +27,7 @@ export class RegisterComponent implements OnInit {
 
   register() {
     if (!this.username || !this.password) {
-      alert('validate input');
+      this.toasterService.pop('warning', 'Enter username/password');
       return;
     }
 
@@ -43,7 +45,7 @@ export class RegisterComponent implements OnInit {
       .pipe(ofActionDispatched(RegisterFailed))
       .subscribe(({ payload }) => {
         this.spinnerService.hide();
-        alert('Register error');
+        this.toasterService.pop('error', 'Registration error');
       });
   }
 }

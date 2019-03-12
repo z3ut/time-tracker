@@ -9,7 +9,8 @@ import {
   UpdateActivityError, UpdateActivity,
   DeleteActivityError, DeleteActivity
 } from 'src/app/store/actions/activity';
-import { CreateProject, LoadUserProjects, DeleteProject, DeleteProjectError, CreateProjectError } from 'src/app/store/actions/project';
+import { LoadUserProjects, DeleteProject, DeleteProjectError, CreateProjectError } from 'src/app/store/actions/project';
+import { ToasterService } from 'angular2-toaster';
 
 @Component({
   selector: 'app-current-activities',
@@ -18,7 +19,8 @@ import { CreateProject, LoadUserProjects, DeleteProject, DeleteProjectError, Cre
 })
 export class CurrentActivitiesComponent implements OnInit {
 
-  constructor(private store: Store,
+  constructor(private toasterService: ToasterService,
+              private store: Store,
               private actions$: Actions) { }
 
   activities$: Observable<Activity[]>;
@@ -52,7 +54,7 @@ export class CurrentActivitiesComponent implements OnInit {
     this.actions$
       .pipe(ofActionDispatched(LoadMoreCurrentActivitiesError))
       .subscribe(({ payload }) => {
-        console.log('Error loading more activities');
+        this.toasterService.pop('error', 'Error loading more activities');
         this.isLoadingMore = false;
       });
 
@@ -66,33 +68,33 @@ export class CurrentActivitiesComponent implements OnInit {
     this.actions$
       .pipe(ofActionDispatched(CreateActivityError))
       .subscribe(({ payload }) => {
-        console.log('Error creating new activity');
+        this.toasterService.pop('error', 'Error creating new activity');
       });
 
 
     this.actions$
       .pipe(ofActionDispatched(UpdateActivityError))
       .subscribe(({ payload }) => {
-        console.log('Error updating activity');
+        this.toasterService.pop('error', 'Error updating activity');
       });
 
 
     this.actions$
       .pipe(ofActionDispatched(DeleteActivityError))
       .subscribe(({ payload }) => {
-        console.log('Error deleting activity');
+        this.toasterService.pop('error', 'Error deleting activity');
       });
 
     this.actions$
       .pipe(ofActionDispatched(DeleteProjectError))
       .subscribe(({ payload }) => {
-        console.log('Error deleting project');
+        this.toasterService.pop('error', 'Error deleting project');
       });
 
     this.actions$
       .pipe(ofActionDispatched(CreateProjectError))
       .subscribe(({ payload }) => {
-        console.log('Error creating project');
+        this.toasterService.pop('error', 'Error creating project');
       });
   }
 
