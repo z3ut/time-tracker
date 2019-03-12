@@ -14,6 +14,7 @@ export class RegisterComponent implements OnInit {
 
   username: '';
   password: '';
+  isLoading = false;
 
   constructor(
     private spinnerService: SpinnerService,
@@ -31,12 +32,14 @@ export class RegisterComponent implements OnInit {
       return;
     }
 
+    this.isLoading = true;
     this.spinnerService.show();
     this.store.dispatch(new UserRegister(this.username, this.password));
 
     this.actions$
       .pipe(ofActionDispatched(RegisterSuccess))
       .subscribe(({ payload }) => {
+        this.isLoading = false;
         this.spinnerService.hide();
         this.router.navigate(['']);
       });
@@ -44,6 +47,7 @@ export class RegisterComponent implements OnInit {
     this.actions$
       .pipe(ofActionDispatched(RegisterFailed))
       .subscribe(({ payload }) => {
+        this.isLoading = false;
         this.spinnerService.hide();
         this.toasterService.pop('error', 'Registration error');
       });

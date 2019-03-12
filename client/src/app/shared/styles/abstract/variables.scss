@@ -1,0 +1,13 @@
+$app-colors: (
+  'primary': #87CFFA, 
+  'accent': #3AA6E6,
+  'secondary': #FFE4C4,
+  'foreground': #B6E3FD,
+  'background': #FFFFFF
+);
+
+@function app-color($key: 'primary') {
+  @return map-get($rdview-colors, $key);
+}
+
+$header-height: 2em;

@@ -14,6 +14,7 @@ export class LoginComponent implements OnInit {
 
   username: '';
   password: '';
+  isLoading = false;
 
   private returnUrl: string;
 
@@ -36,12 +37,14 @@ export class LoginComponent implements OnInit {
       return;
     }
 
+    this.isLoading = true;
     this.spinnerService.show();
     this.store.dispatch(new UserLogin(this.username, this.password));
 
     this.actions$
       .pipe(ofActionDispatched(LoginSuccess))
       .subscribe(({ payload }) => {
+        this.isLoading = false;
         this.spinnerService.hide();
         this.router.navigate([this.returnUrl]);
       });
@@ -49,6 +52,7 @@ export class LoginComponent implements OnInit {
     this.actions$
       .pipe(ofActionDispatched(LoginFailed))
       .subscribe(({ payload }) => {
+        this.isLoading = false;
         this.spinnerService.hide();
         this.toasterService.pop('error', 'Login error');
       });

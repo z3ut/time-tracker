@@ -2,17 +2,4 @@
 @import '~@simonwep/pickr/dist/pickr.min.css';
 @import '~angular2-toaster/toaster';
 
-input[type=number]::-webkit-outer-spin-button,
-input[type=number]::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-
-input[type=number] {
-  -moz-appearance:textfield;
-}
-
-html, body {
-  padding: 0;
-  margin: 0;
-}
+@import 'app/shared/styles/main.scss';

@@ -1,10 +1,43 @@
-Username:<br>
-<input type="text" name="username" [(ngModel)]="username">
-<br>
-Password:<br>
-<input type="password" name="password" [(ngModel)]="password">
-<br>
-<br>
-<button value="Login" (click)="login()">Login</button>
-<br>
-<a routerLink="/register">Register</a>
+<form (ngSubmit)="login()"
+    #loginForm="ngForm"
+    class="form">
+  <div class="input-container">
+    <label>
+      Username:
+      <input type="text"
+        class="input"
+        name="username"
+        [(ngModel)]="username"
+        #usernameInput="ngModel"
+        required>
+    </label>
+    <div [hidden]="usernameInput.valid || usernameInput.pristine"
+        class="input-error-message">
+      Username is required
+    </div>
+  </div>
+  <div class="input-container">
+    <label>
+      Password:
+      <input type="password"
+        class="input"
+        name="password"
+        [(ngModel)]="password"
+        #passwordInput="ngModel"
+        required>
+    </label>
+    <div [hidden]="passwordInput.valid || passwordInput.pristine"
+        class="input-error-message">
+      Password is required
+    </div>
+  </div>
+  <div class="input-container">
+    <button type="submit"
+        class="button"
+        [disabled]="!loginForm.form.valid || isLoading">
+      Login</button>
+  </div>
+  <div class="input-container register">
+    <a routerLink="/register">Register</a>
+  </div>
+</form>
