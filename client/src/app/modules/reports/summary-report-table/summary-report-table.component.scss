@@ -1,5 +1,30 @@
+.container {
+  padding: .25em 1em;
+}
+
+.project:not(:last-child) {
+  padding-bottom: 2em;
+}
+
 .project-color {
   display: inline-block;
-  width: 1em;
-  height: 1em;
+  width: 1.5em;
+  height: 1.5em;
+  margin-right: .5em;
+}
+
+.project-title {
+  display: flex;
+  justify-content: space-between;
+  padding-bottom: .5em;
+}
+
+.project-name {
+  font-size: 1.5em;
+  display: inline-block;
+}
+
+.activity {
+  display: flex;
+  justify-content: space-between;
 }

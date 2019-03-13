@@ -1,23 +1,37 @@
-
-
-<div class="project"
-  *ngFor="let projectData of activitesByProject">
-  {{ projectData.project.name }}
-  <div class="project-color"
-    [style.backgroundColor]="projectData.project.color"></div>
+<div class="container">
+  <div class="project"
+    *ngFor="let projectData of activitesByProject">
   
-  <app-time-amount
-    [intervalSeconds]="projectData.totalTimeSeconds"
-    [isReadonly]="true">
-  </app-time-amount>
-
-  <div class="activities">
-    <div class="activity" *ngFor="let a of projectData.activities">
-      {{ a.title }}
-      <app-time-amount
-        [intervalSeconds]="a.amountSeconds"
-        [isReadonly]="true">
-      </app-time-amount>
+    <div class="project-title">
+      <div>
+        <div class="project-color"
+          [style.backgroundColor]="projectData.project.color"></div>
+        <div class="project-name">
+          {{ projectData.project.name }}
+        </div>
+      </div>
+  
+      <div class="project-time-amount">
+        <app-time-amount
+          [intervalSeconds]="projectData.totalTimeSeconds"
+          [isReadonly]="true">
+        </app-time-amount>
+      </div>
+    </div>
+  
+    <div class="activities">
+      <div class="activity" *ngFor="let a of projectData.activities">
+        <div class="activity-title">
+          {{ a.title }}
+        </div>
+        <div class="activity-time-amount">
+          <app-time-amount
+            [intervalSeconds]="a.amountSeconds"
+            [isReadonly]="true">
+          </app-time-amount>
+        </div>
+      </div>
     </div>
   </div>
 </div>
+

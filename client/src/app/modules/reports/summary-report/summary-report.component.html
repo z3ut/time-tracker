@@ -1,22 +1,30 @@
-<div class="date-range-interval-container">
-  <input [owlDateTime]="dateTimeFromContainer"
-    [owlDateTimeTrigger]="dateTimeFromContainer"
-    placeholder="From"
-    class="activity-date-input"
-    [(ngModel)]="dateTimeFrom"
-    (ngModelChange)="timeChange()">
-  <owl-date-time #dateTimeFromContainer ></owl-date-time>
-
-  <input [owlDateTime]="dateTimeToContainer"
-    [owlDateTimeTrigger]="dateTimeToContainer"
-    placeholder="To"
-    class="activity-date-input"
-    [(ngModel)]="dateTimeTo"
-    (ngModelChange)="timeChange()">
-  <owl-date-time #dateTimeToContainer ></owl-date-time>
+<div class="control-container">
+  <div class="date-range-interval-container">
+    <div class="date-container">
+      <input [owlDateTime]="dateTimeFromContainer"
+        [owlDateTimeTrigger]="dateTimeFromContainer"
+        placeholder="From"
+        class="activity-date-input"
+        [(ngModel)]="dateTimeFrom">
+      <owl-date-time #dateTimeFromContainer ></owl-date-time>
+    </div>
+    
+    <div class="date-container">
+      <input [owlDateTime]="dateTimeToContainer"
+        [owlDateTimeTrigger]="dateTimeToContainer"
+        placeholder="To"
+        class="activity-date-input"
+        [(ngModel)]="dateTimeTo">
+      <owl-date-time #dateTimeToContainer ></owl-date-time>
+    </div>
+  </div>
+  
+  <button class="button generate-report-button"
+      (click)="generateReport()"
+      [disabled]="!isDateRangeSelected">
+    Generate
+  </button>
 </div>
 
-<button (click)="generateReport()">Generate</button>
-<br>
 
 <app-summary-report-table [activities]="activities"></app-summary-report-table>

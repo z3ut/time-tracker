@@ -1,6 +1,18 @@
-.date-range-interval-container {
-  font-size: 1.2em;
-  padding: .25em 1em;
+.control-container {
+  text-align: center;
+  padding: 1em .5em;
 }
 
+.date-container {
+  display: inline-block;
+  padding: 0 1em;
+}
 
+.date-range-interval-container {
+  font-size: 1.2em;
+  padding: .25em 1em 1em;
+}
+
+.generate-report-button {
+  width: 15em;
+}
