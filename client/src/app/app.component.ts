@@ -1,5 +1,8 @@
 import { Component } from '@angular/core';
 import { ToasterConfig } from 'angular2-toaster';
+import { Router, NavigationStart } from '@angular/router';
+import { filter } from 'rxjs/operators';
+import { SpinnerService } from './shared/components/spinner/spinner.service';
 
 @Component({
   selector: 'app-root',
@@ -13,4 +16,12 @@ export class AppComponent {
     animation: 'fade',
     limit: 5
   });
+
+  constructor(private router: Router, private spinnerService: SpinnerService) {
+    this.router.events
+      .pipe(filter(event => event instanceof NavigationStart))
+      .subscribe(() => {
+        this.spinnerService.hide();
+      });
+  }
 }
