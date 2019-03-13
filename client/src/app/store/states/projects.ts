@@ -8,6 +8,7 @@ import {
   DeleteProject, DeleteProjectSuccess, DeleteProjectError,
   LoadUserProjects, LoadUserProjectsSuccess, LoadUserProjectsError
 } from '../actions/project';
+import { LoginSuccess } from '../actions/auth';
 
 export interface ProjectsStateModel {
   projects: Project[];
@@ -23,7 +24,7 @@ export class ProjectsState implements NgxsOnInit  {
 
   constructor(private projectService: ProjectService) {}
 
-  ngxsOnInit(ctx: StateContext<ProjectsStateModel>) {}
+  ngxsOnInit(ctx: StateContext<ProjectsStateModel>) { }
 
   @Action(CreateProject)
   createProject(ctx: StateContext<ProjectsStateModel>, action: CreateProject) {
@@ -83,6 +84,11 @@ export class ProjectsState implements NgxsOnInit  {
       }, err => {
         ctx.dispatch(new DeleteProjectError(action.id));
       });
+  }
+
+  @Action(LoginSuccess)
+  loginSuccess(ctx: StateContext<ProjectsStateModel>) {
+    ctx.dispatch(new LoadUserProjects());
   }
 
   @Action(LoadUserProjects)
