@@ -1,8 +1,37 @@
-Name:<br>
-<input type="text" name="name" [(ngModel)]="name">
-<br>
-Color:<br>
-<div #colorPicker></div>
-<br>
-<br>
-<button value="Login" (click)="create()">Create</button>
+<form (ngSubmit)="create()"
+    #loginForm="ngForm">
+  <div class="input-container">
+    <label>
+      Name:
+      <input type="text"
+        class="input"
+        name="name"
+        [(ngModel)]="name"
+        #nameInput="ngModel"
+        required>
+    </label>
+    <div [hidden]="nameInput.valid || nameInput.pristine"
+        class="input-error-message">
+      Project name is required
+    </div>
+  </div>
+
+  <div class="input-container">
+    Color:
+    <div #colorPicker></div>
+  </div>
+  
+  <button
+      type="submit"
+      class="button ctrl-button"
+      [disabled]="!loginForm.form.valid || isLoading">
+    Create
+  </button>
+  
+  <button
+      class="button ctrl-button"
+      (click)="cancel()">
+    Cancel
+  </button>
+</form>
+

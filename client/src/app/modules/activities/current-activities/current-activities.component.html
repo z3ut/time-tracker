@@ -30,10 +30,9 @@
   Loading
 </div>
 
-<app-popup *ngIf="isCreatingNewProject"
-    (ok)="closeNewProjectPopup()"
-    (close)="closeNewProjectPopup()">
+<app-popup *ngIf="isCreatingNewProject">
   <app-create-new-project
-    (created)="newProjectCreated()">
+    (created)="closeNewProjectPopup()"
+    (canceled)="closeNewProjectPopup()">
   </app-create-new-project>
 </app-popup>

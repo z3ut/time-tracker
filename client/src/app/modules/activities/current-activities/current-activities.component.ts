@@ -9,7 +9,7 @@ import {
   UpdateActivityError, UpdateActivity,
   DeleteActivityError, DeleteActivity
 } from 'src/app/store/actions/activity';
-import { LoadUserProjects, DeleteProject, DeleteProjectError, CreateProjectError } from 'src/app/store/actions/project';
+import { LoadUserProjects, DeleteProject, DeleteProjectError } from 'src/app/store/actions/project';
 import { ToasterService } from 'angular2-toaster';
 
 @Component({
@@ -90,12 +90,6 @@ export class CurrentActivitiesComponent implements OnInit {
       .subscribe(({ payload }) => {
         this.toasterService.pop('error', 'Error deleting project');
       });
-
-    this.actions$
-      .pipe(ofActionDispatched(CreateProjectError))
-      .subscribe(({ payload }) => {
-        this.toasterService.pop('error', 'Error creating project');
-      });
   }
 
   saveActivity() {
@@ -121,10 +115,6 @@ export class CurrentActivitiesComponent implements OnInit {
 
   deleteProject(project: Project) {
     this.store.dispatch(new DeleteProject(project.id));
-  }
-
-  newProjectCreated() {
-    this.isCreatingNewProject = false;
   }
 
   closeNewProjectPopup() {

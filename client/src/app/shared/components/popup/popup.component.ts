@@ -8,6 +8,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 export class PopupComponent implements OnInit {
 
   @Input() isVisible: boolean;
+  @Input() isShowControlButtons = false;
   @Output() ok = new EventEmitter();
   @Output() close = new EventEmitter();
 

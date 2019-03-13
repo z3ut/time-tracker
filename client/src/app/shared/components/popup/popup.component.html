@@ -3,7 +3,7 @@
     <div class="content">
       <ng-content></ng-content>
     </div>
-    <div class="footer">
+    <div class="footer" *ngIf="isShowControlButtons">
       <button (click)="okClick()">Ok</button>
       <button (click)="closeClick()">Close</button>
     </div>
