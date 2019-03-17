@@ -10,9 +10,10 @@ import { FormsModule } from '@angular/forms';
 import { ActivitiesByDayListComponent } from './activities-by-day-list/activities-by-day-list.component';
 import { ProjectSelectorComponent } from './project-selector/project-selector.component';
 import { ProjectListItemComponent } from './project-list-item/project-list-item.component';
-import { CreateActivityWithTimerComponent } from './create-activity-with-timer/create-activity-with-timer.component';
+import { CreateActivityWithTimerComponent } from './create-activity/create-activity-with-timer/create-activity-with-timer.component';
 import { CreateActivityComponent } from './create-activity/create-activity.component';
 import { CreateNewProjectComponent } from './create-new-project/create-new-project.component';
+import { CreateActivityManualComponent } from './create-activity/create-activity-manual/create-activity-manual.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import { CreateNewProjectComponent } from './create-new-project/create-new-proje
     ProjectListItemComponent,
     CreateActivityWithTimerComponent,
     CreateActivityComponent,
-    CreateNewProjectComponent
+    CreateNewProjectComponent,
+    CreateActivityManualComponent
   ],
   imports: [
     CommonModule,

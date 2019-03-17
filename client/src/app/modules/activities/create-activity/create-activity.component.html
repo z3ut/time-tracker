@@ -3,35 +3,20 @@
     <div [ngSwitch]="createBy">
         <div *ngSwitchCase="'timer'">
           <app-create-activity-with-timer
-            [activity]="newActivity"
             [projects]="projects"
-            (createActivity)="createActivity()"
+            (createActivity)="createActivity($event)"
+            (updateActivity)="updateActivity($event)"
             (createNewProject)="createNewProjectEvent()"
             (deleteProject)="deleteProjectEvent($event)">
           </app-create-activity-with-timer>
         </div>
         <div *ngSwitchCase="'manual'">
-          <div class="manual-container">
-            <app-editable-activity
-              [activity]="newActivity"
-              [projects]="projects"
-              (createNewProject)="createNewProjectEvent()"
-              (deleteProject)="deleteProjectEvent($event)">
-            </app-editable-activity>
-          </div>
-          <div class="manual-create-button">
-            <button (click)="createActivity()">Create</button>
-          </div>
-        </div>
-    
-        <div *ngSwitchDefault>
-          <app-create-activity-with-timer
-            [activity]="newActivity"
+          <app-create-activity-manual
             [projects]="projects"
-            (createActivity)="createActivity()"
+            (createActivity)="createActivity($event)"
             (createNewProject)="createNewProjectEvent()"
             (deleteProject)="deleteProjectEvent($event)">
-          </app-create-activity-with-timer>
+          </app-create-activity-manual>
         </div>
       </div>
   </div>

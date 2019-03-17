@@ -1,11 +1,10 @@
 <app-create-activity
   [projects]="projects$ | async"
   (create)="createActivity($event)"
+  (update)="activityChanged($event)"
   (createNewProject)="createNewProjectEvent()"
   (deleteProject)="deleteProject($event)">
 </app-create-activity>
-
-<p></p>
 
 <app-activities-by-day-list
   [activities]="activities$ | async"
@@ -14,7 +13,6 @@
   (deleteActivity)="deleteActivity($event)"
   (createNewProject)="createNewProjectEvent()"
   (deleteProject)="deleteProject($event)">
-
 </app-activities-by-day-list>
 
 

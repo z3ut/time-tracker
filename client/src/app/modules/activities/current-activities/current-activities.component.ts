@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Activity } from 'src/app/models/activity';
 import { Project } from 'src/app/models/project';
-import { Store, Actions, ofActionDispatched } from '@ngxs/store';
+import { Store, Actions, ofActionDispatched, Select } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import {
   LoadMoreCurrentActivities, LoadMoreCurrentActivitiesSuccess, LoadMoreCurrentActivitiesError,
@@ -11,6 +11,7 @@ import {
 } from 'src/app/store/actions/activity';
 import { LoadUserProjects, DeleteProject, DeleteProjectError } from 'src/app/store/actions/project';
 import { ToasterService } from 'angular2-toaster';
+import { ActivitiesState } from 'src/app/store/states/activities';
 
 @Component({
   selector: 'app-current-activities',
@@ -23,19 +24,17 @@ export class CurrentActivitiesComponent implements OnInit {
               private store: Store,
               private actions$: Actions) { }
 
-  activities$: Observable<Activity[]>;
-  projects$: Observable<Project>;
   newActivity: Activity;
   userId: number;
   isLoadingMore = false;
   isCreatingNewProject = false;
 
+  @Select(ActivitiesState.activitiesExceptRunning) activities$: Observable<Activity>;
+  @Select(state => state.app.projects.projects) projects$: Observable<Activity>;
+
   ngOnInit() {
     const store = this.store.snapshot();
     this.userId = store.app.auth.user.id;
-
-    this.activities$ = this.store.select(state => state.app.activities.currentActivities);
-    this.projects$ = this.store.select(state => state.app.projects.projects);
 
     if (!store.app.activities.isCurrentActivitiesInited) {
       this.loadMoreActivities();

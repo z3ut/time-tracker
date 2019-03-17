@@ -1,23 +1,4 @@
 $control-width: 5em;
-$manual-button-create-width: 4em;
-
-.container {
-
-}
-
-.manual-container {
-  width: calc(100% - #{$manual-button-create-width});
-  display: inline-block;
-}
-
-.manual-create-button {
-  width: $manual-button-create-width;
-  display: inline-block;
-
-  button {
-    height: 3em;
-  }
-}
 
 .create-container {
   width: calc(100% - #{$control-width});

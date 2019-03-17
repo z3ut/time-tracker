@@ -1,0 +1,15 @@
+$manual-button-create-width: 4em;
+
+.manual-container {
+  width: calc(100% - #{$manual-button-create-width});
+  display: inline-block;
+}
+
+.manual-create-button {
+  width: $manual-button-create-width;
+  display: inline-block;
+
+  button {
+    height: 3em;
+  }
+}

@@ -30,6 +30,16 @@ export class ActivitiesState implements NgxsOnInit  {
 
   private loadCurrentActivitiesStepDays = 7;
 
+  static runningActivity(state) {
+    return state.app.activities.currentActivities.find(a => !a.dateTimeEnd);
+  }
+
+  static activitiesExceptRunning(state) {
+    const runningActivity = ActivitiesState.runningActivity(state);
+    return state.app.activities.currentActivities
+      .filter(a => a !== runningActivity);
+  }
+
   constructor(private activityService: ActivityService) {}
 
   ngxsOnInit(ctx: StateContext<ActivitiesStateModel>) {}

@@ -12,26 +12,22 @@ export class CreateActivityComponent implements OnInit {
 
   @Input() projects: Project[];
   @Output() create = new EventEmitter<Activity>();
+  @Output() update = new EventEmitter<Activity>();
   @Output() createNewProject = new EventEmitter();
   @Output() deleteProject = new EventEmitter<Project>();
-
-  newActivity: Activity;
-  userId: number;
 
   createBy: 'timer' | 'manual' = 'timer';
 
   constructor(private store: Store) { }
 
-  ngOnInit() {
-    const store = this.store.snapshot();
-    this.userId = store.app.auth.user.id;
+  ngOnInit() { }
 
-    this.generateNewActivity();
+  createActivity(activity: Activity) {
+    this.create.emit(activity);
   }
 
-  createActivity() {
-    this.create.emit(this.newActivity);
-    this.generateNewActivity();
+  updateActivity(activity: Activity) {
+    this.update.emit(activity);
   }
 
   deleteProjectEvent(project: Project) {
@@ -40,13 +36,5 @@ export class CreateActivityComponent implements OnInit {
 
   createNewProjectEvent() {
     this.createNewProject.emit();
-  }
-
-  private generateNewActivity() {
-    this.newActivity = {
-      userId: this.userId,
-      title: '',
-      dateTimeStart: new Date()
-    };
   }
 }

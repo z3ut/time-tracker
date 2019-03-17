@@ -1,0 +1,11 @@
+<div class="manual-container">
+  <app-editable-activity
+    [activity]="activity"
+    [projects]="projects"
+    (createNewProject)="createNewProjectEvent()"
+    (deleteProject)="deleteProjectEvent($event)">
+  </app-editable-activity>
+</div>
+<div class="manual-create-button">
+  <button (click)="create(activity)">Create</button>
+</div>
