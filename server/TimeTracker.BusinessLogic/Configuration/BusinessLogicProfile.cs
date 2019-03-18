@@ -12,6 +12,7 @@ namespace TimeTracker.BusinessLogic.Configuration
             CreateMap<Users.User, DataAccess.Models.User>().ReverseMap();
             CreateMap<Activities.Activity, DataAccess.Models.Activity>().ReverseMap();
             CreateMap<Projects.Project, DataAccess.Models.Project>().ReverseMap();
+            CreateMap<Workspaces.Workspace, DataAccess.Models.Workspace>().ReverseMap();
         }
     }
 }

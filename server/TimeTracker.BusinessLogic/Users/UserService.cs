@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using TimeTracker.BusinessLogic.Users.Passwords;
+using TimeTracker.BusinessLogic.Workspaces;
 using TimeTracker.DataAccess;
 
 namespace TimeTracker.BusinessLogic.Users
@@ -13,13 +14,15 @@ namespace TimeTracker.BusinessLogic.Users
         private readonly ActivityContext _activityContext;
         private readonly IMapper _mapper;
         private readonly IPasswordService _passwordService;
+        private readonly IUserWorkspaceService _userWorkspaceService;
 
         public UserService(ActivityContext activityContext, IMapper mapper,
-            IPasswordService passwordService)
+            IPasswordService passwordService, IUserWorkspaceService userWorkspaceService)
         {
             _activityContext = activityContext;
             _mapper = mapper;
             _passwordService = passwordService;
+            _userWorkspaceService = userWorkspaceService;
         }
 
         public User Create(User user, string password)
@@ -42,6 +45,12 @@ namespace TimeTracker.BusinessLogic.Users
             userDA.PasswordSalt = passwordSalt;
 
             _activityContext.Users.Add(userDA);
+
+            var defaultWorkspace = new DataAccess.Models.Workspace();
+            defaultWorkspace.Name = $"{user.Username} default workspace";
+            defaultWorkspace.DateTimeCreated = DateTime.Now;
+
+            userDA.SelectedWorkspace = defaultWorkspace;
             _activityContext.SaveChanges();
 
             var insertedUser = _mapper.Map<User>(userDA);
@@ -84,7 +93,14 @@ namespace TimeTracker.BusinessLogic.Users
                 }
             }
 
+            if (!_userWorkspaceService.IsWorkspaceInUserWorkspaces(
+                user.SelectedWorkspaceId, user.Id))
+            {
+                throw new Exception("Workspace doesn't belong to user");
+            }
+
             userDA.Name = user.Name;
+            userDA.SelectedWorkspaceId = user.SelectedWorkspaceId;
 
             if (!string.IsNullOrWhiteSpace(password))
             {

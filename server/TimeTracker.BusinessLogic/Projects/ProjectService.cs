@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using TimeTracker.BusinessLogic.Workspaces;
 using TimeTracker.DataAccess;
 
 namespace TimeTracker.BusinessLogic.Projects
@@ -11,11 +12,14 @@ namespace TimeTracker.BusinessLogic.Projects
     {
         private readonly ActivityContext _activityContext;
         private readonly IMapper _mapper;
+        private readonly IUserWorkspaceService _userWorkspaceService;
 
-        public ProjectService(ActivityContext activityContext, IMapper mapper)
+        public ProjectService(ActivityContext activityContext, IMapper mapper,
+            IUserWorkspaceService userWorkspaceService)
         {
             _activityContext = activityContext;
             _mapper = mapper;
+            _userWorkspaceService = userWorkspaceService;
         }
 
         public Project Create(Project project, int userId)
@@ -23,6 +27,12 @@ namespace TimeTracker.BusinessLogic.Projects
             if (project.UserId != userId)
             {
                 throw new Exception("Project doesn't belong to user");
+            }
+
+            if (!_userWorkspaceService.IsWorkspaceInUserWorkspaces(
+                project.WorkspaceId, userId))
+            {
+                throw new Exception("Workspace doesn't belong to user");
             }
 
             var projectDA = _mapper.Map<DataAccess.Models.Project>(project);
@@ -79,10 +89,16 @@ namespace TimeTracker.BusinessLogic.Projects
             return _mapper.Map<Project>(project);
         }
 
-        public IEnumerable<Project> GetUserProjects(int userId)
+        public IEnumerable<Project> GetUserProjects(int userId, int workspaceId)
         {
+            if (!_userWorkspaceService.IsWorkspaceInUserWorkspaces(
+                workspaceId, userId))
+            {
+                throw new Exception("Workspace doesn't belong to user");
+            }
+
             var userProjects = _activityContext.Projects
-                .Where(p => p.UserId == userId);
+                .Where(p => p.UserId == userId && p.WorkspaceId == workspaceId);
 
             return _mapper.Map<IEnumerable<Project>>(userProjects);
         }
@@ -93,7 +109,7 @@ namespace TimeTracker.BusinessLogic.Projects
 
             if (projectDA == null)
             {
-                throw new Exception("User not found");
+                throw new Exception("Project not found");
             }
 
             if (project.UserId != userId)
@@ -101,9 +117,16 @@ namespace TimeTracker.BusinessLogic.Projects
                 throw new Exception("Project doesn't belong to user");
             }
 
+            if (!_userWorkspaceService.IsWorkspaceInUserWorkspaces(
+                project.WorkspaceId, userId))
+            {
+                throw new Exception("Workspace doesn't belong to user");
+            }
+
             projectDA.Name = project.Name;
-            projectDA.UserId = project.UserId;
             projectDA.Color = project.Color;
+            projectDA.UserId = project.UserId;
+            projectDA.WorkspaceId = project.WorkspaceId;
 
             _activityContext.Projects.Update(projectDA);
             _activityContext.SaveChanges();

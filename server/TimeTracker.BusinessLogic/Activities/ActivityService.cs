@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using TimeTracker.BusinessLogic.Workspaces;
 using TimeTracker.DataAccess;
 
 namespace TimeTracker.BusinessLogic.Activities
@@ -11,11 +12,14 @@ namespace TimeTracker.BusinessLogic.Activities
     {
         private readonly ActivityContext _activityContext;
         private readonly IMapper _mapper;
+        private readonly IUserWorkspaceService _userWorkspaceService;
 
-        public ActivityService(ActivityContext activityContext, IMapper mapper)
+        public ActivityService(ActivityContext activityContext, IMapper mapper,
+            IUserWorkspaceService userWorkspaceService)
         {
             _activityContext = activityContext;
             _mapper = mapper;
+            _userWorkspaceService = userWorkspaceService;
         }
 
         public Activity Create(Activity activity, int userId)
@@ -23,6 +27,12 @@ namespace TimeTracker.BusinessLogic.Activities
             if (activity.UserId != userId)
             {
                 throw new Exception("Activity doesn't belong to user");
+            }
+
+            if (!_userWorkspaceService.IsWorkspaceInUserWorkspaces(
+                activity.WorkspaceId, userId))
+            {
+                throw new Exception("Workspace doesn't belong to user");
             }
 
             var activityDA = _mapper.Map<DataAccess.Models.Activity>(activity);
@@ -53,20 +63,20 @@ namespace TimeTracker.BusinessLogic.Activities
         }
 
         public IEnumerable<Activity> Get(DateTime dateTimeFrom,
-            DateTime dateTimeTo, int userId)
+            DateTime dateTimeTo, int userId, int workspaceId)
         {
+            if (!_userWorkspaceService.IsWorkspaceInUserWorkspaces(
+                workspaceId, userId))
+            {
+                throw new Exception("Workspace doesn't belong to user");
+            }
+
             var activities = _activityContext.Activities
                 .Where(a => a.UserId == userId &&
+                    a.WorkspaceId == workspaceId &&
                     dateTimeFrom <= a.DateTimeStart &&
                     a.DateTimeStart < dateTimeTo);
             return _mapper.Map<List<Activity>>(activities);
-        }
-
-        public Activity Get(int id)
-        {
-            var activity = _activityContext.Activities
-                .FirstOrDefault(a => a.Id == id);
-            return _mapper.Map<Activity>(activity);
         }
 
         public Activity Get(int id, int userId)
@@ -76,7 +86,7 @@ namespace TimeTracker.BusinessLogic.Activities
 
             if (activity == null)
             {
-                throw new Exception("Activity not found");
+                return null;
             }
 
             if (activity.UserId != userId)
@@ -101,11 +111,18 @@ namespace TimeTracker.BusinessLogic.Activities
                 throw new Exception("Activity doesn't belong to user");
             }
 
+            if (!_userWorkspaceService.IsWorkspaceInUserWorkspaces(
+                activity.WorkspaceId, userId))
+            {
+                throw new Exception("Workspace doesn't belong to user");
+            }
+
             savedActivity.DateTimeEnd = activity.DateTimeEnd;
             savedActivity.DateTimeStart = activity.DateTimeStart;
             savedActivity.Title = activity.Title;
             savedActivity.UserId = activity.UserId;
             savedActivity.ProjectId = activity.ProjectId;
+            savedActivity.WorkspaceId = activity.WorkspaceId;
 
             _activityContext.Activities.Update(savedActivity);
             _activityContext.SaveChanges();

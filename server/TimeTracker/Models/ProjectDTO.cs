@@ -12,5 +12,6 @@ namespace TimeTracker.Web.Models
         public string Color { get; set; }
         public DateTime DateTimeCreated { get; set; }
         public int UserId { get; set; }
+        public int WorkspaceId { get; set; }
     }
 }

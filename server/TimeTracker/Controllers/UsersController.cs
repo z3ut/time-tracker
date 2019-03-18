@@ -46,15 +46,9 @@ namespace TimeTracker.Web.Controllers
                 return BadRequest(new { message = "Username or password is incorrect" });
             }
 
-            var tokenString = CreateToken(user);
-
-            return Ok(new UserDTO
-            {
-                Id = user.Id,
-                Username = user.Username,
-                Name = user.Name,
-                Token = tokenString
-            });
+            var userDTO = _mapper.Map<UserDTO>(user);
+            userDTO.Token = CreateToken(user);
+            return Ok(userDTO);
         }
 
         [AllowAnonymous]
@@ -66,13 +60,9 @@ namespace TimeTracker.Web.Controllers
             var createdUser = _userService.Create(user, userCredentials.Password);
             var tokenString = CreateToken(createdUser);
 
-            return Ok(new UserDTO
-            {
-                Id = createdUser.Id,
-                Username = createdUser.Username,
-                Name = createdUser.Name,
-                Token = tokenString
-            });
+            var userDTO = _mapper.Map<UserDTO>(createdUser);
+            userDTO.Token = CreateToken(createdUser);
+            return Ok(userDTO);
         }
 
         private string CreateToken(User user)

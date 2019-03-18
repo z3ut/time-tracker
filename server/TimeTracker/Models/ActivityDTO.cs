@@ -9,6 +9,7 @@ namespace TimeTracker.Web.Models
     {
         public int Id { get; set; }
         public int UserId { get; set; }
+        public int WorkspaceId { get; set; }
         public int? ProjectId { get; set; }
         public string Title { get; set; }
         public DateTime DateTimeStart { get; set; }

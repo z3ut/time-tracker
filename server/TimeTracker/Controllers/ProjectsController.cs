@@ -26,7 +26,7 @@ namespace TimeTracker.Web.Controllers
         }
 
         [HttpPost]
-        public ProjectDTO CreateActivity(ProjectDTO project)
+        public ProjectDTO CreateProject(ProjectDTO project)
         {
             var projectBL = _mapper.Map<Project>(project);
             var projectCreated = _projectService.Create(projectBL, UserId);
@@ -34,23 +34,23 @@ namespace TimeTracker.Web.Controllers
         }
 
         [HttpDelete]
-        public void DeleteActivity(int id)
+        public void DeleteProject(int id)
         {
             _projectService.Delete(id, UserId);
         }
 
         [HttpGet]
         [ActionName("GetProjects")]
-        public IEnumerable<ProjectDTO> GetProjects()
+        public IEnumerable<ProjectDTO> GetProjects(int workspaceId)
         {
-            var projects = _projectService.GetUserProjects(UserId);
+            var projects = _projectService.GetUserProjects(UserId, workspaceId);
             return _mapper.Map<IEnumerable<ProjectDTO>>(projects);
         }
 
         [HttpGet]
-        [ActionName("GetActivity")]
+        [ActionName("GetProject")]
         [Route("{id}")]
-        public ActionResult<ProjectDTO> GetActivity(int id)
+        public ActionResult<ProjectDTO> GetProject(int id)
         {
             var project = _projectService.Get(id, UserId);
 

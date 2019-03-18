@@ -44,9 +44,10 @@ namespace TimeTracker.Web.Controllers
         [HttpGet]
         [ActionName("GetActivities")]
         public IEnumerable<ActivityDTO> GetActivities(DateTime dateTimeFrom,
-            DateTime dateTimeTo)
+            DateTime dateTimeTo, int workspaceId)
         {
-            var activities = _activityService.Get(dateTimeFrom, dateTimeTo, UserId);
+            var activities = _activityService.Get(dateTimeFrom, dateTimeTo,
+                UserId, workspaceId); 
             return _mapper.Map<IEnumerable<ActivityDTO>>(activities);
         }
 

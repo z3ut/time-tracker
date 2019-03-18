@@ -9,5 +9,6 @@ namespace TimeTracker.BusinessLogic.Users
         public int Id { get; set; }
         public string Name { get; set; }
         public string Username { get; set; }
+        public int SelectedWorkspaceId { get; set; }
     }
 }

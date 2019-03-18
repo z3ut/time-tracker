@@ -7,13 +7,9 @@ namespace TimeTracker.BusinessLogic.Activities
     public interface IActivityService
     {
         Activity Create(Activity activity, int userId);
-
-        Activity Get(int id);
         Activity Get(int id, int userId);
-        IEnumerable<Activity> Get(DateTime dateTimeFrom, DateTime dateTimeTo, int userId);
-
+        IEnumerable<Activity> Get(DateTime dateTimeFrom, DateTime dateTimeTo, int userId, int workspaceId);
         void Update(Activity activity, int userId);
-
         void Delete(int id, int userId);
     }
 }
