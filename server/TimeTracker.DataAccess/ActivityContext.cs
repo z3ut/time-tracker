@@ -30,11 +30,41 @@ namespace TimeTracker.DataAccess
                 }
             }
 
+            modelBuilder.Entity<UserWorkspace>()
+                .HasKey(uw => new { uw.UserId, uw.WorkspaceId });
+
+            modelBuilder.Entity<UserWorkspace>()
+                .HasOne<User>(uw => uw.User)
+                .WithMany(uw => uw.UserWorkspaces)
+                .HasForeignKey(uw => uw.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+
+            modelBuilder.Entity<UserWorkspace>()
+                .HasOne<Workspace>(uw => uw.Workspace)
+                .WithMany(uw => uw.UserWorkspaces)
+                .HasForeignKey(uw => uw.WorkspaceId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Activity>()
+                .HasOne<Workspace>(a => a.Workspace)
+                .WithMany(w => w.Activities)
+                .HasForeignKey(a => a.WorkspaceId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Project>()
+                .HasOne<Workspace>(p => p.Workspace)
+                .WithMany(w => w.Projects)
+                .HasForeignKey(p => p.WorkspaceId)
+                .OnDelete(DeleteBehavior.Restrict);
+
             base.OnModelCreating(modelBuilder);
         }
 
         public DbSet<Activity> Activities { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<UserWorkspace> UserWorkspaces { get; set; }
         public DbSet<Project> Projects { get; set; }
+        public DbSet<Workspace> Workspaces { get; set; }
     }
 }
