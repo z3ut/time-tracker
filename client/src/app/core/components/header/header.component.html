@@ -6,6 +6,10 @@
   <a class="link"
     routerLink="/summary-report"
     routerLinkActive="active">Summary report</a>
+
+  <a class="link"
+    routerLink="/manage-workspaces"
+    routerLinkActive="active">Workspaces</a>
   
   <div class="header-user" *ngIf="isLogged$ | async">
     {{ username$ | async }}

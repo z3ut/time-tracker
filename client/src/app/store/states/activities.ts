@@ -9,6 +9,8 @@ import {
 import { Activity } from 'src/app/models/activity';
 import { ActivityService } from 'src/app/core/services/activity.service';
 import { DeleteProject } from '../actions/project';
+import { SelectWorkspaceSuccess } from '../actions/workspace';
+import { WorkspacesStateModel } from './workspaces';
 
 export interface ActivitiesStateModel {
   currentActivities: Activity[];
@@ -154,5 +156,16 @@ export class ActivitiesState implements NgxsOnInit  {
         return a;
       })
     });
+  }
+
+  @Action(SelectWorkspaceSuccess)
+  selectWorkspaceSuccess(ctx: StateContext<ActivitiesStateModel>, action: SelectWorkspaceSuccess) {
+    ctx.patchState({
+      currentActivities: [],
+      currentActivitiesLoadedFrom: new Date(),
+      isCurrentActivitiesInited: false,
+      isLoadingCurrentActivities: false
+    });
+    ctx.dispatch(new LoadMoreCurrentActivities(action.workspace.id));
   }
 }

@@ -9,6 +9,7 @@ import {
   LoadUserProjects, LoadUserProjectsSuccess, LoadUserProjectsError
 } from '../actions/project';
 import { LoginSuccess } from '../actions/auth';
+import { SelectWorkspaceSuccess } from '../actions/workspace';
 
 export interface ProjectsStateModel {
   projects: Project[];
@@ -103,5 +104,13 @@ export class ProjectsState implements NgxsOnInit  {
       }, err => {
         ctx.dispatch(new LoadUserProjectsError(action.workspaceId));
       });
+  }
+
+  @Action(SelectWorkspaceSuccess)
+  selectWorkspaceSuccess(ctx: StateContext<ProjectsStateModel>, action: SelectWorkspaceSuccess) {
+    ctx.patchState({
+      projects: []
+    });
+    ctx.dispatch(new LoadUserProjects(action.workspace.id));
   }
 }

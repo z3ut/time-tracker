@@ -16,6 +16,7 @@ import { ProjectsState } from './store/states/projects';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToasterModule } from 'angular2-toaster';
 import { WorkspacesState } from './store/states/workspaces';
+import { WorkspacesModule } from './modules/workspaces/workspaces.module';
 
 @NgModule({
   declarations: [
@@ -29,6 +30,7 @@ import { WorkspacesState } from './store/states/workspaces';
     CoreModule,
     ActivitiesModule,
     ReportsModule,
+    WorkspacesModule,
     LoginModule,
     SharedModule,
     NgxsModule.forRoot([

@@ -6,32 +6,35 @@ import {
   GetWorkspace, GetWorkspaceSuccess, GetWorkspaceError,
   UpdateWorkspace, UpdateWorkspaceSuccess, UpdateWorkspaceError,
   DeleteWorkspace, DeleteWorkspaceSuccess, DeleteWorkspaceError,
-  LoadUserWorkspaces, LoadUserWorkspacesSuccess, LoadUserWorkspacesError
+  LoadUserWorkspaces, LoadUserWorkspacesSuccess, LoadUserWorkspacesError, SelectWorkspace, SelectWorkspaceError, SelectWorkspaceSuccess
 } from '../actions/workspace';
 import { LoginSuccess } from '../actions/auth';
 
 export interface WorkspacesStateModel {
   workspaces: Workspace[];
   selectedWorkspaceId: number;
-  // selectedWorkspace: Workspace;
 }
 
 @State<WorkspacesStateModel>({
   name: 'workspaces',
   defaults: {
     workspaces: [],
-    selectedWorkspaceId: null,
-    // selectedWorkspace: null
+    selectedWorkspaceId: null
   }
 })
 export class WorkspacesState implements NgxsOnInit  {
+
+  static selectedWorkspace(state) {
+    return state.app.workspaces.workspaces
+      .find(w => w.id === state.app.workspaces.selectedWorkspaceId);
+  }
 
   constructor(private workspaceService: WorkspaceService) {}
 
   ngxsOnInit(ctx: StateContext<WorkspacesStateModel>) { }
 
   @Action(CreateWorkspace)
-  createProject(ctx: StateContext<WorkspacesStateModel>, action: CreateWorkspace) {
+  createWorkspace(ctx: StateContext<WorkspacesStateModel>, action: CreateWorkspace) {
     this.workspaceService
       .createWorkspace(action.workspace)
       .subscribe(workspace => {
@@ -46,7 +49,7 @@ export class WorkspacesState implements NgxsOnInit  {
   }
 
   @Action(GetWorkspace)
-  getProject(ctx: StateContext<WorkspacesStateModel>, action: GetWorkspace) {
+  getWorkspace(ctx: StateContext<WorkspacesStateModel>, action: GetWorkspace) {
     this.workspaceService
       .getWorkspace(action.id)
       .subscribe(workspace => {
@@ -57,7 +60,7 @@ export class WorkspacesState implements NgxsOnInit  {
   }
 
   @Action(UpdateWorkspace)
-  updateProject(ctx: StateContext<WorkspacesStateModel>, action: UpdateWorkspace) {
+  updateWorkspace(ctx: StateContext<WorkspacesStateModel>, action: UpdateWorkspace) {
     this.workspaceService
       .updateWorkspace(action.workspace)
       .subscribe(workspace => {
@@ -75,7 +78,7 @@ export class WorkspacesState implements NgxsOnInit  {
   }
 
   @Action(DeleteWorkspace)
-  deleteProject(ctx: StateContext<WorkspacesStateModel>, action: DeleteWorkspace) {
+  deleteWorkspace(ctx: StateContext<WorkspacesStateModel>, action: DeleteWorkspace) {
     this.workspaceService
       .deleteWorkspace(action.id)
       .subscribe(() => {
@@ -99,7 +102,7 @@ export class WorkspacesState implements NgxsOnInit  {
   }
 
   @Action(LoadUserWorkspaces)
-  loadMoreCurrentActivities(ctx: StateContext<WorkspacesStateModel>) {
+  LoadUserWorkspaces(ctx: StateContext<WorkspacesStateModel>) {
     this.workspaceService
       .getUserWorkspaces()
       .subscribe(workspaces => {
@@ -107,8 +110,27 @@ export class WorkspacesState implements NgxsOnInit  {
           workspaces
         });
         ctx.dispatch(new LoadUserWorkspacesSuccess(workspaces));
+
+        const state = ctx.getState();
+        const selectedWorkspace = state.workspaces
+          .find(w => w.id === state.selectedWorkspaceId);
+        ctx.dispatch(new SelectWorkspaceSuccess(selectedWorkspace));
       }, err => {
         ctx.dispatch(new LoadUserWorkspacesError());
       });
+  }
+
+  @Action(SelectWorkspace)
+  selectWorkspace(ctx: StateContext<WorkspacesStateModel>, action: SelectWorkspace) {
+    const state = ctx.getState();
+    const newSelectedWorkspace = state.workspaces.find(w => w.id === action.id);
+    if (!newSelectedWorkspace) {
+      ctx.dispatch(new SelectWorkspaceError(action.id));
+      return;
+    }
+    ctx.patchState({
+      selectedWorkspaceId: action.id
+    });
+    ctx.dispatch(new SelectWorkspaceSuccess(newSelectedWorkspace));
   }
 }

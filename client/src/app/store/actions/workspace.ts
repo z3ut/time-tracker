@@ -89,3 +89,22 @@ export class LoadUserWorkspacesSuccess {
 export class LoadUserWorkspacesError {
   static readonly type = '[Workspaces] LoadUserWorkspacesError';
 }
+
+
+export class SelectWorkspace {
+  static readonly type = '[Workspaces] SelectWorkspace';
+
+  constructor(public id: number) {}
+}
+
+export class SelectWorkspaceSuccess {
+  static readonly type = '[Workspaces] SelectWorkspaceSuccess';
+
+  constructor(public workspace: Workspace) {}
+}
+
+export class SelectWorkspaceError {
+  static readonly type = '[Workspaces] SelectWorkspaceError';
+
+  constructor(public id: number) {}
+}
