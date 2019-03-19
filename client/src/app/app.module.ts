@@ -15,6 +15,7 @@ import { AuthState } from './store/states/auth';
 import { ProjectsState } from './store/states/projects';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToasterModule } from 'angular2-toaster';
+import { WorkspacesState } from './store/states/workspaces';
 
 @NgModule({
   declarations: [
@@ -34,7 +35,8 @@ import { ToasterModule } from 'angular2-toaster';
       AppState,
       ActivitiesState,
       ProjectsState,
-      AuthState
+      AuthState,
+      WorkspacesState
     ])
   ],
   providers: [],

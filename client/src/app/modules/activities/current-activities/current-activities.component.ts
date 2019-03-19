@@ -26,6 +26,7 @@ export class CurrentActivitiesComponent implements OnInit {
 
   newActivity: Activity;
   userId: number;
+  workspaceId: number;
   isLoadingMore = false;
   isCreatingNewProject = false;
 
@@ -35,13 +36,14 @@ export class CurrentActivitiesComponent implements OnInit {
   ngOnInit() {
     const store = this.store.snapshot();
     this.userId = store.app.auth.user.id;
+    this.workspaceId = store.app.workspaces.selectedWorkspaceId;
 
     if (!store.app.activities.isCurrentActivitiesInited) {
       this.loadMoreActivities();
     }
 
     this.generateNewActivity();
-    this.store.dispatch(new LoadUserProjects());
+    this.store.dispatch(new LoadUserProjects(this.workspaceId));
 
 
     this.actions$
@@ -105,7 +107,7 @@ export class CurrentActivitiesComponent implements OnInit {
 
   loadMoreActivities() {
     this.isLoadingMore = true;
-    this.store.dispatch(new LoadMoreCurrentActivities());
+    this.store.dispatch(new LoadMoreCurrentActivities(this.workspaceId));
   }
 
   createNewProjectEvent() {

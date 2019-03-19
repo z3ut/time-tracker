@@ -109,11 +109,11 @@ export class ActivitiesState implements NgxsOnInit  {
   }
 
   @Action(LoadMoreCurrentActivities)
-  loadMoreCurrentActivities(ctx: StateContext<ActivitiesStateModel>) {
+  loadMoreCurrentActivities(ctx: StateContext<ActivitiesStateModel>, action: LoadMoreCurrentActivities) {
     const stateBeforeLoad = ctx.getState();
 
     if (stateBeforeLoad.isLoadingCurrentActivities) {
-      ctx.dispatch(new LoadMoreCurrentActivitiesError());
+      ctx.dispatch(new LoadMoreCurrentActivitiesError(action.workspaceId));
       return;
     }
 
@@ -127,7 +127,7 @@ export class ActivitiesState implements NgxsOnInit  {
     });
 
     this.activityService
-      .getActivities(dateTimeFrom, dateTimeTo)
+      .getActivities(dateTimeFrom, dateTimeTo, action.workspaceId)
       .subscribe(activities => {
         const state = ctx.getState();
         ctx.patchState({
@@ -139,7 +139,7 @@ export class ActivitiesState implements NgxsOnInit  {
         ctx.dispatch(new LoadMoreCurrentActivitiesSuccess(activities));
       }, err => {
         ctx.patchState({ isLoadingCurrentActivities: false });
-        ctx.dispatch(new LoadMoreCurrentActivitiesError());
+        ctx.dispatch(new LoadMoreCurrentActivitiesError(action.workspaceId));
       });
   }
 

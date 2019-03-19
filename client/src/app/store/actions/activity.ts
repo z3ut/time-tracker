@@ -78,6 +78,8 @@ export class DeleteActivityError {
 
 export class LoadMoreCurrentActivities {
   static readonly type = '[Activities] LoadMoreCurrentActivities';
+
+  constructor(public workspaceId: number) {}
 }
 
 export class LoadMoreCurrentActivitiesSuccess {
@@ -88,4 +90,6 @@ export class LoadMoreCurrentActivitiesSuccess {
 
 export class LoadMoreCurrentActivitiesError {
   static readonly type = '[Activities] LoadMoreCurrentActivitiesError';
+
+  constructor(public workspaceId: number) {}
 }

@@ -4,4 +4,5 @@ export interface Project {
   color: string;
   dateTimeCreated?: Date;
   userId: number;
+  workspaceId?: number;
 }

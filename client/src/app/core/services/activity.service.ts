@@ -35,11 +35,12 @@ export class ActivityService {
     );
   }
 
-  getActivities(dateTimeFrom: Date, dateTimeTo: Date): Observable<Activity[]> {
+  getActivities(dateTimeFrom: Date, dateTimeTo: Date, workspaceId: number): Observable<Activity[]> {
     return this.http.get<Activity[]>(this.apiUrl, {
       params: {
         dateTimeFrom: dateTimeFrom.toISOString(),
-        dateTimeTo: dateTimeTo && dateTimeTo.toISOString()
+        dateTimeTo: dateTimeTo && dateTimeTo.toISOString(),
+        workspaceId: workspaceId.toString()
       }
     }).pipe(
       map(a => this.extractActivities(a))

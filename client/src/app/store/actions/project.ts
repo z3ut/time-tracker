@@ -78,14 +78,18 @@ export class DeleteProjectError {
 
 export class LoadUserProjects {
   static readonly type = '[Projects] LoadUserProjects';
+
+  constructor(public workspaceId: number) {}
 }
 
 export class LoadUserProjectsSuccess {
   static readonly type = '[Projects] LoadUserProjectsSuccess';
 
-  constructor(public activities: Project[]) {}
+  constructor(public projects: Project[]) {}
 }
 
 export class LoadUserProjectsError {
   static readonly type = '[Projects] LoadUserProjectsError';
+
+  constructor(public workspaceId: number) {}
 }

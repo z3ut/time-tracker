@@ -16,18 +16,17 @@ export class CreateActivityManualComponent implements OnInit {
   @Output() deleteProject = new EventEmitter<Project>();
 
   activity: Activity;
-  userId: number;
 
   constructor(private store: Store) { }
 
   ngOnInit() {
-    const store = this.store.snapshot();
-    this.userId = store.app.auth.user.id;
-
     this.generateNewActivity();
   }
 
   create(activity: Activity) {
+    const store = this.store.snapshot();
+    activity.userId = store.app.auth.user.id;
+    activity.workspaceId = store.app.workspaces.selectedWorkspaceId;
     this.createActivity.emit(activity);
     this.generateNewActivity();
   }
@@ -42,7 +41,7 @@ export class CreateActivityManualComponent implements OnInit {
 
   private generateNewActivity() {
     this.activity = {
-      userId: this.userId,
+      userId: null,
       title: '',
       dateTimeStart: new Date()
     };

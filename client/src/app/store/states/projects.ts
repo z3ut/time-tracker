@@ -87,21 +87,21 @@ export class ProjectsState implements NgxsOnInit  {
   }
 
   @Action(LoginSuccess)
-  loginSuccess(ctx: StateContext<ProjectsStateModel>) {
-    ctx.dispatch(new LoadUserProjects());
+  loadUserWorkspacesSuccess(ctx: StateContext<ProjectsStateModel>, action: LoginSuccess) {
+    ctx.dispatch(new LoadUserProjects(action.user.selectedWorkspaceId));
   }
 
   @Action(LoadUserProjects)
-  loadMoreCurrentActivities(ctx: StateContext<ProjectsStateModel>) {
+  loadMoreCurrentActivities(ctx: StateContext<ProjectsStateModel>, action: LoadUserProjects) {
     this.projectService
-      .getUserProjects()
+      .getUserProjects(action.workspaceId)
       .subscribe(projects => {
         ctx.patchState({
           projects
         });
         ctx.dispatch(new LoadUserProjectsSuccess(projects));
       }, err => {
-        ctx.dispatch(new LoadUserProjectsError());
+        ctx.dispatch(new LoadUserProjectsError(action.workspaceId));
       });
   }
 }

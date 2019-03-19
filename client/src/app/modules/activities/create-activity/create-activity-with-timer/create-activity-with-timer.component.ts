@@ -22,7 +22,6 @@ export class CreateActivityWithTimerComponent implements OnInit {
   intervalSeconds: number;
   isStarted = false;
   activity: Activity;
-  userId: number;
 
   @Select(ActivitiesState.runningActivity) runningActivity$: Observable<Activity>;
 
@@ -32,9 +31,6 @@ export class CreateActivityWithTimerComponent implements OnInit {
   constructor(private store: Store) { }
 
   ngOnInit() {
-    const store = this.store.snapshot();
-    this.userId = store.app.auth.user.id;
-
     this.runningActivity$.subscribe(a => {
       this.activity = a || this.creteNewActivity();
       if (this.activity.dateTimeStart) {
@@ -46,6 +42,7 @@ export class CreateActivityWithTimerComponent implements OnInit {
 
   saveChanges() {
     if (this.isStarted || (this.activity && this.activity.id)) {
+      this.setActivityUserAndWorkspace(this.activity);
       this.updateActivity.emit(this.activity);
     }
   }
@@ -67,11 +64,13 @@ export class CreateActivityWithTimerComponent implements OnInit {
     if (this.isStarted) {
       this.activity.dateTimeEnd = new Date();
       this.stopTimer();
+      this.setActivityUserAndWorkspace(this.activity);
       this.updateActivity.emit(this.activity);
       this.intervalSeconds = 0;
     } else {
       this.activity.dateTimeStart = new Date();
       this.startTimer();
+      this.setActivityUserAndWorkspace(this.activity);
       this.createActivity.emit(this.activity);
     }
     this.isStarted = !this.isStarted;
@@ -94,11 +93,17 @@ export class CreateActivityWithTimerComponent implements OnInit {
     }
   }
 
-  private creteNewActivity() {
+  private creteNewActivity(): Activity {
     return {
-      userId: this.userId,
+      userId: null,
       title: '',
       dateTimeStart: null
     };
+  }
+
+  private setActivityUserAndWorkspace(activity: Activity) {
+    const store = this.store.snapshot();
+    activity.userId = store.app.auth.user.id;
+    activity.workspaceId = store.app.workspaces.selectedWorkspaceId;
   }
 }

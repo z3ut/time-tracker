@@ -35,8 +35,12 @@ export class ProjectService {
     );
   }
 
-  getUserProjects(): Observable<Project[]> {
-    return this.http.get<Project[]>(this.apiUrl).pipe(
+  getUserProjects(workspaceId: number): Observable<Project[]> {
+    return this.http.get<Project[]>(this.apiUrl, {
+      params: {
+        workspaceId: workspaceId.toString()
+      }
+    }).pipe(
       map(p => this.extractProjects(p))
     );
   }
