@@ -20,9 +20,11 @@
           </app-editable-activity>
         </div>
         
-        <div class="delete"
-          title="Delete"
-          (click)="deleteActivityClick(a)">&#10060;</div>
+        <div class="delete">
+          <app-delete-icon
+            [isDoubleClickRequired]="true"
+            (delete)="deleteActivityClick(a)"></app-delete-icon>
+        </div>
       </div>
     </div>
   </div>

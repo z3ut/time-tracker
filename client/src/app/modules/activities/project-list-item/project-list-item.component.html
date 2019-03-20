@@ -4,8 +4,8 @@
     <span>{{ project.name }}</span>
   </div>
   <div class="delete"
-      *ngIf="isDeletable"
-      (click)="deleteClick()">
-    &#10060;
+      *ngIf="isDeletable">
+    <app-delete-icon
+      (delete)="deleteClick()"></app-delete-icon>
   </div>
 </div>

@@ -8,13 +8,15 @@ import { SecondsToTimeFormatService } from './services/seconds-to-time-format.se
 import { PopupComponent } from './components/popup/popup.component';
 import { SpinnerComponent } from './components/spinner/spinner.component';
 import { SpinnerService } from './components/spinner/spinner.service';
+import { DeleteIconComponent } from './components/delete-icon/delete-icon.component';
 
 @NgModule({
   declarations: [
     TimeIntervalPipe,
     TimeAmountComponent,
     PopupComponent,
-    SpinnerComponent
+    SpinnerComponent,
+    DeleteIconComponent
   ],
   imports: [
     CommonModule,
@@ -25,7 +27,8 @@ import { SpinnerService } from './components/spinner/spinner.service';
     TimeIntervalPipe,
     TimeAmountComponent,
     PopupComponent,
-    SpinnerComponent
+    SpinnerComponent,
+    DeleteIconComponent
   ],
   providers: [
     SecondsToTimeFormatService,

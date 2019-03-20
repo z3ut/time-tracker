@@ -1,0 +1,14 @@
+$delete-button-size: 1.5em;
+
+.delete {
+  display: inline-block;
+  height: $delete-button-size;
+  width: $delete-button-size;
+  text-align: center;
+  line-height: $delete-button-size;
+  cursor: pointer;
+}
+
+.warning {
+  color: #ff8128;
+}

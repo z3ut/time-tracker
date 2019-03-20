@@ -25,9 +25,11 @@
         </button>
       </div>
 
-      <div class="delete-workspace"
-        title="Delete"
-        (click)="deleteWorkspace(w)">&#10060;</div>
+      <div class="delete-workspace">
+        <app-delete-icon
+          (delete)="deleteWorkspace(w)"
+          [isDoubleClickRequired]="true"></app-delete-icon>
+      </div>
     
   </div>
 </div>

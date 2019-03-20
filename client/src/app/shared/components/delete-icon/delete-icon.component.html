@@ -1,0 +1,6 @@
+<div class="delete"
+    [title]="title"
+    (click)="deleteClick()">
+  <span *ngIf="!isClickedOnce">&#10060;</span>
+  <span *ngIf="isClickedOnce" class="warning">&#9888;</span>
+</div>

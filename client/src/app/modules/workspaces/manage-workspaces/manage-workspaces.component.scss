@@ -1,4 +1,3 @@
-$delete-button-size: 1.5em;
 $delete-button-width: 5em;
 $select-button-size: 5em;
 
@@ -33,9 +32,6 @@ $select-button-size: 5em;
 
 .delete-workspace {
   display: inline-block;
-  height: $delete-button-size;
   width: $delete-button-width;
   text-align: center;
-  line-height: $delete-button-size;
-  cursor: pointer;
 }
