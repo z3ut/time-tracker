@@ -20,7 +20,7 @@ export class ActivityService {
   }
 
   updateActivity(activity: Activity): Observable<Activity> {
-    return this.http.put<Activity>(this.apiUrl, activity).pipe(
+    return this.http.put<Activity>(`${this.apiUrl}/${activity.id}`, activity).pipe(
       map(a => this.extractActivity(a))
     );
   }
@@ -35,24 +35,21 @@ export class ActivityService {
     );
   }
 
-  getActivities(dateTimeFrom: Date, dateTimeTo: Date, workspaceId: number): Observable<Activity[]> {
-    return this.http.get<Activity[]>(this.apiUrl, {
-      params: {
-        dateTimeFrom: dateTimeFrom.toISOString(),
-        dateTimeTo: dateTimeTo && dateTimeTo.toISOString(),
-        workspaceId: workspaceId.toString()
-      }
-    }).pipe(
-      map(a => this.extractActivities(a))
-    );
+  getActivities(userId: number, dateTimeFrom: Date, dateTimeTo: Date,
+                workspaceId: number): Observable<Activity[]> {
+    return this.http.get<Activity[]>(
+      `api/v1/users/${userId}/workspaces/${workspaceId}/activities`, {
+        params: {
+          dateTimeFrom: dateTimeFrom.toISOString(),
+          dateTimeTo: dateTimeTo && dateTimeTo.toISOString()
+        }
+      }).pipe(
+        map(a => this.extractActivities(a))
+      );
   }
 
   deleteActivity(id: number): Observable<void> {
-    return this.http.delete<void>(this.apiUrl, {
-      params: {
-        id: id.toString()
-      }
-    });
+    return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
 
   private extractActivities(activities: Activity[]): Activity[] {

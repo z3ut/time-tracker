@@ -4,6 +4,7 @@ import { ActivitiesState } from './states/activities';
 import { AuthState } from './states/auth';
 import { ProjectsState } from './states/projects';
 import { WorkspacesState } from './states/workspaces';
+import { WorkspaceInvitesState } from './states/workspace-invites';
 
 // tslint:disable-next-line:no-empty-interface
 export interface AppStateModel {}
@@ -17,7 +18,8 @@ export interface AppStateModel {}
     ActivitiesState,
     ProjectsState,
     AuthState,
-    WorkspacesState
+    WorkspacesState,
+    WorkspaceInvitesState
   ]
 })
 export class AppState implements NgxsOnInit  {

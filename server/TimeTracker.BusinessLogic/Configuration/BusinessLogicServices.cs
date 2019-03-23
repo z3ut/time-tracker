@@ -25,6 +25,8 @@ namespace TimeTracker.BusinessLogic.Configuration
             services.AddScoped<IWorkspaceService, WorkspaceService>();
             services.AddScoped<IUserWorkspaceService, UserWorkspaceService>();
 
+            services.AddScoped<IWorkspaceInviteService, WorkspaceInviteService>();
+
             return services;
         }
     }

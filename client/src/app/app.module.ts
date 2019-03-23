@@ -17,6 +17,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToasterModule } from 'angular2-toaster';
 import { WorkspacesState } from './store/states/workspaces';
 import { WorkspacesModule } from './modules/workspaces/workspaces.module';
+import { WorkspaceInvitesState } from './store/states/workspace-invites';
 
 @NgModule({
   declarations: [
@@ -38,7 +39,8 @@ import { WorkspacesModule } from './modules/workspaces/workspaces.module';
       ActivitiesState,
       ProjectsState,
       AuthState,
-      WorkspacesState
+      WorkspacesState,
+      WorkspaceInvitesState
     ])
   ],
   providers: [],

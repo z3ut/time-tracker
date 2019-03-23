@@ -58,6 +58,19 @@ namespace TimeTracker.DataAccess
                 .HasForeignKey(p => p.WorkspaceId)
                 .OnDelete(DeleteBehavior.Restrict);
 
+
+            modelBuilder.Entity<WorkspaceInvite>()
+                .HasOne<User>(wi => wi.Inviter)
+                .WithMany(u => u.WorkspaceInviter)
+                .HasForeignKey(ui => ui.InviterId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<WorkspaceInvite>()
+                .HasOne<User>(wi => wi.Recipient)
+                .WithMany(u => u.WorkspaceInviteRecipient)
+                .HasForeignKey(ui => ui.RecipientId)
+                .OnDelete(DeleteBehavior.Restrict);
+
             base.OnModelCreating(modelBuilder);
         }
 
@@ -66,5 +79,6 @@ namespace TimeTracker.DataAccess
         public DbSet<UserWorkspace> UserWorkspaces { get; set; }
         public DbSet<Project> Projects { get; set; }
         public DbSet<Workspace> Workspaces { get; set; }
+        public DbSet<WorkspaceInvite> WorkspaceInvites { get; set; }
     }
 }

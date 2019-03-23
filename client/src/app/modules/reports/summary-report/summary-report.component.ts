@@ -15,8 +15,6 @@ export class SummaryReportComponent implements OnInit {
   dateTimeFrom: Date;
   dateTimeTo: Date;
 
-  workspaceId: number;
-
   activities: Activity[];
 
   constructor(
@@ -30,8 +28,6 @@ export class SummaryReportComponent implements OnInit {
   }
 
   ngOnInit() {
-    const store = this.store.snapshot();
-    this.workspaceId = store.app.workspaces.selectedWorkspaceId;
   }
 
   generateReport() {
@@ -40,10 +36,14 @@ export class SummaryReportComponent implements OnInit {
       return;
     }
 
+    const store = this.store.snapshot();
+    const workspaceId = store.app.workspaces.selectedWorkspaceId;
+    const userId = store.app.auth.user.id;
+
     this.spinnerService.show();
 
-    this.activityService.getActivities(this.dateTimeFrom,
-        this.dateTimeTo, this.workspaceId)
+    this.activityService.getActivities(userId, this.dateTimeFrom,
+        this.dateTimeTo, workspaceId)
       .subscribe(a => {
         this.spinnerService.hide();
         this.activities = a;

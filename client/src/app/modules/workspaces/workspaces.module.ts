@@ -5,11 +5,15 @@ import { WorkspacesRoutingModule } from './workspaces-routing.module';
 import { CreateWorkspaceComponent } from './create-workspace/create-workspace.component';
 import { FormsModule } from '@angular/forms';
 import { SharedModule } from 'src/app/shared/shared.module';
+import { WorkspaceListComponent } from './workspace-list/workspace-list.component';
+import { WorkspaceInvitesComponent } from './workspace-invites/workspace-invites.component';
 
 @NgModule({
   declarations: [
     ManageWorkspacesComponent,
-    CreateWorkspaceComponent
+    CreateWorkspaceComponent,
+    WorkspaceListComponent,
+    WorkspaceInvitesComponent
   ],
   imports: [
     CommonModule,

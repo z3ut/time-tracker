@@ -35,22 +35,15 @@ export class ProjectService {
     );
   }
 
-  getUserProjects(workspaceId: number): Observable<Project[]> {
-    return this.http.get<Project[]>(this.apiUrl, {
-      params: {
-        workspaceId: workspaceId.toString()
-      }
-    }).pipe(
-      map(p => this.extractProjects(p))
-    );
+  getUserProjects(userId: number, workspaceId: number): Observable<Project[]> {
+    return this.http.get<Project[]>(`
+      api/v1/users/${userId}/workspaces/${workspaceId}/projects`).pipe(
+        map(p => this.extractProjects(p))
+      );
   }
 
   deleteProject(id: number): Observable<void> {
-    return this.http.delete<void>(this.apiUrl, {
-      params: {
-        id: id.toString()
-      }
-    });
+    return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
 
 

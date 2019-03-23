@@ -11,11 +11,14 @@ namespace TimeTracker.BusinessLogic.Workspaces
     {
         private readonly ActivityContext _activityContext;
         private readonly IMapper _mapper;
+        private readonly IUserWorkspaceService _userWorkspaceService;
 
-        public WorkspaceService(ActivityContext activityContext, IMapper mapper)
+        public WorkspaceService(ActivityContext activityContext, IMapper mapper,
+            IUserWorkspaceService userWorkspaceService)
         {
             _activityContext = activityContext;
             _mapper = mapper;
+            _userWorkspaceService = userWorkspaceService;
         }
 
         public Workspace Create(Workspace workspace, int userId)
@@ -36,9 +39,9 @@ namespace TimeTracker.BusinessLogic.Workspaces
             return insertedWorkspace;
         }
 
-        public void Delete(int id, int userId)
+        public void Delete(int workspaceId, int userId)
         {
-            var workspace = _activityContext.Workspaces.Find(id);
+            var workspace = _activityContext.Workspaces.Find(workspaceId);
 
             if (workspace == null)
             {
@@ -51,33 +54,36 @@ namespace TimeTracker.BusinessLogic.Workspaces
             }
 
             var workspaceProjects = _activityContext.Projects
-                .Where(p => p.WorkspaceId == id);
+                .Where(p => p.WorkspaceId == workspaceId);
 
             var workspaceActivities = _activityContext.Activities
-                .Where(a => a.WorkspaceId == id);
+                .Where(a => a.WorkspaceId == workspaceId);
 
             var workspaceUsers = _activityContext.UserWorkspaces
-                .Where(uw => uw.WorkspaceId == id);
+                .Where(uw => uw.WorkspaceId == workspaceId);
+
+            var workspaceInvites = _activityContext.WorkspaceInvites
+                .Where(wi => wi.WorkspaceId == workspaceId);
 
             _activityContext.Projects.RemoveRange(workspaceProjects);
             _activityContext.Activities.RemoveRange(workspaceActivities);
             _activityContext.UserWorkspaces.RemoveRange(workspaceUsers);
+            _activityContext.WorkspaceInvites.RemoveRange(workspaceInvites);
             _activityContext.Workspaces.Remove(workspace);
 
             _activityContext.SaveChanges();
         }
 
-        public Workspace Get(int id, int userId)
+        public Workspace Get(int workspaceId, int userId)
         {
-            var workspace = _activityContext.Workspaces.Find(id);
+            var workspace = _activityContext.Workspaces.Find(workspaceId);
 
             if (workspace == null)
             {
                 return null;
             }
 
-            if (workspace.UserId != userId && !_activityContext.UserWorkspaces
-                .Any(uw => uw.UserId == userId && uw.WorkspaceId == id))
+            if (!_userWorkspaceService.IsWorkspaceInUserWorkspaces(workspaceId, userId))
             {
                 throw new Exception("Can't get workspace not owned by user or not participated in");
             }
@@ -85,12 +91,37 @@ namespace TimeTracker.BusinessLogic.Workspaces
             return _mapper.Map<Workspace>(workspace);
         }
 
+        public void Leave(int workspaceId, int userId)
+        {
+            var workspace = _activityContext.Workspaces.Find(workspaceId);
+
+            if (workspace == null)
+            {
+                throw new Exception("Workspace not found");
+            }
+
+            var user = _activityContext.Users.Find(userId);
+
+            if (user == null)
+            {
+                throw new Exception("User not found");
+            }
+
+            var userWorkspace = _activityContext.UserWorkspaces
+                .FirstOrDefault(uw => uw.UserId == userId && uw.WorkspaceId == workspaceId);
+
+            if (userWorkspace == null)
+            {
+                throw new Exception("User has no access to this workspace");
+            }
+
+            _activityContext.UserWorkspaces.Remove(userWorkspace);
+            _activityContext.SaveChanges();
+        }
+
         public IEnumerable<Workspace> GetUserWorkspaces(int userId)
         {
-            var userWorkspaces = _activityContext.Workspaces
-                .Where(p => p.UserId == userId);
-
-            return _mapper.Map<IEnumerable<Workspace>>(userWorkspaces);
+            return _userWorkspaceService.GetUserWorkspaces(userId);
         }
 
         public void Update(Workspace workspace, int userId)

@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { Store } from '@ngxs/store';
+import { Store, Select } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { UserLogout } from 'src/app/store/actions/auth';
 
@@ -11,15 +11,15 @@ import { UserLogout } from 'src/app/store/actions/auth';
 })
 export class HeaderComponent {
 
-  isLogged$: Observable<boolean>;
-  username$: Observable<string>;
+  @Select(state => state.app.auth.isLogged) isLogged$: Observable<boolean>;
+  @Select(state => state.app.auth.user.username) username$: Observable<string>;
+
+  @Select(state => state.app.workspaceInvites.workspaceInvites.length)
+  numberOfWorkspaceInvites$: Observable<number>;
 
   constructor(
       private router: Router,
-      private store: Store) {
-    this.isLogged$ = this.store.select(state => state.app.auth.isLogged);
-    this.username$ = this.store.select(state => state.app.auth.user.username);
-  }
+      private store: Store) { }
 
   logout() {
     this.store.dispatch(new UserLogout());

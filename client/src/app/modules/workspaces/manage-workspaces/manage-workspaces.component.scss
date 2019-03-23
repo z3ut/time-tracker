@@ -1,37 +1,5 @@
-$delete-button-width: 5em;
-$select-button-size: 5em;
-
 .create-new-workspace {
   width: 10em;
   margin-top: 1em;
   margin-left: 1em;
-}
-
-.workspace {
-  padding: .5em 1em;
-  margin: .5em;
-}
-
-.workspace.selected {
-  background-color: #baf2ff;
-}
-
-.workspace-name {
-  display: inline-block;
-  width: calc(100% - #{$select-button-size} - #{$delete-button-width});
-}
-
-.select-workspace {
-  display: inline-block;
-  width: $select-button-size;
-}
-
-.select-button {
-  padding: 0;
-}
-
-.delete-workspace {
-  display: inline-block;
-  width: $delete-button-width;
-  text-align: center;
 }

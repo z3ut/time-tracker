@@ -35,20 +35,19 @@ export class WorkspaceService {
     );
   }
 
-  getUserWorkspaces(): Observable<Workspace[]> {
-    return this.http.get<Workspace[]>(this.apiUrl).pipe(
+  getUserWorkspaces(userId: number): Observable<Workspace[]> {
+    return this.http.get<Workspace[]>(`api/v1/users/${userId}/workspaces/`).pipe(
       map(w => this.extractWorkspaces(w))
     );
   }
 
   deleteWorkspace(id: number): Observable<void> {
-    return this.http.delete<void>(this.apiUrl, {
-      params: {
-        id: id.toString()
-      }
-    });
+    return this.http.delete<void>(`${this.apiUrl}/${id}`);
   }
 
+  leaveWorkspace(userId: number, workspaceId: number) {
+    return this.http.delete<void>(`api/v1/users/${userId}/workspaces/${workspaceId}`);
+  }
 
   private extractWorkspaces(workspaces: Workspace[]): Workspace[] {
     return workspaces.map(w => this.extractWorkspace(w));

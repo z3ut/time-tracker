@@ -9,7 +9,7 @@ import {
   UpdateActivityError, UpdateActivity,
   DeleteActivityError, DeleteActivity
 } from 'src/app/store/actions/activity';
-import { LoadUserProjects, DeleteProject, DeleteProjectError } from 'src/app/store/actions/project';
+import { DeleteProject, DeleteProjectError } from 'src/app/store/actions/project';
 import { ToasterService } from 'angular2-toaster';
 import { ActivitiesState } from 'src/app/store/states/activities';
 
@@ -100,9 +100,10 @@ export class CurrentActivitiesComponent implements OnInit {
   loadMoreActivities() {
     const store = this.store.snapshot();
     const workspaceId = store.app.workspaces.selectedWorkspaceId;
+    const userId = store.app.auth.user.id;
 
     this.isLoadingMore = true;
-    this.store.dispatch(new LoadMoreCurrentActivities(workspaceId));
+    this.store.dispatch(new LoadMoreCurrentActivities(userId, workspaceId));
   }
 
   createNewProjectEvent() {

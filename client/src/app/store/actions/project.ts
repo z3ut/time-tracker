@@ -79,7 +79,7 @@ export class DeleteProjectError {
 export class LoadUserProjects {
   static readonly type = '[Projects] LoadUserProjects';
 
-  constructor(public workspaceId: number) {}
+  constructor(public userId: number, public workspaceId: number) {}
 }
 
 export class LoadUserProjectsSuccess {
@@ -91,5 +91,5 @@ export class LoadUserProjectsSuccess {
 export class LoadUserProjectsError {
   static readonly type = '[Projects] LoadUserProjectsError';
 
-  constructor(public workspaceId: number) {}
+  constructor(public userId: number, public workspaceId: number) {}
 }

@@ -51,11 +51,15 @@ namespace TimeTracker.BusinessLogic.Workspaces
             return userWorkspaces.Any(w => w.Id == workspaceId);
         }
 
-        private IEnumerable<Workspace> GetUserWorkspaces(int userId)
+        public IEnumerable<Workspace> GetUserWorkspaces(int userId)
         {
-            return _mapper.Map<IEnumerable<Workspace>>(
-                _activityContext.Workspaces
-                    .Where(w => w.UserId == userId));
+            var userWorkspaces = _activityContext.Workspaces
+                .Where(w => w.UserId == userId ||
+                    _activityContext.UserWorkspaces
+                        .Any(uw => uw.UserId == userId &&
+                            uw.WorkspaceId == w.Id));
+
+            return _mapper.Map<IEnumerable<Workspace>>(userWorkspaces);
         }
     }
 }

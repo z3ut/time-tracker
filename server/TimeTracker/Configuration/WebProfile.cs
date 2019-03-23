@@ -15,9 +15,11 @@ namespace TimeTracker.Web.Configuration
         public WebProfile()
         {
             CreateMap<User, UserDTO>().ReverseMap();
+            CreateMap<User, UserInfoDTO>().ReverseMap();
             CreateMap<User, UserCredentialsDTO>().ReverseMap();
             CreateMap<Activity, ActivityDTO>().ReverseMap();
             CreateMap<Workspace, WorkspaceDTO>().ReverseMap();
+            CreateMap<WorkspaceInvite, WorkspaceInviteDTO>().ReverseMap();
         }
     }
 }

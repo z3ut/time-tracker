@@ -9,6 +9,8 @@ import { ProjectService } from './services/project.service';
 import { AuthService } from './services/auth.service';
 import { AuthInterceptor } from './interceptors/auth.interceptor';
 import { AuthErrorInterceptor } from './interceptors/auth-error.interceptor';
+import { WorkspaceInviteService } from './services/workspace-invite.service';
+import { WorkspaceService } from './services/workspace.service';
 
 @NgModule({
   declarations: [
@@ -22,6 +24,8 @@ import { AuthErrorInterceptor } from './interceptors/auth-error.interceptor';
   providers: [
     ActivityService,
     ProjectService,
+    WorkspaceInviteService,
+    WorkspaceService,
     AuthService,
     AuthGuard,
     { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },

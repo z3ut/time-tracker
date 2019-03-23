@@ -1,4 +1,4 @@
-import { State, Action, StateContext, NgxsOnInit } from '@ngxs/store';
+import { State, Action, StateContext, NgxsOnInit, Store } from '@ngxs/store';
 import { ProjectService } from 'src/app/core/services/project.service';
 import { Project } from 'src/app/models/project';
 import {
@@ -8,7 +8,6 @@ import {
   DeleteProject, DeleteProjectSuccess, DeleteProjectError,
   LoadUserProjects, LoadUserProjectsSuccess, LoadUserProjectsError
 } from '../actions/project';
-import { LoginSuccess } from '../actions/auth';
 import { SelectWorkspaceSuccess } from '../actions/workspace';
 
 export interface ProjectsStateModel {
@@ -23,7 +22,7 @@ export interface ProjectsStateModel {
 })
 export class ProjectsState implements NgxsOnInit  {
 
-  constructor(private projectService: ProjectService) {}
+  constructor(private store: Store, private projectService: ProjectService) {}
 
   ngxsOnInit(ctx: StateContext<ProjectsStateModel>) { }
 
@@ -87,22 +86,17 @@ export class ProjectsState implements NgxsOnInit  {
       });
   }
 
-  @Action(LoginSuccess)
-  loadUserWorkspacesSuccess(ctx: StateContext<ProjectsStateModel>, action: LoginSuccess) {
-    ctx.dispatch(new LoadUserProjects(action.user.selectedWorkspaceId));
-  }
-
   @Action(LoadUserProjects)
   loadMoreCurrentActivities(ctx: StateContext<ProjectsStateModel>, action: LoadUserProjects) {
     this.projectService
-      .getUserProjects(action.workspaceId)
+      .getUserProjects(action.userId, action.workspaceId)
       .subscribe(projects => {
         ctx.patchState({
           projects
         });
         ctx.dispatch(new LoadUserProjectsSuccess(projects));
       }, err => {
-        ctx.dispatch(new LoadUserProjectsError(action.workspaceId));
+        ctx.dispatch(new LoadUserProjectsError(action.userId, action.workspaceId));
       });
   }
 
@@ -111,6 +105,8 @@ export class ProjectsState implements NgxsOnInit  {
     ctx.patchState({
       projects: []
     });
-    ctx.dispatch(new LoadUserProjects(action.workspace.id));
+    const state = this.store.snapshot();
+    const userId = state.app.auth.user.id;
+    ctx.dispatch(new LoadUserProjects(userId, action.workspace.id));
   }
 }

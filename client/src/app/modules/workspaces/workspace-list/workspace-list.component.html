@@ -1,0 +1,31 @@
+<table>
+  <tr *ngFor="let w of workspaces$ | async"
+    class="workspace"
+    [ngClass]="{ 'selected': isWorkspaceSelected(w) }">
+    <td>{{ w.name }}</td>
+    <td>
+      <button *ngIf="isUserOwnsWorkspace(w)"
+          (click)="inviteToWorkspace(w)">
+        Invite
+      </button>
+    </td>
+    <td>
+      <span *ngIf="isUserOwnsWorkspace(w)">
+        <app-delete-icon
+          (delete)="deleteWorkspace(w)"
+          [isDoubleClickRequired]="true">
+        </app-delete-icon>
+      </span>
+      <button *ngIf="!isUserOwnsWorkspace(w)"
+          (click)="leaveWorkspace(w)">
+        Leave
+      </button>
+    </td>
+    <td>
+      <button *ngIf="!isWorkspaceSelected(w)"
+          (click)="selectWorkspace(w)">
+        Select
+      </button>
+    </td>
+  </tr>
+</table>

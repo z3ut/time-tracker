@@ -127,6 +127,31 @@ namespace TimeTracker.DataAccess.Migrations
                     b.ToTable("Workspaces");
                 });
 
+            modelBuilder.Entity("TimeTracker.DataAccess.Models.WorkspaceInvite", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("DateTimeCreated");
+
+                    b.Property<int>("InviterId");
+
+                    b.Property<int>("RecipientId");
+
+                    b.Property<int>("WorkspaceId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("InviterId");
+
+                    b.HasIndex("RecipientId");
+
+                    b.HasIndex("WorkspaceId");
+
+                    b.ToTable("WorkspaceInvites");
+                });
+
             modelBuilder.Entity("TimeTracker.DataAccess.Models.Activity", b =>
                 {
                     b.HasOne("TimeTracker.DataAccess.Models.Project", "Project")
@@ -176,6 +201,24 @@ namespace TimeTracker.DataAccess.Migrations
                         .WithMany("UserWorkspaces")
                         .HasForeignKey("WorkspaceId")
                         .OnDelete(DeleteBehavior.Restrict);
+                });
+
+            modelBuilder.Entity("TimeTracker.DataAccess.Models.WorkspaceInvite", b =>
+                {
+                    b.HasOne("TimeTracker.DataAccess.Models.User", "Inviter")
+                        .WithMany("WorkspaceInviter")
+                        .HasForeignKey("InviterId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("TimeTracker.DataAccess.Models.User", "Recipient")
+                        .WithMany("WorkspaceInviteRecipient")
+                        .HasForeignKey("RecipientId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("TimeTracker.DataAccess.Models.Workspace", "Workspace")
+                        .WithMany("WorkspaceInvites")
+                        .HasForeignKey("WorkspaceId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618
         }

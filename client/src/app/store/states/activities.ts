@@ -1,4 +1,4 @@
-import { State, Action, StateContext, NgxsOnInit } from '@ngxs/store';
+import { State, Action, StateContext, NgxsOnInit, Store } from '@ngxs/store';
 import {
   CreateActivity, CreateActivitySuccess, CreateActivityError,
   GetActivity, GetActivitySuccess, GetActivityError,
@@ -42,7 +42,7 @@ export class ActivitiesState implements NgxsOnInit  {
       .filter(a => a !== runningActivity);
   }
 
-  constructor(private activityService: ActivityService) {}
+  constructor(private store: Store, private activityService: ActivityService) {}
 
   ngxsOnInit(ctx: StateContext<ActivitiesStateModel>) {}
 
@@ -115,7 +115,6 @@ export class ActivitiesState implements NgxsOnInit  {
     const stateBeforeLoad = ctx.getState();
 
     if (stateBeforeLoad.isLoadingCurrentActivities) {
-      ctx.dispatch(new LoadMoreCurrentActivitiesError(action.workspaceId));
       return;
     }
 
@@ -129,7 +128,7 @@ export class ActivitiesState implements NgxsOnInit  {
     });
 
     this.activityService
-      .getActivities(dateTimeFrom, dateTimeTo, action.workspaceId)
+      .getActivities(action.userId, dateTimeFrom, dateTimeTo, action.workspaceId)
       .subscribe(activities => {
         const state = ctx.getState();
         ctx.patchState({
@@ -141,7 +140,7 @@ export class ActivitiesState implements NgxsOnInit  {
         ctx.dispatch(new LoadMoreCurrentActivitiesSuccess(activities));
       }, err => {
         ctx.patchState({ isLoadingCurrentActivities: false });
-        ctx.dispatch(new LoadMoreCurrentActivitiesError(action.workspaceId));
+        ctx.dispatch(new LoadMoreCurrentActivitiesError(action.userId, action.workspaceId));
       });
   }
 
@@ -166,6 +165,8 @@ export class ActivitiesState implements NgxsOnInit  {
       isCurrentActivitiesInited: false,
       isLoadingCurrentActivities: false
     });
-    ctx.dispatch(new LoadMoreCurrentActivities(action.workspace.id));
+    const state = this.store.snapshot();
+    const userId = state.app.auth.user.id;
+    ctx.dispatch(new LoadMoreCurrentActivities(userId, action.workspace.id));
   }
 }

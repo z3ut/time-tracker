@@ -11,7 +11,6 @@ using TimeTracker.Web.Models;
 namespace TimeTracker.Web.Controllers
 {
     [Authorize]
-    [Route("api/v1/[controller]")]
     [ApiController]
     public class ProjectsController : Controller
     {
@@ -26,6 +25,8 @@ namespace TimeTracker.Web.Controllers
         }
 
         [HttpPost]
+        [ActionName("CreateProject")]
+        [Route("api/v1/projects")]
         public ProjectDTO CreateProject(ProjectDTO project)
         {
             var projectBL = _mapper.Map<Project>(project);
@@ -34,25 +35,35 @@ namespace TimeTracker.Web.Controllers
         }
 
         [HttpDelete]
-        public void DeleteProject(int id)
+        [ActionName("DeleteProject")]
+        [Route("api/v1/projects/{projectId}")]
+        public ActionResult DeleteProject(int projectId)
         {
-            _projectService.Delete(id, UserId);
+            _projectService.Delete(projectId, UserId);
+            return Ok();
         }
 
         [HttpGet]
         [ActionName("GetProjects")]
-        public IEnumerable<ProjectDTO> GetProjects(int workspaceId)
+        [Route("api/v1/users/{userId}/workspaces/{workspaceId}/projects")]
+        public ActionResult<IEnumerable<ProjectDTO>> GetProjects(int userId,
+            int workspaceId)
         {
-            var projects = _projectService.GetUserProjects(UserId, workspaceId);
-            return _mapper.Map<IEnumerable<ProjectDTO>>(projects);
+            if (userId != UserId)
+            {
+                return BadRequest("Wrong user id");
+            }
+
+            var projects = _projectService.GetWorkspaceProjects(UserId, workspaceId);
+            return _mapper.Map<IEnumerable<ProjectDTO>>(projects).ToList();
         }
 
         [HttpGet]
         [ActionName("GetProject")]
-        [Route("{id}")]
-        public ActionResult<ProjectDTO> GetProject(int id)
+        [Route("api/v1/projects/{projectId}")]
+        public ActionResult<ProjectDTO> GetProject(int projectId)
         {
-            var project = _projectService.Get(id, UserId);
+            var project = _projectService.Get(projectId, UserId);
 
             if (project == null)
             {
@@ -63,8 +74,15 @@ namespace TimeTracker.Web.Controllers
         }
 
         [HttpPut]
-        public ActionResult<ProjectDTO> UpdateProject(ProjectDTO project)
+        [ActionName("UpdateProject")]
+        [Route("api/v1/projects/{projectId}")]
+        public ActionResult<ProjectDTO> UpdateProject(int projectId, ProjectDTO project)
         {
+            if (projectId != project.Id)
+            {
+                return BadRequest("Wrong project id");
+            }
+
             var projectBL = _mapper.Map<Project>(project);
             _projectService.Update(projectBL, UserId);
             return project;

@@ -13,7 +13,8 @@ namespace TimeTracker.DataAccess.Configuration
             var connectionString = "Data Source=(localdb)\\MSSQLLocalDB;Database=Activities;Trusted_Connection=True;ConnectRetryCount=0";
             services
                 .AddDbContext<ActivityContext>(options =>
-                    options.UseSqlServer(connectionString));
+                    options.UseSqlServer(connectionString),
+                    ServiceLifetime.Transient);
 
             return services;
         }

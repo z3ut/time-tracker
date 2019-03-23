@@ -46,9 +46,9 @@ namespace TimeTracker.BusinessLogic.Projects
             return insertedProject;
         }
 
-        public void Delete(int id, int userId)
+        public void Delete(int projectId, int userId)
         {
-            var project = _activityContext.Projects.Find(id);
+            var project = _activityContext.Projects.Find(projectId);
 
             if (project == null)
             {
@@ -72,33 +72,33 @@ namespace TimeTracker.BusinessLogic.Projects
             _activityContext.SaveChanges();
         }
 
-        public Project Get(int id, int userId)
+        public Project Get(int projectId, int userId)
         {
-            var project = _activityContext.Projects.Find(id);
+            var project = _activityContext.Projects.Find(projectId);
 
             if (project == null)
             {
                 return null;
             }
 
-            if (project.UserId != userId)
+            if (!_userWorkspaceService.IsProjectInUserWorkspaces(project.Id, userId))
             {
-                throw new Exception("Can't get another user's project");
+                throw new Exception("Project doesn't belong to user workspaces");
             }
 
             return _mapper.Map<Project>(project);
         }
 
-        public IEnumerable<Project> GetUserProjects(int userId, int workspaceId)
+        public IEnumerable<Project> GetWorkspaceProjects(int userId, int workspaceId)
         {
             if (!_userWorkspaceService.IsWorkspaceInUserWorkspaces(
                 workspaceId, userId))
             {
-                throw new Exception("Workspace doesn't belong to user");
+                throw new Exception("User doesn't have access to workspace");
             }
 
             var userProjects = _activityContext.Projects
-                .Where(p => p.UserId == userId && p.WorkspaceId == workspaceId);
+                .Where(p => p.WorkspaceId == workspaceId);
 
             return _mapper.Map<IEnumerable<Project>>(userProjects);
         }
@@ -120,7 +120,7 @@ namespace TimeTracker.BusinessLogic.Projects
             if (!_userWorkspaceService.IsWorkspaceInUserWorkspaces(
                 project.WorkspaceId, userId))
             {
-                throw new Exception("Workspace doesn't belong to user");
+                throw new Exception("User doesn't have access to workspace");
             }
 
             projectDA.Name = project.Name;

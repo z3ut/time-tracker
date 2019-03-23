@@ -8,8 +8,15 @@
     routerLinkActive="active">Summary report</a>
 
   <a class="link"
-    routerLink="/manage-workspaces"
-    routerLinkActive="active">Workspaces</a>
+      routerLink="/manage-workspaces"
+      routerLinkActive="active">
+    Workspaces
+    <span
+        *ngIf="numberOfWorkspaceInvites$ | async"
+        class="workspace-invites">
+      + {{ numberOfWorkspaceInvites$ | async }}
+    </span>
+  </a>
   
   <div class="header-user" *ngIf="isLogged$ | async">
     {{ username$ | async }}

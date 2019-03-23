@@ -1,0 +1,9 @@
+<div class="workspace-invites" *ngIf="numberOfWorkspaceInvites$ | async">
+  You have {{ numberOfWorkspaceInvites$ | async }} invites:
+
+  <div class="workspace-invite" *ngFor="let invite of workspaceInvites$ | async">
+    User <span class="invite-inviter-name">{{ invite.inviter.name }}</span> want's to invite you to workspace <span class="invite-workspace-name">{{ invite.workspace.name }}</span>
+    <button (click)="acceptWorkspaceInvite(invite)">Accept</button>
+    <button (click)="declineWorkspaceInvite(invite)">Decline</button>
+  </div>
+</div>

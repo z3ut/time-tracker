@@ -1,5 +1,11 @@
 import { Workspace } from 'src/app/models/workspace';
 
+export class AddWorkspace {
+  static readonly type = '[Workspaces] AddWorkspace';
+
+  constructor(public workspace: Workspace) {}
+}
+
 export class CreateWorkspace {
   static readonly type = '[Workspaces] CreateWorkspace';
 
@@ -107,4 +113,23 @@ export class SelectWorkspaceError {
   static readonly type = '[Workspaces] SelectWorkspaceError';
 
   constructor(public id: number) {}
+}
+
+
+export class LeaveWorkspace {
+  static readonly type = '[Workspaces] LeaveWorkspace';
+
+  constructor(public userId: number, public workspaceId: number) {}
+}
+
+export class LeaveWorkspaceSuccess {
+  static readonly type = '[Workspaces] LeaveWorkspaceSuccess';
+
+  constructor(public userId: number, public workspaceId: number) {}
+}
+
+export class LeaveWorkspaceError {
+  static readonly type = '[Workspaces] LeaveWorkspaceError';
+
+  constructor(public userId: number, public workspaceId: number) {}
 }
