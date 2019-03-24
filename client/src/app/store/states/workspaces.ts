@@ -12,6 +12,8 @@ import {
   LeaveWorkspace, LeaveWorkspaceSuccess, LeaveWorkspaceError
 } from '../actions/workspace';
 import { LoginSuccess } from '../actions/auth';
+import { LoadUserProjects } from '../actions/project';
+import { LoadMoreCurrentActivities } from '../actions/activity';
 
 export interface WorkspacesStateModel {
   workspaces: Workspace[];
@@ -29,7 +31,8 @@ export class WorkspacesState implements NgxsOnInit  {
 
   static selectedWorkspace(state) {
     return state.app.workspaces.workspaces
-      .find(w => w.id === state.app.workspaces.selectedWorkspaceId);
+      .find(w => w.id === state.app.workspaces.selectedWorkspaceId) ||
+      state.app.workspaces.workspaces[0];
   }
 
   constructor(private store: Store, private workspaceService: WorkspaceService) {}
@@ -122,12 +125,10 @@ export class WorkspacesState implements NgxsOnInit  {
         ctx.patchState({
           workspaces
         });
-        ctx.dispatch(new LoadUserWorkspacesSuccess(workspaces));
 
-        const state = ctx.getState();
-        const selectedWorkspace = state.workspaces
-          .find(w => w.id === state.selectedWorkspaceId);
-        ctx.dispatch(new SelectWorkspaceSuccess(selectedWorkspace));
+        const state = this.store.snapshot();
+        const selectedWorkspace = WorkspacesState.selectedWorkspace(state);
+        ctx.dispatch(new LoadUserWorkspacesSuccess(workspaces, selectedWorkspace));
       }, err => {
         ctx.dispatch(new LoadUserWorkspacesError());
       });

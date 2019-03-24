@@ -9,7 +9,7 @@ import {
 import { Activity } from 'src/app/models/activity';
 import { ActivityService } from 'src/app/core/services/activity.service';
 import { DeleteProject } from '../actions/project';
-import { SelectWorkspaceSuccess } from '../actions/workspace';
+import { SelectWorkspaceSuccess, LoadUserWorkspacesSuccess } from '../actions/workspace';
 import { WorkspacesStateModel } from './workspaces';
 
 export interface ActivitiesStateModel {
@@ -168,5 +168,18 @@ export class ActivitiesState implements NgxsOnInit  {
     const state = this.store.snapshot();
     const userId = state.app.auth.user.id;
     ctx.dispatch(new LoadMoreCurrentActivities(userId, action.workspace.id));
+  }
+
+  @Action(LoadUserWorkspacesSuccess)
+  loadUserWorkspacesSuccess(ctx: StateContext<ActivitiesStateModel>, action: LoadUserWorkspacesSuccess) {
+    ctx.patchState({
+      currentActivities: [],
+      currentActivitiesLoadedFrom: new Date(),
+      isCurrentActivitiesInited: false,
+      isLoadingCurrentActivities: false
+    });
+    const state = this.store.snapshot();
+    const userId = state.app.auth.user.id;
+    ctx.dispatch(new LoadMoreCurrentActivities(userId, action.selectedWorkspace.id));
   }
 }

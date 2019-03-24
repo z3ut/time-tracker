@@ -89,7 +89,7 @@ export class LoadUserWorkspaces {
 export class LoadUserWorkspacesSuccess {
   static readonly type = '[Workspaces] LoadUserWorkspacesSuccess';
 
-  constructor(public workspaces: Workspace[]) {}
+  constructor(public workspaces: Workspace[], public selectedWorkspace: Workspace) {}
 }
 
 export class LoadUserWorkspacesError {

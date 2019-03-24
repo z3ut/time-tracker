@@ -6,6 +6,9 @@ import {
 } from '../actions/auth';
 import { User } from 'src/app/models/user';
 import { AuthService } from 'src/app/core/services/auth.service';
+import { SelectWorkspaceSuccess } from '../actions/workspace';
+import { UserService } from 'src/app/core/services/user.service';
+import { UpdateUserSuccess, UpdateUserError, UpdateUser } from '../actions/auth';
 
 export interface AuthStateModel {
   user: User;
@@ -21,7 +24,7 @@ export interface AuthStateModel {
 })
 export class AuthState implements NgxsOnInit  {
 
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService, private userService: UserService) {}
 
   ngxsOnInit(ctx: StateContext<AuthStateModel>) {
     ctx.dispatch(new CheckIsLogged());
@@ -79,5 +82,25 @@ export class AuthState implements NgxsOnInit  {
       user: action.user,
       isLogged: true
     });
+  }
+
+  @Action(SelectWorkspaceSuccess)
+  selectWorkspaceSuccess(ctx: StateContext<AuthStateModel>, action: SelectWorkspaceSuccess) {
+    const state = ctx.getState();
+    const user = state.user;
+    user.selectedWorkspaceId = action.workspace.id;
+    ctx.dispatch(new UpdateUser(user));
+  }
+
+  @Action(UpdateUser)
+  updateUser(ctx: StateContext<AuthStateModel>, action: UpdateUser) {
+    this.userService
+      .updateUser(action.user)
+      .subscribe(user => {
+        this.authService.saveUser(user);
+        ctx.dispatch(new UpdateUserSuccess(user));
+      }, err => {
+        ctx.dispatch(new UpdateUserError(action.user));
+      });
   }
 }

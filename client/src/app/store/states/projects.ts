@@ -8,7 +8,7 @@ import {
   DeleteProject, DeleteProjectSuccess, DeleteProjectError,
   LoadUserProjects, LoadUserProjectsSuccess, LoadUserProjectsError
 } from '../actions/project';
-import { SelectWorkspaceSuccess } from '../actions/workspace';
+import { SelectWorkspaceSuccess, LoadUserWorkspacesSuccess } from '../actions/workspace';
 
 export interface ProjectsStateModel {
   projects: Project[];
@@ -108,5 +108,15 @@ export class ProjectsState implements NgxsOnInit  {
     const state = this.store.snapshot();
     const userId = state.app.auth.user.id;
     ctx.dispatch(new LoadUserProjects(userId, action.workspace.id));
+  }
+
+  @Action(LoadUserWorkspacesSuccess)
+  loadUserWorkspacesSuccess(ctx: StateContext<ProjectsStateModel>, action: LoadUserWorkspacesSuccess) {
+    ctx.patchState({
+      projects: []
+    });
+    const state = this.store.snapshot();
+    const userId = state.app.auth.user.id;
+    ctx.dispatch(new LoadUserProjects(userId, action.selectedWorkspace.id));
   }
 }

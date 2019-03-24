@@ -45,3 +45,21 @@ export class UserRegister {
     public password: string
   ) {}
 }
+
+export class UpdateUser {
+  static readonly type = '[Auth] UpdateUser';
+
+  constructor(public user: User) { }
+}
+
+export class UpdateUserSuccess {
+  static readonly type = '[Auth] UpdateUserSuccess';
+
+  constructor(public user: User) { }
+}
+
+export class UpdateUserError {
+  static readonly type = '[Auth] UpdateUserError';
+
+  constructor(public user: User) { }
+}

@@ -17,7 +17,6 @@ using TimeTracker.Web.Models;
 namespace TimeTracker.Web.Controllers
 {
     [Authorize]
-    [Route("api/v1/[controller]")]
     [ApiController]
     public class UsersController : ControllerBase
     {
@@ -25,7 +24,6 @@ namespace TimeTracker.Web.Controllers
         private readonly IMapper _mapper;
         private readonly IConfiguration _config;
         private readonly string secret;
-
 
         public UsersController(IUserService userService, IMapper mapper, IConfiguration config)
         {
@@ -36,7 +34,8 @@ namespace TimeTracker.Web.Controllers
         }
 
         [AllowAnonymous]
-        [HttpPost("authenticate")]
+        [Route("api/v1/users/authenticate")]
+        [HttpPost]
         public IActionResult Authenticate([FromBody] UserCredentialsDTO userCredentials)
         {
             var user = _userService.Authenticate(userCredentials.Username, userCredentials.Password);
@@ -52,7 +51,8 @@ namespace TimeTracker.Web.Controllers
         }
 
         [AllowAnonymous]
-        [HttpPost("register")]
+        [Route("api/v1/users/register")]
+        [HttpPost]
         public IActionResult Register([FromBody] UserCredentialsDTO userCredentials)
         {
             var user = _mapper.Map<User>(userCredentials);
@@ -63,6 +63,21 @@ namespace TimeTracker.Web.Controllers
             var userDTO = _mapper.Map<UserDTO>(createdUser);
             userDTO.Token = CreateToken(createdUser);
             return Ok(userDTO);
+        }
+
+        [AllowAnonymous]
+        [HttpPut("api/v1/users/{userId}")]
+        public ActionResult<UserDTO> UpdateUser(int userId, [FromBody] UserDTO user)
+        {
+            if (userId != UserId || UserId != user.Id)
+            {
+                return BadRequest("Wrong user id");
+            }
+
+            var userBL = _mapper.Map<User>(user);
+            _userService.Update(userBL);
+
+            return user;
         }
 
         private string CreateToken(User user)
@@ -83,6 +98,11 @@ namespace TimeTracker.Web.Controllers
             var tokenString = tokenHandler.WriteToken(token);
 
             return tokenString;
+        }
+
+        private int UserId
+        {
+            get { return int.Parse(User.FindFirst("sub")?.Value); }
         }
     }
 }

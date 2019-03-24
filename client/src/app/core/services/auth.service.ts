@@ -48,7 +48,7 @@ export class AuthService {
       null;
   }
 
-  private saveUser(user: User) {
+  saveUser(user: User) {
     if (user && user.token) {
       localStorage.setItem(this.userLocalStorageKey, JSON.stringify(user));
       this.behaviorSubject.next(true);
