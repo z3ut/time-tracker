@@ -19,7 +19,7 @@ namespace TimeTracker.Web.Configuration
         public static IServiceCollection ConfigureWebServices(
             this IServiceCollection services, IConfiguration configuration)
         {
-            services.ConfigureBusinessLogicServices();
+            services.ConfigureBusinessLogicServices(configuration);
 
             var automapperConfig = new MapperConfiguration(cfg =>
             {

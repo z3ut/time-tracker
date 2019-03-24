@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -13,9 +14,10 @@ namespace TimeTracker.BusinessLogic.Configuration
 {
     public static class BusinessLogicServices
     {
-        public static IServiceCollection ConfigureBusinessLogicServices(this IServiceCollection services)
+        public static IServiceCollection ConfigureBusinessLogicServices(
+            this IServiceCollection services, IConfiguration configuration)
         {
-            services.ConfigureDataAccessServices();
+            services.ConfigureDataAccessServices(configuration);
 
             services.AddScoped<IActivityService, ActivityService>();
             services.AddScoped<IUserService, UserService>();

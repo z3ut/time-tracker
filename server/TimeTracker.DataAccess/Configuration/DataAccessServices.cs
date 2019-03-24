@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -8,9 +9,10 @@ namespace TimeTracker.DataAccess.Configuration
 {
     public static class DataAccessServices
     {
-        public static IServiceCollection ConfigureDataAccessServices(this IServiceCollection services)
+        public static IServiceCollection ConfigureDataAccessServices(
+            this IServiceCollection services, IConfiguration configuration)
         {
-            var connectionString = "Data Source=(localdb)\\MSSQLLocalDB;Database=Activities;Trusted_Connection=True;ConnectRetryCount=0";
+            var connectionString = configuration.GetConnectionString("ActivityContext");
             services
                 .AddDbContext<ActivityContext>(options =>
                     options.UseSqlServer(connectionString),
