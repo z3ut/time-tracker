@@ -1,0 +1,18 @@
+<div class="container">
+  <div class="project" *ngFor="let stats of activitiesStats">
+    <div class="project-title">
+      <span class="project-name">{{ stats.project.name }}</span>
+      <app-time-amount
+        class="time-amount"
+        [intervalSeconds]="stats.totalTimeSeconds"
+        [isReadonly]="true">
+      </app-time-amount>
+    </div>
+
+    <div class="activities">
+      <app-activities-list
+        [activities]="stats.activities">
+      </app-activities-list>
+    </div>
+  </div>
+</div>

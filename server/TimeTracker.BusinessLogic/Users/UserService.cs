@@ -138,5 +138,28 @@ namespace TimeTracker.BusinessLogic.Users
 
             return _mapper.Map<User>(user);
         }
+
+        public IEnumerable<User> GetWorkspaceUsers(int workspaceId, int userId)
+        {
+            if (!_userWorkspaceService.IsWorkspaceInUserWorkspaces(workspaceId, userId))
+            {
+                throw new Exception("Workspace doesn't belong to user");
+            }
+
+            var usersInWorkspace = _activityContext.UserWorkspaces
+                .Where(uw => uw.WorkspaceId == workspaceId)
+                .Select(uw => uw.User)
+                .ToList();
+
+            var workspace = _activityContext.Workspaces
+                .FirstOrDefault(w => w.UserId == userId);
+
+            if (workspace != null && workspace.User != null)
+            {
+                usersInWorkspace.Add(workspace.User);
+            }
+            
+            return _mapper.Map<IEnumerable<User>>(usersInWorkspace);
+        }
     }
 }

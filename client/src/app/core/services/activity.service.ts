@@ -35,10 +35,23 @@ export class ActivityService {
     );
   }
 
-  getActivities(userId: number, dateTimeFrom: Date, dateTimeTo: Date,
-                workspaceId: number): Observable<Activity[]> {
+  getUserActivities(userId: number, dateTimeFrom: Date, dateTimeTo: Date,
+                    workspaceId: number): Observable<Activity[]> {
     return this.http.get<Activity[]>(
       `api/v1/users/${userId}/workspaces/${workspaceId}/activities`, {
+        params: {
+          dateTimeFrom: dateTimeFrom.toISOString(),
+          dateTimeTo: dateTimeTo && dateTimeTo.toISOString()
+        }
+      }).pipe(
+        map(a => this.extractActivities(a))
+      );
+  }
+
+  getWorkspaceActivities(dateTimeFrom: Date, dateTimeTo: Date,
+                         workspaceId: number): Observable<Activity[]>  {
+    return this.http.get<Activity[]>(
+      `api/v1/workspaces/${workspaceId}/activities`, {
         params: {
           dateTimeFrom: dateTimeFrom.toISOString(),
           dateTimeTo: dateTimeTo && dateTimeTo.toISOString()

@@ -128,7 +128,7 @@ export class ActivitiesState implements NgxsOnInit  {
     });
 
     this.activityService
-      .getActivities(action.userId, dateTimeFrom, dateTimeTo, action.workspaceId)
+      .getUserActivities(action.userId, dateTimeFrom, dateTimeTo, action.workspaceId)
       .subscribe(activities => {
         const state = ctx.getState();
         ctx.patchState({

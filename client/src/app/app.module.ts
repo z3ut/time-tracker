@@ -18,6 +18,7 @@ import { ToasterModule } from 'angular2-toaster';
 import { WorkspacesState } from './store/states/workspaces';
 import { WorkspacesModule } from './modules/workspaces/workspaces.module';
 import { WorkspaceInvitesState } from './store/states/workspace-invites';
+import { UsersState } from './store/states/users';
 
 @NgModule({
   declarations: [
@@ -40,7 +41,8 @@ import { WorkspaceInvitesState } from './store/states/workspace-invites';
       ProjectsState,
       AuthState,
       WorkspacesState,
-      WorkspaceInvitesState
+      WorkspaceInvitesState,
+      UsersState
     ])
   ],
   providers: [],

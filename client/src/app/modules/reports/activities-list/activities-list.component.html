@@ -1,0 +1,10 @@
+<div class="container">
+  <div class="activity" *ngFor="let stats of activitiesStats">
+    <span class="activity-title">{{ stats.title }}</span>
+    <app-time-amount
+      class="time-amount"
+      [intervalSeconds]="stats.totalTimeSeconds"
+      [isReadonly]="true">
+    </app-time-amount>
+  </div>
+</div>

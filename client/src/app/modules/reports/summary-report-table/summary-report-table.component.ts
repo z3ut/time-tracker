@@ -1,73 +1,49 @@
-import { Component, OnInit, Input, OnChanges } from '@angular/core';
+import { Component, Input, OnChanges } from '@angular/core';
 import { Activity } from 'src/app/models/activity';
 import { Project } from 'src/app/models/project';
-import { ProjectService } from 'src/app/core/services/project.service';
-import { Store } from '@ngxs/store';
+import { User } from 'src/app/models/user';
 
 @Component({
   selector: 'app-summary-report-table',
   templateUrl: './summary-report-table.component.html',
   styleUrls: ['./summary-report-table.component.scss']
 })
-export class SummaryReportTableComponent implements OnInit, OnChanges {
+export class SummaryReportTableComponent implements OnChanges {
 
   @Input() activities: Activity[];
+  @Input() projects: Project[];
+  @Input() users: User[];
 
-  activitesByProject: {
-    project: Project,
+  userStats: {
+    user: User,
     activities: Activity[],
-    totalTimeSeconds: number
+    totalTimeSeconds: number,
   }[];
 
-  constructor(private store: Store) { }
-
-  ngOnInit() {
-  }
-
   ngOnChanges() {
-    if (!Array.isArray(this.activities)) {
-      this.activitesByProject = [];
+    if (!Array.isArray(this.activities) || !Array.isArray(this.users)) {
+      this.userStats = [];
       return;
     }
 
-    this.generateActivitiesByProjects();
+    this.generateStats();
   }
 
-  private generateActivitiesByProjects() {
-    const store = this.store.snapshot();
-    const projects: Project[] = store.app.projects.projects;
+  private generateStats() {
+    const usersWithActivities = this.users
+      .filter(u => this.activities.some(a => a.userId === u.id));
 
-    const activitiesProjects = projects
-      .filter(p => this.activities.some(a => a.projectId === p.id));
-
-    this.activitesByProject = activitiesProjects.map(project => {
-      const projectActivities = this.activities
-        .filter(a => a.projectId === project.id);
-      const totalTimeSeconds = projectActivities
+    this.userStats = usersWithActivities.map(user => {
+      const userActivities = this.activities.filter(a => a.userId === user.id);
+      const totalTimeSeconds = userActivities
         .reduce((acc, cur) => acc + cur.amountSeconds, 0);
 
       return {
-        project,
-        activities: projectActivities,
+        user,
+        activities: userActivities,
         totalTimeSeconds
       };
     });
-
-    const activitiesWithoutProject = this.activities
-      .filter(a => typeof a.projectId !== 'number');
-
-    if (activitiesWithoutProject.length) {
-      this.activitesByProject.push({
-        project: {
-          name: 'No project',
-          color: '#b2b5ba',
-          userId: null
-        },
-        activities: activitiesWithoutProject,
-        totalTimeSeconds: activitiesWithoutProject
-          .reduce((acc, cur) => acc + cur.amountSeconds, 0)
-      });
-    }
   }
 
 }

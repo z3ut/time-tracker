@@ -27,4 +27,8 @@
 </div>
 
 
-<app-summary-report-table [activities]="activities"></app-summary-report-table>
+<app-summary-report-table
+  [activities]="activities"
+  [projects]="projects$ | async"
+  [users]="users$ | async">
+</app-summary-report-table>

@@ -65,7 +65,6 @@ namespace TimeTracker.Web.Controllers
             return Ok(userDTO);
         }
 
-        [AllowAnonymous]
         [HttpPut("api/v1/users/{userId}")]
         public ActionResult<UserDTO> UpdateUser(int userId, [FromBody] UserDTO user)
         {
@@ -78,6 +77,13 @@ namespace TimeTracker.Web.Controllers
             _userService.Update(userBL);
 
             return user;
+        }
+
+        [HttpGet("api/v1/workspaces/{workspaceId}/users")]
+        public ActionResult<IEnumerable<UserInfoDTO>> GetWorkspaceUsers(int workspaceId)
+        {
+            var users = _userService.GetWorkspaceUsers(workspaceId, UserId);
+            return _mapper.Map<IEnumerable<UserInfoDTO>>(users).ToList();
         }
 
         private string CreateToken(User user)

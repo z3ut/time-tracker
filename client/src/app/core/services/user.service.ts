@@ -19,4 +19,8 @@ export class UserService {
   updateUser(user: User): Observable<User> {
     return this.http.put<User>(`${this.apiUrl}/${user.id}`, user);
   }
+
+  getWorkspaceUsers(workspaceId: number): Observable<User[]> {
+    return this.http.get<User[]>(`api/v1/workspaces/${workspaceId}/users`);
+  }
 }
