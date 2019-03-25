@@ -1,5 +1,6 @@
 import { Component, Input, OnChanges } from '@angular/core';
 import { Activity } from 'src/app/models/activity';
+import { calculateActivitiesTotalTimeSeconds } from 'src/app/shared/helpers/time-calculations';
 
 @Component({
   selector: 'app-activities-list',
@@ -28,8 +29,7 @@ export class ActivitiesListComponent implements OnChanges {
     const activityTitles = Array.from(new Set(this.activities.map(a => a.title)));
     this.activitiesStats = activityTitles.map(title => {
       const activitiesWithTitle = this.activities.filter(a => a.title === title);
-      const totalTimeSeconds = activitiesWithTitle
-        .reduce((acc, cur) => acc + cur.amountSeconds, 0);
+      const totalTimeSeconds = calculateActivitiesTotalTimeSeconds(activitiesWithTitle);
 
       return {
         title,

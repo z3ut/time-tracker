@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
 import { Activity } from 'src/app/models/activity';
 import { Project } from 'src/app/models/project';
+import { calculateActivitiesTotalTimeSeconds } from 'src/app/shared/helpers/time-calculations';
 
 @Component({
   selector: 'app-activities-by-day-list',
@@ -57,8 +58,8 @@ export class ActivitiesByDayListComponent implements OnInit, OnChanges {
             .sort((a1, a2) => a2.dateTimeStart.getTime() - a1.dateTimeStart.getTime());
           return {
             dayDate,
-            totalTimeSeconds: Math.floor(dayActivities
-              .reduce((acc, cur) => acc += cur.amountSeconds, 0)),
+            totalTimeSeconds: Math.floor(
+              calculateActivitiesTotalTimeSeconds(dayActivities)),
             activities: dayActivities
           };
         });

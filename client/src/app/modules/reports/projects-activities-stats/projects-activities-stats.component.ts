@@ -2,6 +2,7 @@ import { Component, Input, OnChanges } from '@angular/core';
 import { Project } from 'src/app/models/project';
 import { Activity } from 'src/app/models/activity';
 import { EmptyProject } from '../empty-project';
+import { calculateActivitiesTotalTimeSeconds } from 'src/app/shared/helpers/time-calculations';
 
 @Component({
   selector: 'app-projects-activities-stats',
@@ -35,8 +36,8 @@ export class ProjectsActivitiesStatsComponent implements OnChanges {
     this.activitiesStats = projectsWithActivities.map(project => {
       const projectActivities = this.activities
         .filter(a => a.projectId === project.id);
-      const totalTimeSeconds = projectActivities
-        .reduce((acc, cur) => acc + cur.amountSeconds, 0);
+      const totalTimeSeconds = calculateActivitiesTotalTimeSeconds(projectActivities);
+
       return {
         project,
         activities: projectActivities,
@@ -51,8 +52,8 @@ export class ProjectsActivitiesStatsComponent implements OnChanges {
       return;
     }
 
-    const emptyProjectTotalTimeSeconds = emptyProjectActivities
-      .reduce((acc, cur) => acc + cur.amountSeconds, 0);
+    const emptyProjectTotalTimeSeconds =
+      calculateActivitiesTotalTimeSeconds(emptyProjectActivities);
     this.activitiesStats.push({
       project: EmptyProject,
       activities: emptyProjectActivities,

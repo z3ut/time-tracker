@@ -2,6 +2,7 @@ import { Component, Input, OnChanges } from '@angular/core';
 import { Activity } from 'src/app/models/activity';
 import { Project } from 'src/app/models/project';
 import { User } from 'src/app/models/user';
+import { calculateActivitiesTotalTimeSeconds } from 'src/app/shared/helpers/time-calculations';
 
 @Component({
   selector: 'app-summary-report-table',
@@ -35,8 +36,7 @@ export class SummaryReportTableComponent implements OnChanges {
 
     this.userStats = usersWithActivities.map(user => {
       const userActivities = this.activities.filter(a => a.userId === user.id);
-      const totalTimeSeconds = userActivities
-        .reduce((acc, cur) => acc + cur.amountSeconds, 0);
+      const totalTimeSeconds = calculateActivitiesTotalTimeSeconds(userActivities);
 
       return {
         user,
