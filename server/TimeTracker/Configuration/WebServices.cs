@@ -11,6 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TimeTracker.BusinessLogic.Configuration;
 using TimeTracker.BusinessLogic.Users;
+using TimeTracker.Web.Services;
 
 namespace TimeTracker.Web.Configuration
 {
@@ -28,6 +29,11 @@ namespace TimeTracker.Web.Configuration
             });
 
             services.AddScoped<IMapper>(cfg => automapperConfig.CreateMapper());
+
+            var secret = configuration["Token:Secret"];
+            var tokenExpireDays = configuration.GetValue<int>("Token:ExpireDays");
+            services.AddScoped<IUserTokenService>(cfg =>
+                new UserTokenService(secret, tokenExpireDays));
 
             services.AddAuthentication(x =>
             {
@@ -57,8 +63,6 @@ namespace TimeTracker.Web.Configuration
                 };
                 x.RequireHttpsMetadata = false;
                 x.SaveToken = true;
-
-                var secret = configuration["Secret"];
 
                 x.TokenValidationParameters = new TokenValidationParameters
                 {

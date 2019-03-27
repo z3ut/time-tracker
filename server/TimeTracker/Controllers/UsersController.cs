@@ -13,6 +13,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using TimeTracker.BusinessLogic.Users;
 using TimeTracker.Web.Models;
+using TimeTracker.Web.Services;
 
 namespace TimeTracker.Web.Controllers
 {
@@ -21,16 +22,18 @@ namespace TimeTracker.Web.Controllers
     public class UsersController : ControllerBase
     {
         private readonly IUserService _userService;
+        private readonly IUserTokenService _userTokenService;
         private readonly IMapper _mapper;
         private readonly IConfiguration _config;
-        private readonly string secret;
 
-        public UsersController(IUserService userService, IMapper mapper, IConfiguration config)
+        public UsersController(IUserService userService,
+            IUserTokenService userTokenService, IMapper mapper,
+            IConfiguration config)
         {
             _userService = userService;
+            _userTokenService = userTokenService;
             _mapper = mapper;
             _config = config;
-            secret = config["Secret"];
         }
 
         [AllowAnonymous]
@@ -38,7 +41,8 @@ namespace TimeTracker.Web.Controllers
         [HttpPost]
         public IActionResult Authenticate([FromBody] UserCredentialsDTO userCredentials)
         {
-            var user = _userService.Authenticate(userCredentials.Username, userCredentials.Password);
+            var user = _userService.Authenticate(userCredentials.Username,
+                userCredentials.Password);
 
             if (user == null)
             {
@@ -46,7 +50,7 @@ namespace TimeTracker.Web.Controllers
             }
 
             var userDTO = _mapper.Map<UserDTO>(user);
-            userDTO.Token = CreateToken(user);
+            userDTO.Token = _userTokenService.CreateToken(user);
             return Ok(userDTO);
         }
 
@@ -58,10 +62,9 @@ namespace TimeTracker.Web.Controllers
             var user = _mapper.Map<User>(userCredentials);
 
             var createdUser = _userService.Create(user, userCredentials.Password);
-            var tokenString = CreateToken(createdUser);
 
             var userDTO = _mapper.Map<UserDTO>(createdUser);
-            userDTO.Token = CreateToken(createdUser);
+            userDTO.Token = _userTokenService.CreateToken(createdUser);
             return Ok(userDTO);
         }
 
@@ -84,26 +87,6 @@ namespace TimeTracker.Web.Controllers
         {
             var users = _userService.GetWorkspaceUsers(workspaceId, UserId);
             return _mapper.Map<IEnumerable<UserInfoDTO>>(users).ToList();
-        }
-
-        private string CreateToken(User user)
-        {
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(secret);
-            var tokenDescriptor = new SecurityTokenDescriptor
-            {
-                Subject = new ClaimsIdentity(new Claim[]
-                {
-                    new Claim("sub", user.Id.ToString())
-                }),
-                Expires = DateTime.UtcNow.AddDays(7),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key),
-                    SecurityAlgorithms.HmacSha256Signature)
-            };
-            var token = tokenHandler.CreateToken(tokenDescriptor);
-            var tokenString = tokenHandler.WriteToken(token);
-
-            return tokenString;
         }
 
         private int UserId
