@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Transactions;
 using TimeTracker.BusinessLogic.Users.Passwords;
 using TimeTracker.BusinessLogic.Workspaces;
 using TimeTracker.DataAccess;
@@ -43,14 +44,19 @@ namespace TimeTracker.BusinessLogic.Users
             var userDA = _mapper.Map<DataAccess.Models.User>(user);
             userDA.PasswordHash = passwordHash;
             userDA.PasswordSalt = passwordSalt;
-
             _activityContext.Users.Add(userDA);
 
             var defaultWorkspace = new DataAccess.Models.Workspace();
             defaultWorkspace.Name = $"{user.Username} default workspace";
             defaultWorkspace.DateTimeCreated = DateTime.Now;
+            defaultWorkspace.User = userDA;
+            _activityContext.Workspaces.Add(defaultWorkspace);
 
-            userDA.SelectedWorkspace = defaultWorkspace;
+            var userSelectedWorkspace = new DataAccess.Models.UserSelectedWorkspace();
+            userSelectedWorkspace.User = userDA;
+            userSelectedWorkspace.Workspace = defaultWorkspace;
+            _activityContext.UserSelectedWorkspaces.Add(userSelectedWorkspace);
+
             _activityContext.SaveChanges();
 
             var insertedUser = _mapper.Map<User>(userDA);
@@ -93,14 +99,7 @@ namespace TimeTracker.BusinessLogic.Users
                 }
             }
 
-            if (!_userWorkspaceService.IsWorkspaceInUserWorkspaces(
-                user.SelectedWorkspaceId, user.Id))
-            {
-                throw new Exception("Workspace doesn't belong to user");
-            }
-
             userDA.Name = user.Name;
-            userDA.SelectedWorkspaceId = user.SelectedWorkspaceId;
 
             if (!string.IsNullOrWhiteSpace(password))
             {

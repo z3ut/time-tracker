@@ -19,5 +19,6 @@ namespace TimeTracker.DataAccess.Models
         public ICollection<Project> Projects { get; set; }
         public ICollection<UserWorkspace> UserWorkspaces { get; set; }
         public ICollection<WorkspaceInvite> WorkspaceInvites { get; set; }
+        public ICollection<UserSelectedWorkspace> UserSelectedWorkspaces { get; set; }
     }
 }

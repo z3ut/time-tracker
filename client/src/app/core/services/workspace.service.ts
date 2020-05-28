@@ -35,8 +35,8 @@ export class WorkspaceService {
     );
   }
 
-  getUserWorkspaces(userId: number): Observable<Workspace[]> {
-    return this.http.get<Workspace[]>(`api/v1/users/${userId}/workspaces/`).pipe(
+  getUserWorkspaces(): Observable<Workspace[]> {
+    return this.http.get<Workspace[]>(this.apiUrl).pipe(
       map(w => this.extractWorkspaces(w))
     );
   }
@@ -46,7 +46,19 @@ export class WorkspaceService {
   }
 
   leaveWorkspace(userId: number, workspaceId: number) {
-    return this.http.delete<void>(`api/v1/users/${userId}/workspaces/${workspaceId}`);
+    return this.http.delete<void>(`${this.apiUrl}/${workspaceId}`);
+  }
+
+  getUserSelectedWorkspace(): Observable<Workspace> {
+    return this.http.get<Workspace>(`${this.apiUrl}/selected`).pipe(
+      map(w => this.extractWorkspace(w))
+    );
+  }
+
+  setUserSelectedWorkspace(workspaceId: number): Observable<Workspace> {
+    return this.http.put<Workspace>(`${this.apiUrl}/selected/${workspaceId}`, null).pipe(
+      map(w => this.extractWorkspace(w))
+    );
   }
 
   private extractWorkspaces(workspaces: Workspace[]): Workspace[] {

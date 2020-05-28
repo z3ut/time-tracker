@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -143,6 +144,50 @@ namespace TimeTracker.BusinessLogic.Workspaces
 
             _activityContext.Workspaces.Update(workspaceDA);
             _activityContext.SaveChanges();
+        }
+
+        public Workspace GetUserSelectedWorkspace(int userId)
+        {
+            var selectedWorkspaceDA = _activityContext.UserSelectedWorkspaces
+                .Include(usw => usw.Workspace)
+                .First(usw => usw.UserId == userId)
+                .Workspace;
+
+            var selectedWorkspace = _mapper.Map<Workspace>(selectedWorkspaceDA);
+            return selectedWorkspace;
+        }
+
+        public Workspace SetUserSelectedWorkspace(int workspaceId, int userId)
+        {
+            var workspaceDA = _activityContext.Workspaces.Find(workspaceId);
+
+            if (workspaceDA == null)
+            {
+                throw new Exception("Workspace not found");
+            }
+
+            if (!_userWorkspaceService.IsWorkspaceInUserWorkspaces(workspaceId, userId))
+            {
+                throw new Exception("Workspace doesn't belong to user");
+            }
+
+            var currentSelectedWorkspaceDA = _activityContext.UserSelectedWorkspaces
+                .FirstOrDefault(usw => usw.UserId == userId);
+
+            if (currentSelectedWorkspaceDA != null)
+            {
+                _activityContext.UserSelectedWorkspaces
+                    .Remove(currentSelectedWorkspaceDA);
+            }
+
+            var selectedWorkspaceDA = new DataAccess.Models.UserSelectedWorkspace();
+            selectedWorkspaceDA.UserId = userId;
+            selectedWorkspaceDA.WorkspaceId = workspaceId;
+            _activityContext.UserSelectedWorkspaces.Add(selectedWorkspaceDA);
+            _activityContext.SaveChanges();
+
+            var selectedWorkspace = _mapper.Map<Workspace>(workspaceDA);
+            return selectedWorkspace;
         }
     }
 }

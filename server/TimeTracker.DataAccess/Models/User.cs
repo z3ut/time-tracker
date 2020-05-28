@@ -14,12 +14,10 @@ namespace TimeTracker.DataAccess.Models
         public byte[] PasswordHash { get; set; }
         public byte[] PasswordSalt { get; set; }
 
-        public int SelectedWorkspaceId { get; set; }
-        [ForeignKey(nameof(SelectedWorkspaceId))]
-        public Workspace SelectedWorkspace { get; set; }
-
         public ICollection<Activity> Activities { get; set; }
         public ICollection<UserWorkspace> UserWorkspaces { get; set; }
+        public ICollection<Workspace> WorkspacesOwned { get; set; }
+        public ICollection<UserSelectedWorkspace> UserSelectedWorkspace { get; set; }
 
         public ICollection<WorkspaceInvite> WorkspaceInviter { get; set; }
         public ICollection<WorkspaceInvite> WorkspaceInviteRecipient { get; set; }

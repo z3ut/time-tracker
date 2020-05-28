@@ -8,7 +8,7 @@ import {
   DeleteProject, DeleteProjectSuccess, DeleteProjectError,
   LoadUserProjects, LoadUserProjectsSuccess, LoadUserProjectsError
 } from '../actions/project';
-import { SelectWorkspaceSuccess, LoadUserWorkspacesSuccess } from '../actions/workspace';
+import { SelectWorkspaceSuccess, LoadUserWorkspacesSuccess, LoadUserSelectedWorkspaceSuccess } from '../actions/workspace';
 
 export interface ProjectsStateModel {
   projects: Project[];
@@ -88,35 +88,30 @@ export class ProjectsState implements NgxsOnInit  {
 
   @Action(LoadUserProjects)
   loadMoreCurrentActivities(ctx: StateContext<ProjectsStateModel>, action: LoadUserProjects) {
+    const state = this.store.snapshot();
+    const userId = state.app.auth.user.id;
+    ctx.patchState({
+      projects: []
+    });
     this.projectService
-      .getUserProjects(action.userId, action.workspaceId)
+      .getUserProjects(userId, action.workspaceId)
       .subscribe(projects => {
         ctx.patchState({
           projects
         });
         ctx.dispatch(new LoadUserProjectsSuccess(projects));
       }, err => {
-        ctx.dispatch(new LoadUserProjectsError(action.userId, action.workspaceId));
+        ctx.dispatch(new LoadUserProjectsError(action.workspaceId));
       });
   }
 
   @Action(SelectWorkspaceSuccess)
   selectWorkspaceSuccess(ctx: StateContext<ProjectsStateModel>, action: SelectWorkspaceSuccess) {
-    ctx.patchState({
-      projects: []
-    });
-    const state = this.store.snapshot();
-    const userId = state.app.auth.user.id;
-    ctx.dispatch(new LoadUserProjects(userId, action.workspace.id));
+    ctx.dispatch(new LoadUserProjects(action.workspace.id));
   }
 
-  @Action(LoadUserWorkspacesSuccess)
-  loadUserWorkspacesSuccess(ctx: StateContext<ProjectsStateModel>, action: LoadUserWorkspacesSuccess) {
-    ctx.patchState({
-      projects: []
-    });
-    const state = this.store.snapshot();
-    const userId = state.app.auth.user.id;
-    ctx.dispatch(new LoadUserProjects(userId, action.selectedWorkspace.id));
+  @Action(LoadUserSelectedWorkspaceSuccess)
+  loadUserWorkspacesSuccess(ctx: StateContext<ProjectsStateModel>, action: LoadUserSelectedWorkspaceSuccess) {
+    ctx.dispatch(new LoadUserProjects(action.selectedWorkspace.id));
   }
 }

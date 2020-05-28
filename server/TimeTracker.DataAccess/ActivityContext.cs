@@ -30,6 +30,29 @@ namespace TimeTracker.DataAccess
                 }
             }
 
+            modelBuilder.Entity<Workspace>()
+                .HasOne<User>(w => w.User)
+                .WithMany(w => w.WorkspacesOwned)
+                .HasForeignKey(w => w.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
+
+
+            modelBuilder.Entity<UserSelectedWorkspace>()
+                .HasKey(usw => new { usw.UserId, usw.WorkspaceId });
+
+            modelBuilder.Entity<UserSelectedWorkspace>()
+               .HasOne<Workspace>(w => w.Workspace)
+               .WithMany(w => w.UserSelectedWorkspaces)
+               .HasForeignKey(w => w.WorkspaceId)
+               .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<UserSelectedWorkspace>()
+               .HasOne<User>(u => u.User)
+               .WithMany(u => u.UserSelectedWorkspace)
+               .HasForeignKey(w => w.UserId)
+               .OnDelete(DeleteBehavior.Restrict);
+
+
             modelBuilder.Entity<UserWorkspace>()
                 .HasKey(uw => new { uw.UserId, uw.WorkspaceId });
 
@@ -39,12 +62,12 @@ namespace TimeTracker.DataAccess
                 .HasForeignKey(uw => uw.UserId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-
             modelBuilder.Entity<UserWorkspace>()
                 .HasOne<Workspace>(uw => uw.Workspace)
                 .WithMany(uw => uw.UserWorkspaces)
                 .HasForeignKey(uw => uw.WorkspaceId)
                 .OnDelete(DeleteBehavior.Restrict);
+
 
             modelBuilder.Entity<Activity>()
                 .HasOne<Workspace>(a => a.Workspace)
@@ -77,6 +100,7 @@ namespace TimeTracker.DataAccess
         public DbSet<Activity> Activities { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<UserWorkspace> UserWorkspaces { get; set; }
+        public DbSet<UserSelectedWorkspace> UserSelectedWorkspaces { get; set; }
         public DbSet<Project> Projects { get; set; }
         public DbSet<Workspace> Workspaces { get; set; }
         public DbSet<WorkspaceInvite> WorkspaceInvites { get; set; }

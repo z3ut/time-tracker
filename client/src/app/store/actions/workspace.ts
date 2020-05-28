@@ -89,11 +89,26 @@ export class LoadUserWorkspaces {
 export class LoadUserWorkspacesSuccess {
   static readonly type = '[Workspaces] LoadUserWorkspacesSuccess';
 
-  constructor(public workspaces: Workspace[], public selectedWorkspace: Workspace) {}
+  constructor(public workspaces: Workspace[]) {}
 }
 
 export class LoadUserWorkspacesError {
   static readonly type = '[Workspaces] LoadUserWorkspacesError';
+}
+
+
+export class LoadUserSelectedWorkspace {
+  static readonly type = '[Workspaces] LoadUserSelectedWorkspace';
+}
+
+export class LoadUserSelectedWorkspaceSuccess {
+  static readonly type = '[Workspaces] LoadUserSelectedWorkspaceSuccess';
+
+  constructor(public selectedWorkspace: Workspace) {}
+}
+
+export class LoadUserSelectedWorkspaceError {
+  static readonly type = '[Workspaces] LoadUserSelectedWorkspaceError';
 }
 
 

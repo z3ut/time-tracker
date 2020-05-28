@@ -1,5 +1,5 @@
 import { State, Action, StateContext, NgxsOnInit } from '@ngxs/store';
-import { SelectWorkspaceSuccess, LoadUserWorkspacesSuccess } from '../actions/workspace';
+import { SelectWorkspaceSuccess, LoadUserWorkspacesSuccess, LoadUserSelectedWorkspaceSuccess } from '../actions/workspace';
 import { LoadWorkspaceUsers, LoadWorkspaceUsersSuccess, LoadWorkspaceUsersError } from '../actions/user';
 import { UserService } from 'src/app/core/services/user.service';
 import { User } from 'src/app/models/user';
@@ -22,6 +22,9 @@ export class UsersState implements NgxsOnInit  {
 
   @Action(LoadWorkspaceUsers)
   loadWorkspaceUsers(ctx: StateContext<UsersStateModel>, action: LoadWorkspaceUsers) {
+    ctx.patchState({
+      workspaceUsers: []
+    });
     this.userService
       .getWorkspaceUsers(action.workspaceId)
       .subscribe(workspaceUsers => {
@@ -36,17 +39,11 @@ export class UsersState implements NgxsOnInit  {
 
   @Action(SelectWorkspaceSuccess)
   selectWorkspaceSuccess(ctx: StateContext<UsersStateModel>, action: SelectWorkspaceSuccess) {
-    ctx.patchState({
-      workspaceUsers: []
-    });
     ctx.dispatch(new LoadWorkspaceUsers(action.workspace.id));
   }
 
-  @Action(LoadUserWorkspacesSuccess)
-  loadUserWorkspacesSuccess(ctx: StateContext<UsersStateModel>, action: LoadUserWorkspacesSuccess) {
-    ctx.patchState({
-      workspaceUsers: []
-    });
+  @Action(LoadUserSelectedWorkspaceSuccess)
+  loadUserWorkspacesSuccess(ctx: StateContext<UsersStateModel>, action: LoadUserSelectedWorkspaceSuccess) {
     ctx.dispatch(new LoadWorkspaceUsers(action.selectedWorkspace.id));
   }
 }

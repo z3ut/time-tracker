@@ -52,7 +52,7 @@ namespace TimeTracker.Web.Controllers
 
         [HttpDelete]
         [ActionName("LeaveWorkspace")]
-        [Route("api/v1/users/{userId}/workspaces/{workspaceId}")]
+        [Route("api/v1/workspaces/{workspaceId}")]
         public ActionResult LeaveWorkspace(int userId, int workspaceId)
         {
             if (userId != UserId)
@@ -67,14 +67,9 @@ namespace TimeTracker.Web.Controllers
 
         [HttpGet]
         [ActionName("GetUserWorkspaces")]
-        [Route("api/v1/users/{userId}/workspaces")]
-        public ActionResult<IEnumerable<WorkspaceDTO>> GetUserWorkspaces(int userId)
+        [Route("api/v1/workspaces")]
+        public ActionResult<IEnumerable<WorkspaceDTO>> GetUserWorkspaces()
         {
-            if (userId != UserId)
-            {
-                return BadRequest("Wrong user id");
-            }
-
             var workspaces = _workspaceService.GetUserWorkspaces(UserId);
             return _mapper.Map<IEnumerable<WorkspaceDTO>>(workspaces).ToList();
         }
@@ -107,6 +102,26 @@ namespace TimeTracker.Web.Controllers
             var workspaceBL = _mapper.Map<Workspace>(workspace);
             _workspaceService.Update(workspaceBL, UserId);
             return workspace;
+        }
+
+        [HttpGet]
+        [ActionName("GetUserSelectedWorkspace")]
+        [Route("api/v1/workspaces/selected")]
+        public ActionResult<WorkspaceDTO> GetUserSelectedWorkspace()
+        {
+            var workspace = _workspaceService.GetUserSelectedWorkspace(UserId);
+            var workspaceDTO = _mapper.Map<WorkspaceDTO>(workspace);
+            return workspaceDTO;
+        }
+
+        [HttpPut]
+        [ActionName("SetUserSelectedWorkspace")]
+        [Route("api/v1/workspaces/selected/{workspaceId}")]
+        public ActionResult<WorkspaceDTO> SetUserSelectedWorkspace(int workspaceId)
+        {
+            var workspace = _workspaceService.SetUserSelectedWorkspace(workspaceId, UserId);
+            var workspaceDTO = _mapper.Map<WorkspaceDTO>(workspace);
+            return workspaceDTO;
         }
 
         private int UserId

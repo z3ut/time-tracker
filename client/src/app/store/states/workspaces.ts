@@ -9,11 +9,10 @@ import {
   DeleteWorkspace, DeleteWorkspaceSuccess, DeleteWorkspaceError,
   LoadUserWorkspaces, LoadUserWorkspacesSuccess, LoadUserWorkspacesError,
   SelectWorkspace, SelectWorkspaceError, SelectWorkspaceSuccess,
-  LeaveWorkspace, LeaveWorkspaceSuccess, LeaveWorkspaceError
+  LeaveWorkspace, LeaveWorkspaceSuccess, LeaveWorkspaceError,
+  LoadUserSelectedWorkspace, LoadUserSelectedWorkspaceError, LoadUserSelectedWorkspaceSuccess
 } from '../actions/workspace';
 import { LoginSuccess } from '../actions/auth';
-import { LoadUserProjects } from '../actions/project';
-import { LoadMoreCurrentActivities } from '../actions/activity';
 
 export interface WorkspacesStateModel {
   workspaces: Workspace[];
@@ -109,28 +108,35 @@ export class WorkspacesState implements NgxsOnInit  {
 
   @Action(LoginSuccess)
   loginSuccess(ctx: StateContext<WorkspacesStateModel>, action: LoginSuccess) {
-    ctx.patchState({
-      selectedWorkspaceId: action.user.selectedWorkspaceId
-    });
     ctx.dispatch(new LoadUserWorkspaces());
+    ctx.dispatch(new LoadUserSelectedWorkspace());
   }
 
   @Action(LoadUserWorkspaces)
   LoadUserWorkspaces(ctx: StateContext<WorkspacesStateModel>) {
-    const globalState = this.store.snapshot();
-    const userId = globalState.app.auth.user.id;
     this.workspaceService
-      .getUserWorkspaces(userId)
+      .getUserWorkspaces()
       .subscribe(workspaces => {
         ctx.patchState({
           workspaces
         });
-
-        const state = this.store.snapshot();
-        const selectedWorkspace = WorkspacesState.selectedWorkspace(state);
-        ctx.dispatch(new LoadUserWorkspacesSuccess(workspaces, selectedWorkspace));
+        ctx.dispatch(new LoadUserWorkspacesSuccess(workspaces));
       }, err => {
         ctx.dispatch(new LoadUserWorkspacesError());
+      });
+  }
+
+  @Action(LoadUserSelectedWorkspace)
+  loadSelectedWorkspace(ctx: StateContext<WorkspacesStateModel>, action: LoadUserSelectedWorkspace) {
+    this.workspaceService
+      .getUserSelectedWorkspace()
+      .subscribe(workspace => {
+        ctx.patchState({
+          selectedWorkspaceId: workspace.id
+        });
+        ctx.dispatch(new LoadUserSelectedWorkspaceSuccess(workspace));
+      }, err => {
+        ctx.dispatch(new LoadUserSelectedWorkspaceError());
       });
   }
 
@@ -142,10 +148,15 @@ export class WorkspacesState implements NgxsOnInit  {
       ctx.dispatch(new SelectWorkspaceError(action.id));
       return;
     }
-    ctx.patchState({
-      selectedWorkspaceId: action.id
-    });
-    ctx.dispatch(new SelectWorkspaceSuccess(newSelectedWorkspace));
+    this.workspaceService.setUserSelectedWorkspace(action.id)
+      .subscribe(workspace => {
+        ctx.patchState({
+          selectedWorkspaceId: action.id
+        });
+        ctx.dispatch(new SelectWorkspaceSuccess(newSelectedWorkspace));
+      }, err => {
+        ctx.dispatch(new SelectWorkspaceError(action.id));
+      });
   }
 
   @Action(LeaveWorkspace)

@@ -9,7 +9,7 @@ import {
 import { Activity } from 'src/app/models/activity';
 import { ActivityService } from 'src/app/core/services/activity.service';
 import { DeleteProject } from '../actions/project';
-import { SelectWorkspaceSuccess, LoadUserWorkspacesSuccess } from '../actions/workspace';
+import { SelectWorkspaceSuccess, LoadUserWorkspacesSuccess, LoadUserSelectedWorkspaceSuccess } from '../actions/workspace';
 import { WorkspacesStateModel } from './workspaces';
 
 export interface ActivitiesStateModel {
@@ -170,8 +170,8 @@ export class ActivitiesState implements NgxsOnInit  {
     ctx.dispatch(new LoadMoreCurrentActivities(userId, action.workspace.id));
   }
 
-  @Action(LoadUserWorkspacesSuccess)
-  loadUserWorkspacesSuccess(ctx: StateContext<ActivitiesStateModel>, action: LoadUserWorkspacesSuccess) {
+  @Action(LoadUserSelectedWorkspaceSuccess)
+  loadUserWorkspacesSuccess(ctx: StateContext<ActivitiesStateModel>, action: LoadUserSelectedWorkspaceSuccess) {
     ctx.patchState({
       currentActivities: [],
       currentActivitiesLoadedFrom: new Date(),
