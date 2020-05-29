@@ -82,16 +82,16 @@ namespace TimeTracker.BusinessLogic.Users
             return _mapper.Map<User>(user);
         }
 
-        public void Update(User user, string password = null)
+        public User Update(User user, string password = null)
         {
-            var userDA = _activityContext.Users.Find(user.Id);
+            var savedUser = _activityContext.Users.Find(user.Id);
 
-            if (userDA == null)
+            if (savedUser == null)
             {
                 throw new Exception("User not found");
             }
 
-            if (user.Username != userDA.Username)
+            if (user.Username != savedUser.Username)
             {
                 if (_activityContext.Users.Any(x => x.Username == user.Username))
                 {
@@ -99,19 +99,21 @@ namespace TimeTracker.BusinessLogic.Users
                 }
             }
 
-            userDA.Name = user.Name;
+            savedUser.Name = user.Name;
 
             if (!string.IsNullOrWhiteSpace(password))
             {
                 _passwordService.CreatePasswordHash(password, out byte[] passwordHash,
                     out byte[] passwordSalt);
 
-                userDA.PasswordHash = passwordHash;
-                userDA.PasswordSalt = passwordSalt;
+                savedUser.PasswordHash = passwordHash;
+                savedUser.PasswordSalt = passwordSalt;
             }
 
-            _activityContext.Users.Update(userDA);
             _activityContext.SaveChanges();
+
+            var updatedUser = _mapper.Map<User>(savedUser);
+            return updatedUser;
         }
 
         public User Authenticate(string username, string password)

@@ -77,9 +77,9 @@ namespace TimeTracker.Web.Controllers
             }
 
             var userBL = _mapper.Map<User>(user);
-            _userService.Update(userBL);
-
-            return user;
+            var updatedUser = _userService.Update(userBL);
+            var updatedUserDTO = _mapper.Map<UserDTO>(updatedUser);
+            return updatedUserDTO;
         }
 
         [HttpGet("api/v1/workspaces/{workspaceId}/users")]

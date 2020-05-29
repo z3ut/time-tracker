@@ -103,11 +103,11 @@ namespace TimeTracker.BusinessLogic.Projects
             return _mapper.Map<IEnumerable<Project>>(userProjects);
         }
 
-        public void Update(Project project, int userId)
+        public Project Update(Project project, int userId)
         {
-            var projectDA = _activityContext.Projects.Find(project.Id);
+            var savedProject = _activityContext.Projects.Find(project.Id);
 
-            if (projectDA == null)
+            if (savedProject == null)
             {
                 throw new Exception("Project not found");
             }
@@ -123,13 +123,15 @@ namespace TimeTracker.BusinessLogic.Projects
                 throw new Exception("User doesn't have access to workspace");
             }
 
-            projectDA.Name = project.Name;
-            projectDA.Color = project.Color;
-            projectDA.UserId = project.UserId;
-            projectDA.WorkspaceId = project.WorkspaceId;
+            var newProject = _mapper.Map<DataAccess.Models.Project>(project);
+            _activityContext.Entry(savedProject).CurrentValues.SetValues(newProject);
 
-            _activityContext.Projects.Update(projectDA);
             _activityContext.SaveChanges();
+
+            _activityContext.Entry(savedProject).Reload();
+
+            var updatedProject = _mapper.Map<Project>(savedProject);
+            return updatedProject;
         }
     }
 }

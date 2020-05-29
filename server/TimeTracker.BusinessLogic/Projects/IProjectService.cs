@@ -9,7 +9,7 @@ namespace TimeTracker.BusinessLogic.Projects
         Project Create(Project project, int userId);
         Project Get(int projectId, int userId);
         IEnumerable<Project> GetWorkspaceProjects(int userId, int workspaceId);
-        void Update(Project project, int userId);
+        Project Update(Project project, int userId);
         void Delete(int projectId, int userId);
     }
 }

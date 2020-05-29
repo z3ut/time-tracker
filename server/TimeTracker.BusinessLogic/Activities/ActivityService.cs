@@ -114,7 +114,7 @@ namespace TimeTracker.BusinessLogic.Activities
             return _mapper.Map<Activity>(activity);
         }
 
-        public void Update(Activity activity, int userId)
+        public Activity Update(Activity activity, int userId)
         {
             var savedActivity = _activityContext.Activities.Find(activity.Id);
 
@@ -134,15 +134,15 @@ namespace TimeTracker.BusinessLogic.Activities
                 throw new Exception("Workspace doesn't belong to user");
             }
 
-            savedActivity.DateTimeEnd = activity.DateTimeEnd;
-            savedActivity.DateTimeStart = activity.DateTimeStart;
-            savedActivity.Title = activity.Title;
-            savedActivity.UserId = activity.UserId;
-            savedActivity.ProjectId = activity.ProjectId;
-            savedActivity.WorkspaceId = activity.WorkspaceId;
+            var newActivity = _mapper.Map<DataAccess.Models.Activity>(activity);
+            _activityContext.Entry(savedActivity).CurrentValues.SetValues(newActivity);
 
-            _activityContext.Activities.Update(savedActivity);
             _activityContext.SaveChanges();
+
+            _activityContext.Entry(savedActivity).Reload();
+
+            var updatedActivity = _mapper.Map<Activity>(savedActivity);
+            return updatedActivity;
         }
     }
 }

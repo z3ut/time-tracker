@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using System;
@@ -10,11 +11,28 @@ namespace TimeTracker.DataAccess
 {
     public class ActivityContext : DbContext
     {
+        public DbSet<Activity> Activities { get; set; }
+        public DbSet<User> Users { get; set; }
+        public DbSet<UserWorkspace> UserWorkspaces { get; set; }
+        public DbSet<UserSelectedWorkspace> UserSelectedWorkspaces { get; set; }
+        public DbSet<Project> Projects { get; set; }
+        public DbSet<Workspace> Workspaces { get; set; }
+        public DbSet<WorkspaceInvite> WorkspaceInvites { get; set; }
+
         public ActivityContext(DbContextOptions<ActivityContext> options) : base(options)
         {
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            SetUTCProperties(modelBuilder);
+            SetModelRelations(modelBuilder);
+            SetNotUpdatingProperties(modelBuilder);
+
+            base.OnModelCreating(modelBuilder);
+        }
+
+        private void SetUTCProperties(ModelBuilder modelBuilder)
         {
             // https://stackoverflow.com/a/50728577
             // read datetime in UTC
@@ -29,7 +47,10 @@ namespace TimeTracker.DataAccess
                         property.SetValueConverter(dateTimeConverter);
                 }
             }
+        }
 
+        private void SetModelRelations(ModelBuilder modelBuilder)
+        {
             modelBuilder.Entity<Workspace>()
                 .HasOne<User>(w => w.User)
                 .WithMany(w => w.WorkspacesOwned)
@@ -93,16 +114,19 @@ namespace TimeTracker.DataAccess
                 .WithMany(u => u.WorkspaceInviteRecipient)
                 .HasForeignKey(ui => ui.RecipientId)
                 .OnDelete(DeleteBehavior.Restrict);
-
-            base.OnModelCreating(modelBuilder);
         }
 
-        public DbSet<Activity> Activities { get; set; }
-        public DbSet<User> Users { get; set; }
-        public DbSet<UserWorkspace> UserWorkspaces { get; set; }
-        public DbSet<UserSelectedWorkspace> UserSelectedWorkspaces { get; set; }
-        public DbSet<Project> Projects { get; set; }
-        public DbSet<Workspace> Workspaces { get; set; }
-        public DbSet<WorkspaceInvite> WorkspaceInvites { get; set; }
+        private void SetNotUpdatingProperties(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Workspace>()
+                .Property(e => e.DateTimeCreated)
+                .ValueGeneratedOnAddOrUpdate()
+                .Metadata.SetAfterSaveBehavior(PropertySaveBehavior.Ignore);
+
+            modelBuilder.Entity<Project>()
+                .Property(e => e.DateTimeCreated)
+                .ValueGeneratedOnAddOrUpdate()
+                .Metadata.SetAfterSaveBehavior(PropertySaveBehavior.Ignore);
+        }
     }
 }

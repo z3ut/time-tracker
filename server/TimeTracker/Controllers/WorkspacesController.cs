@@ -15,14 +15,12 @@ namespace TimeTracker.Web.Controllers
     public class WorkspacesController : ControllerBase
     {
         private readonly IWorkspaceService _workspaceService;
-        private readonly IWorkspaceInviteService _workspaceInviteService;
         private readonly IMapper _mapper;
 
         public WorkspacesController(IWorkspaceService workspaceService,
-            IWorkspaceInviteService workspaceInviteService, IMapper mapper)
+            IMapper mapper)
         {
             _workspaceService = workspaceService;
-            _workspaceInviteService = workspaceInviteService;
             _mapper = mapper;
         }
 
@@ -38,15 +36,15 @@ namespace TimeTracker.Web.Controllers
 
         [HttpDelete]
         [ActionName("DeleteWorkspace")]
-        [Route("api/v1/workspaces/{userId}")]
-        public ActionResult DeleteWorkspace(int userId)
+        [Route("api/v1/workspaces/{workspaceId}")]
+        public ActionResult DeleteWorkspace(int workspaceId)
         {
-            if (userId != UserId)
+            if (workspaceId != UserId)
             {
-                return BadRequest("Wrong user id");
+                return BadRequest("Wrong workspace id");
             }
 
-            _workspaceService.Delete(userId, UserId);
+            _workspaceService.Delete(workspaceId, UserId);
             return Ok();
         }
 
@@ -57,7 +55,7 @@ namespace TimeTracker.Web.Controllers
         {
             if (userId != UserId)
             {
-                return BadRequest("Wrong user id");
+                return BadRequest("Wrong workspace id");
             }
 
             _workspaceService.Leave(workspaceId, UserId);
@@ -76,10 +74,10 @@ namespace TimeTracker.Web.Controllers
 
         [HttpGet]
         [ActionName("GetWorkspace")]
-        [Route("api/v1/workspaces/{id}")]
-        public ActionResult<WorkspaceDTO> GetWorkspace(int id)
+        [Route("api/v1/workspaces/{workspaceId}")]
+        public ActionResult<WorkspaceDTO> GetWorkspace(int workspaceId)
         {
-            var workspace = _workspaceService.Get(id, UserId);
+            var workspace = _workspaceService.Get(workspaceId, UserId);
 
             if (workspace == null)
             {
@@ -91,17 +89,19 @@ namespace TimeTracker.Web.Controllers
 
         [HttpPut]
         [ActionName("UpdateWorkspace")]
-        [Route("api/v1/workspaces/{id}")]
-        public ActionResult<WorkspaceDTO> UpdateWorkspace(int workspaceId, WorkspaceDTO workspace)
+        [Route("api/v1/workspaces/{workspaceId}")]
+        public ActionResult<WorkspaceDTO> UpdateWorkspace(int workspaceId,
+            WorkspaceDTO workspace)
         {
             if (workspaceId != workspace.Id)
             {
-                return BadRequest("Wrong id");
+                return BadRequest("Wrong workspace id");
             }
 
             var workspaceBL = _mapper.Map<Workspace>(workspace);
-            _workspaceService.Update(workspaceBL, UserId);
-            return workspace;
+            var updatedWorkspace = _workspaceService.Update(workspaceBL, UserId);
+            var updatedWorkspaceDTO = _mapper.Map<WorkspaceDTO>(updatedWorkspace);
+            return updatedWorkspaceDTO;
         }
 
         [HttpGet]
@@ -119,7 +119,8 @@ namespace TimeTracker.Web.Controllers
         [Route("api/v1/workspaces/selected/{workspaceId}")]
         public ActionResult<WorkspaceDTO> SetUserSelectedWorkspace(int workspaceId)
         {
-            var workspace = _workspaceService.SetUserSelectedWorkspace(workspaceId, UserId);
+            var workspace = _workspaceService
+                .SetUserSelectedWorkspace(workspaceId, UserId);
             var workspaceDTO = _mapper.Map<WorkspaceDTO>(workspace);
             return workspaceDTO;
         }

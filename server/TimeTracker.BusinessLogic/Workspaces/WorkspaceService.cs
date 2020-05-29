@@ -125,25 +125,29 @@ namespace TimeTracker.BusinessLogic.Workspaces
             return _userWorkspaceService.GetUserWorkspaces(userId);
         }
 
-        public void Update(Workspace workspace, int userId)
+        public Workspace Update(Workspace workspace, int userId)
         {
-            var workspaceDA = _activityContext.Workspaces.Find(workspace.Id);
+            var savedWorkspace = _activityContext.Workspaces.Find(workspace.Id);
 
-            if (workspaceDA == null)
+            if (savedWorkspace == null)
             {
                 throw new Exception("Workspace not found");
             }
 
-            if (workspaceDA.UserId != userId)
+            if (savedWorkspace.UserId != userId)
             {
                 throw new Exception("Workspace doesn't belong to user");
             }
 
-            workspaceDA.Name = workspace.Name;
-            workspaceDA.UserId = workspace.UserId;
+            var newWorkspace = _mapper.Map<DataAccess.Models.Workspace>(workspace);
+            _activityContext.Entry(savedWorkspace).CurrentValues.SetValues(newWorkspace);
 
-            _activityContext.Workspaces.Update(workspaceDA);
             _activityContext.SaveChanges();
+
+            _activityContext.Entry(savedWorkspace).Reload();
+
+            var updatedWorkspace = _mapper.Map<Workspace>(savedWorkspace);
+            return updatedWorkspace;
         }
 
         public Workspace GetUserSelectedWorkspace(int userId)

@@ -9,7 +9,7 @@ namespace TimeTracker.BusinessLogic.Users
         User Authenticate(string username, string password);
         User Create(User user, string password);
         User Get(int userId);
-        void Update(User user, string password = null);
+        User Update(User user, string password = null);
         void Delete(int userId);
         IEnumerable<User> GetWorkspaceUsers(int workspaceId, int userId);
     }

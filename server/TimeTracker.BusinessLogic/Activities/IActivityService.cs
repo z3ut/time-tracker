@@ -10,7 +10,7 @@ namespace TimeTracker.BusinessLogic.Activities
         Activity Get(int activityId, int userId);
         IEnumerable<Activity> GetAllUsersWorkspaceActivities(DateTime dateTimeFrom, DateTime dateTimeTo, int userId, int workspaceId);
         IEnumerable<Activity> GetUserWorkspaceActivities(DateTime dateTimeFrom, DateTime dateTimeTo, int userId, int workspaceId);
-        void Update(Activity activity, int userId);
+        Activity Update(Activity activity, int userId);
         void Delete(int activityId, int userId);
     }
 }

@@ -13,7 +13,7 @@ namespace TimeTracker.BusinessLogic.Workspaces
         Workspace GetUserSelectedWorkspace(int userId);
         Workspace SetUserSelectedWorkspace(int workspaceId, int userId);
 
-        void Update(Workspace workspace, int userId);
+        Workspace Update(Workspace workspace, int userId);
         void Delete(int workspaceId, int userId);
         void Leave(int workspaceId, int userId);
     }
