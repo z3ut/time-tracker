@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Activity } from 'src/app/models/activity';
 import { Project } from 'src/app/models/project';
 import { Store, Actions, ofActionDispatched, Select } from '@ngxs/store';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import {
   LoadMoreCurrentActivities, LoadMoreCurrentActivitiesSuccess, LoadMoreCurrentActivitiesError,
   CreateActivity, CreateActivitySuccess, CreateActivityError,
@@ -12,13 +12,14 @@ import {
 import { DeleteProject, DeleteProjectError } from 'src/app/store/actions/project';
 import { ToasterService } from 'angular2-toaster';
 import { ActivitiesState } from 'src/app/store/states/activities';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-current-activities',
   templateUrl: './current-activities.component.html',
   styleUrls: ['./current-activities.component.scss']
 })
-export class CurrentActivitiesComponent implements OnInit {
+export class CurrentActivitiesComponent implements OnInit, OnDestroy {
 
   constructor(private toasterService: ToasterService,
               private store: Store,
@@ -28,6 +29,8 @@ export class CurrentActivitiesComponent implements OnInit {
   userId: number;
   isLoadingMore = false;
   isCreatingNewProject = false;
+
+  private ngUnsubscribe = new Subject();
 
   @Select(ActivitiesState.activitiesExceptRunning) activities$: Observable<Activity>;
   @Select(state => state.app.projects.projects) projects$: Observable<Activity>;
@@ -39,13 +42,19 @@ export class CurrentActivitiesComponent implements OnInit {
     this.generateNewActivity();
 
     this.actions$
-      .pipe(ofActionDispatched(LoadMoreCurrentActivitiesSuccess))
+      .pipe(
+        ofActionDispatched(LoadMoreCurrentActivitiesSuccess),
+        takeUntil(this.ngUnsubscribe)
+      )
       .subscribe(({ payload }) => {
         this.isLoadingMore = false;
       });
 
     this.actions$
-      .pipe(ofActionDispatched(LoadMoreCurrentActivitiesError))
+      .pipe(
+        ofActionDispatched(LoadMoreCurrentActivitiesError),
+        takeUntil(this.ngUnsubscribe)
+      )
       .subscribe(({ payload }) => {
         this.toasterService.pop('error', 'Error loading more activities');
         this.isLoadingMore = false;
@@ -53,36 +62,56 @@ export class CurrentActivitiesComponent implements OnInit {
 
 
     this.actions$
-      .pipe(ofActionDispatched(CreateActivitySuccess))
+      .pipe(
+        ofActionDispatched(CreateActivitySuccess),
+        takeUntil(this.ngUnsubscribe)
+      )
       .subscribe(({ payload }) => {
         this.generateNewActivity();
       });
 
     this.actions$
-      .pipe(ofActionDispatched(CreateActivityError))
+      .pipe(
+        ofActionDispatched(CreateActivityError),
+        takeUntil(this.ngUnsubscribe)
+      )
       .subscribe(({ payload }) => {
         this.toasterService.pop('error', 'Error creating new activity');
       });
 
 
     this.actions$
-      .pipe(ofActionDispatched(UpdateActivityError))
+      .pipe(
+        ofActionDispatched(UpdateActivityError),
+        takeUntil(this.ngUnsubscribe)
+      )
       .subscribe(({ payload }) => {
         this.toasterService.pop('error', 'Error updating activity');
       });
 
 
     this.actions$
-      .pipe(ofActionDispatched(DeleteActivityError))
+      .pipe(
+        ofActionDispatched(DeleteActivityError),
+        takeUntil(this.ngUnsubscribe)
+      )
       .subscribe(({ payload }) => {
         this.toasterService.pop('error', 'Error deleting activity');
       });
 
     this.actions$
-      .pipe(ofActionDispatched(DeleteProjectError))
+      .pipe(
+        ofActionDispatched(DeleteProjectError),
+        takeUntil(this.ngUnsubscribe)
+      )
       .subscribe(({ payload }) => {
         this.toasterService.pop('error', 'Error deleting project');
       });
+  }
+
+  ngOnDestroy() {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
   }
 
   saveActivity() {

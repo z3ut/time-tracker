@@ -1,19 +1,22 @@
-import { Component, OnInit, Output, EventEmitter, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, ViewChild, ElementRef, OnDestroy } from '@angular/core';
 import { Project } from 'src/app/models/project';
 import Pickr from '@simonwep/pickr/dist/pickr.min';
 import { Store, Actions, ofActionDispatched } from '@ngxs/store';
 import { CreateProject, CreateProjectError, CreateProjectSuccess } from 'src/app/store/actions/project';
 import { ToasterService } from 'angular2-toaster';
 import { SpinnerService } from 'src/app/shared/components/spinner/spinner.service';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-create-new-project',
   templateUrl: './create-new-project.component.html',
   styleUrls: ['./create-new-project.component.scss']
 })
-export class CreateNewProjectComponent implements OnInit {
+export class CreateNewProjectComponent implements OnInit, OnDestroy {
 
   private defaultColor = '#FF0000';
+  private ngUnsubscribe = new Subject();
 
   name = '';
   color = this.defaultColor;
@@ -55,7 +58,10 @@ export class CreateNewProjectComponent implements OnInit {
     });
 
     this.actions$
-      .pipe(ofActionDispatched(CreateProjectSuccess))
+      .pipe(
+        ofActionDispatched(CreateProjectSuccess),
+        takeUntil(this.ngUnsubscribe)
+      )
       .subscribe(({ payload }) => {
         this.isLoading = false;
         this.spinnerService.hide();
@@ -64,12 +70,20 @@ export class CreateNewProjectComponent implements OnInit {
       });
 
     this.actions$
-      .pipe(ofActionDispatched(CreateProjectError))
+      .pipe(
+        ofActionDispatched(CreateProjectError),
+        takeUntil(this.ngUnsubscribe)
+      )
       .subscribe(({ payload }) => {
         this.isLoading = false;
         this.spinnerService.hide();
         this.toasterService.pop('error', 'Error creating project');
       });
+  }
+
+  ngOnDestroy() {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
   }
 
   create() {

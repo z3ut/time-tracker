@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Observable, Subject } from 'rxjs';
 import { ToasterService } from 'angular2-toaster';
 import { SpinnerService } from 'src/app/shared/components/spinner/spinner.service';
 import { Store, Actions, Select, ofActionDispatched } from '@ngxs/store';
@@ -12,18 +12,21 @@ import { DeleteWorkspace, DeleteWorkspaceSuccess, DeleteWorkspaceError,
   LeaveWorkspaceError
 } from 'src/app/store/actions/workspace';
 import { WorkspaceInviteService } from 'src/app/core/services/workspace-invite.service';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-workspace-list',
   templateUrl: './workspace-list.component.html',
   styleUrls: ['./workspace-list.component.scss']
 })
-export class WorkspaceListComponent implements OnInit {
+export class WorkspaceListComponent implements OnInit, OnDestroy {
 
   @Select(WorkspacesState.selectedWorkspace) selectedWorkspace$: Observable<Workspace>;
   @Select(state => state.app.workspaces.workspaces) workspaces$: Observable<Workspace>;
 
   isCreatingNewWorkspace = false;
+
+  private ngUnsubscribe = new Subject();
 
   constructor(private toasterService: ToasterService,
               private spinnerService: SpinnerService,
@@ -33,32 +36,49 @@ export class WorkspaceListComponent implements OnInit {
 
   ngOnInit() {
     this.actions$
-      .pipe(ofActionDispatched(DeleteWorkspaceSuccess))
+      .pipe(
+        ofActionDispatched(DeleteWorkspaceSuccess),
+        takeUntil(this.ngUnsubscribe)
+      )
       .subscribe(({ workspace }) => {
         this.spinnerService.hide();
         this.toasterService.pop('error', 'Workspace deleted');
       });
 
     this.actions$
-      .pipe(ofActionDispatched(DeleteWorkspaceError))
+      .pipe(
+        ofActionDispatched(DeleteWorkspaceError),
+        takeUntil(this.ngUnsubscribe)
+      )
       .subscribe(({ payload }) => {
         this.spinnerService.hide();
         this.toasterService.pop('error', 'Error creating workspace');
       });
 
     this.actions$
-      .pipe(ofActionDispatched(LeaveWorkspaceSuccess))
+      .pipe(
+        ofActionDispatched(LeaveWorkspaceSuccess),
+        takeUntil(this.ngUnsubscribe)
+      )
       .subscribe(({ workspace }) => {
         this.spinnerService.hide();
         this.toasterService.pop('success', 'Workspace leave');
       });
 
     this.actions$
-      .pipe(ofActionDispatched(LeaveWorkspaceError))
+      .pipe(
+        ofActionDispatched(LeaveWorkspaceError),
+        takeUntil(this.ngUnsubscribe)
+      )
       .subscribe(({ payload }) => {
         this.spinnerService.hide();
         this.toasterService.pop('error', 'Error leaving workspace');
       });
+  }
+
+  ngOnDestroy() {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
   }
 
   isWorkspaceSelected(workspace: Workspace) {

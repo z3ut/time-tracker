@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Observable, Subject } from 'rxjs';
 import { Select, Store, Actions, ofActionDispatched } from '@ngxs/store';
 import { WorkspaceInvite } from 'src/app/models/workspace-invite';
 import { ToasterService } from 'angular2-toaster';
@@ -8,13 +8,14 @@ import {
   AcceptInviteToWorkspace, AcceptInviteToWorkspaceSuccess, AcceptInviteToWorkspaceError,
   DeclineInviteToWorkspace, DeclineInviteToWorkspaceSuccess, DeclineInviteToWorkspaceError
 } from 'src/app/store/actions/workspace-invite';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-workspace-invites',
   templateUrl: './workspace-invites.component.html',
   styleUrls: ['./workspace-invites.component.scss']
 })
-export class WorkspaceInvitesComponent implements OnInit {
+export class WorkspaceInvitesComponent implements OnInit, OnDestroy {
 
   @Select(state => state.app.workspaceInvites.workspaceInvites)
   workspaceInvites$: Observable<WorkspaceInvite>;
@@ -23,6 +24,8 @@ export class WorkspaceInvitesComponent implements OnInit {
   numberOfWorkspaceInvites$: Observable<WorkspaceInvite>;
 
   private userId: number;
+
+  private ngUnsubscribe = new Subject();
 
   constructor(private store: Store,
               private actions$: Actions,
@@ -34,14 +37,20 @@ export class WorkspaceInvitesComponent implements OnInit {
     this.userId = store.app.auth.user.id;
 
     this.actions$
-      .pipe(ofActionDispatched(AcceptInviteToWorkspaceSuccess))
+      .pipe(
+        ofActionDispatched(AcceptInviteToWorkspaceSuccess),
+        takeUntil(this.ngUnsubscribe)
+      )
       .subscribe(({ workspace }) => {
         this.spinnerService.hide();
         this.toasterService.pop('success', 'Invite accepted');
       });
 
     this.actions$
-      .pipe(ofActionDispatched(AcceptInviteToWorkspaceError))
+      .pipe(
+        ofActionDispatched(AcceptInviteToWorkspaceError),
+        takeUntil(this.ngUnsubscribe)
+      )
       .subscribe(({ payload }) => {
         this.spinnerService.hide();
         this.toasterService.pop('error', 'Error accepting invite');
@@ -49,18 +58,29 @@ export class WorkspaceInvitesComponent implements OnInit {
 
 
     this.actions$
-      .pipe(ofActionDispatched(DeclineInviteToWorkspaceSuccess))
+      .pipe(
+        ofActionDispatched(DeclineInviteToWorkspaceSuccess),
+        takeUntil(this.ngUnsubscribe)
+      )
       .subscribe(({ workspace }) => {
         this.spinnerService.hide();
         this.toasterService.pop('success', 'Invite decline');
       });
 
     this.actions$
-      .pipe(ofActionDispatched(DeclineInviteToWorkspaceError))
+      .pipe(
+        ofActionDispatched(DeclineInviteToWorkspaceError),
+        takeUntil(this.ngUnsubscribe),
+      )
       .subscribe(({ payload }) => {
         this.spinnerService.hide();
         this.toasterService.pop('error', 'Error declining invite');
       });
+  }
+
+  ngOnDestroy() {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
   }
 
   acceptWorkspaceInvite(wi: WorkspaceInvite) {

@@ -1,22 +1,26 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { ToasterService } from 'angular2-toaster';
 import { SpinnerService } from 'src/app/shared/components/spinner/spinner.service';
 import { Store, Actions, ofActionDispatched } from '@ngxs/store';
 import { CreateWorkspaceSuccess, CreateWorkspaceError, CreateWorkspace } from 'src/app/store/actions/workspace';
 import { Workspace } from 'src/app/models/workspace';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-create-workspace',
   templateUrl: './create-workspace.component.html',
   styleUrls: ['./create-workspace.component.scss']
 })
-export class CreateWorkspaceComponent implements OnInit {
+export class CreateWorkspaceComponent implements OnInit, OnDestroy {
 
   name = '';
   isLoading = false;
 
   @Output() created = new EventEmitter<Workspace>();
   @Output() canceled = new EventEmitter<Workspace>();
+
+  private ngUnsubscribe = new Subject();
 
   constructor(private toasterService: ToasterService,
               private spinnerService: SpinnerService,
@@ -25,7 +29,10 @@ export class CreateWorkspaceComponent implements OnInit {
 
   ngOnInit() {
     this.actions$
-      .pipe(ofActionDispatched(CreateWorkspaceSuccess))
+      .pipe(
+        ofActionDispatched(CreateWorkspaceSuccess),
+        takeUntil(this.ngUnsubscribe)
+      )
       .subscribe(({ workspace }) => {
         this.isLoading = false;
         this.spinnerService.hide();
@@ -34,12 +41,20 @@ export class CreateWorkspaceComponent implements OnInit {
       });
 
     this.actions$
-      .pipe(ofActionDispatched(CreateWorkspaceError))
+      .pipe(
+        ofActionDispatched(CreateWorkspaceError),
+        takeUntil(this.ngUnsubscribe)
+      )
       .subscribe(({ payload }) => {
         this.isLoading = false;
         this.spinnerService.hide();
         this.toasterService.pop('error', 'Error creating workspace');
       });
+  }
+
+  ngOnDestroy() {
+    this.ngUnsubscribe.next();
+    this.ngUnsubscribe.complete();
   }
 
   create() {
