@@ -5,12 +5,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using TimeTracker.BusinessLogic.Configuration;
+using Microsoft.Extensions.Hosting;
 using TimeTracker.Web.Configuration;
 
 namespace TimeTracker
@@ -30,8 +27,7 @@ namespace TimeTracker
             {
                 options.AddPolicy("CorsPolicy", b => b.AllowAnyOrigin()
                     .AllowAnyMethod()
-                    .AllowAnyHeader()
-                    .AllowCredentials());
+                    .AllowAnyHeader());
             });
 
             services.ConfigureWebServices(Configuration);
@@ -39,21 +35,27 @@ namespace TimeTracker
             // prevent overriding jwt "sub" claim
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddMvc();
         }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseRouting();
+
             app.UseCors("CorsPolicy");
 
             app.UseAuthentication();
+            app.UseAuthorization();
 
-            app.UseMvc();
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+            });
         }
     }
 }
