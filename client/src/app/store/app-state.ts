@@ -6,6 +6,7 @@ import { ProjectsState } from './states/projects';
 import { WorkspacesState } from './states/workspaces';
 import { WorkspaceInvitesState } from './states/workspace-invites';
 import { UsersState } from './states/users';
+import { Injectable } from '@angular/core';
 
 // tslint:disable-next-line:no-empty-interface
 export interface AppStateModel {}
@@ -24,6 +25,7 @@ export interface AppStateModel {}
     UsersState
   ]
 })
+@Injectable()
 export class AppState implements NgxsOnInit  {
 
   constructor() {}

@@ -9,6 +9,7 @@ import {
 } from '../actions/workspace-invite';
 import { LoginSuccess } from '../actions/auth';
 import { AddWorkspace } from '../actions/workspace';
+import { Injectable } from '@angular/core';
 
 export interface WorkspaceInvitesStateModel {
   workspaceInvites: WorkspaceInvite[];
@@ -20,6 +21,7 @@ export interface WorkspaceInvitesStateModel {
     workspaceInvites: []
   }
 })
+@Injectable()
 export class WorkspaceInvitesState implements NgxsOnInit  {
 
   constructor(private workspaceInviteService: WorkspaceInviteService) {}

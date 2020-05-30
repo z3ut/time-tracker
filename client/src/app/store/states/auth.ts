@@ -9,6 +9,7 @@ import { AuthService } from 'src/app/core/services/auth.service';
 import { SelectWorkspaceSuccess } from '../actions/workspace';
 import { UserService } from 'src/app/core/services/user.service';
 import { UpdateUserSuccess, UpdateUserError, UpdateUser } from '../actions/auth';
+import { Injectable } from '@angular/core';
 
 export interface AuthStateModel {
   user: User;
@@ -22,6 +23,7 @@ export interface AuthStateModel {
     isLogged: false
   }
 })
+@Injectable()
 export class AuthState implements NgxsOnInit  {
 
   constructor(private authService: AuthService, private userService: UserService) {}

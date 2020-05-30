@@ -13,6 +13,7 @@ import {
   LoadUserSelectedWorkspace, LoadUserSelectedWorkspaceError, LoadUserSelectedWorkspaceSuccess
 } from '../actions/workspace';
 import { LoginSuccess } from '../actions/auth';
+import { Injectable } from '@angular/core';
 
 export interface WorkspacesStateModel {
   workspaces: Workspace[];
@@ -26,6 +27,7 @@ export interface WorkspacesStateModel {
     selectedWorkspaceId: null
   }
 })
+@Injectable()
 export class WorkspacesState implements NgxsOnInit  {
 
   static selectedWorkspace(state) {

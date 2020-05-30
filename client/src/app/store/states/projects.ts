@@ -9,6 +9,7 @@ import {
   LoadUserProjects, LoadUserProjectsSuccess, LoadUserProjectsError
 } from '../actions/project';
 import { SelectWorkspaceSuccess, LoadUserWorkspacesSuccess, LoadUserSelectedWorkspaceSuccess } from '../actions/workspace';
+import { Injectable } from '@angular/core';
 
 export interface ProjectsStateModel {
   projects: Project[];
@@ -20,6 +21,7 @@ export interface ProjectsStateModel {
     projects: []
   }
 })
+@Injectable()
 export class ProjectsState implements NgxsOnInit  {
 
   constructor(private store: Store, private projectService: ProjectService) {}

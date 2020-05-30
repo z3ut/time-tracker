@@ -11,6 +11,7 @@ import { ActivityService } from 'src/app/core/services/activity.service';
 import { DeleteProject } from '../actions/project';
 import { SelectWorkspaceSuccess, LoadUserWorkspacesSuccess, LoadUserSelectedWorkspaceSuccess } from '../actions/workspace';
 import { WorkspacesStateModel } from './workspaces';
+import { Injectable } from '@angular/core';
 
 export interface ActivitiesStateModel {
   currentActivities: Activity[];
@@ -28,6 +29,7 @@ export interface ActivitiesStateModel {
     isLoadingCurrentActivities: false
   }
 })
+@Injectable()
 export class ActivitiesState implements NgxsOnInit  {
 
   private loadCurrentActivitiesStepDays = 7;

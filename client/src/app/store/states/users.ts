@@ -3,6 +3,7 @@ import { SelectWorkspaceSuccess, LoadUserWorkspacesSuccess, LoadUserSelectedWork
 import { LoadWorkspaceUsers, LoadWorkspaceUsersSuccess, LoadWorkspaceUsersError } from '../actions/user';
 import { UserService } from 'src/app/core/services/user.service';
 import { User } from 'src/app/models/user';
+import { Injectable } from '@angular/core';
 
 export interface UsersStateModel {
   workspaceUsers: User[];
@@ -14,6 +15,7 @@ export interface UsersStateModel {
     workspaceUsers: []
   }
 })
+@Injectable()
 export class UsersState implements NgxsOnInit  {
 
   constructor(private userService: UserService) {}
