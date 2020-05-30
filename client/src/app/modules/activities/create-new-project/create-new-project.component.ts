@@ -22,7 +22,7 @@ export class CreateNewProjectComponent implements OnInit, OnDestroy {
   color = this.defaultColor;
   isLoading = false;
 
-  @ViewChild('colorPicker') colorPicker: ElementRef;
+  @ViewChild('colorPicker', { static: true }) colorPicker: ElementRef;
 
   @Output() created = new EventEmitter<Project>();
   @Output() canceled = new EventEmitter<Project>();
