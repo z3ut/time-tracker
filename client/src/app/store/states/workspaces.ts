@@ -167,7 +167,6 @@ export class WorkspacesState implements NgxsOnInit  {
       .leaveWorkspace(action.userId, action.workspaceId)
       .subscribe(() => {
         const state = ctx.getState();
-        // TODO: handle deleting selected workspace
         ctx.patchState({
           workspaces: state.workspaces.filter(w => w.id !== action.workspaceId)
         });

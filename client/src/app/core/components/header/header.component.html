@@ -1,26 +1,53 @@
-<div class="header">
-  <a class="link"
-    routerLink="/current-activities"
-    routerLinkActive="active">Current activities</a>
-
-  <a class="link"
-    routerLink="/summary-report"
-    routerLinkActive="active">Summary report</a>
-
-  <a class="link"
-      routerLink="/manage-workspaces"
-      routerLinkActive="active">
-    Workspaces
-    <span
-        *ngIf="numberOfWorkspaceInvites$ | async"
-        class="workspace-invites">
-      + {{ numberOfWorkspaceInvites$ | async }}
-    </span>
-  </a>
-  
-  <div class="header-user" *ngIf="isLogged$ | async">
-    {{ username$ | async }}
-
-    <button (click)="logout()" class="logout">Logout</button>
+<nav class="navbar is-fixed-top" role="navigation" aria-label="main navigation">
+  <div class="navbar-brand">
+    <a role="button" (click)="toggleMenu()" class="navbar-burger burger"
+        [ngClass]="{'is-active': isMenuActive}" aria-label="menu" aria-expanded="false">
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+    </a>
   </div>
-</div>
+
+  <div class="navbar-menu" [ngClass]="{'is-active': isMenuActive}">
+    <div class="navbar-start">
+      <a *ngIf="isLogged$ | async" class="navbar-item"
+        routerLink="/current-activities"
+        routerLinkActive="active">Current activities</a>
+
+      <a *ngIf="isLogged$ | async" class="navbar-item"
+        routerLink="/summary-report"
+        routerLinkActive="active">Summary report</a>
+
+      <a *ngIf="isLogged$ | async" class="navbar-item"
+          routerLink="/manage-workspaces"
+          routerLinkActive="active">
+        Workspaces
+        <span
+            *ngIf="numberOfWorkspaceInvites$ | async"
+            class="workspace-invites">
+          + {{ numberOfWorkspaceInvites$ | async }}
+        </span>
+      </a>
+    </div>
+
+    <div class="navbar-end">
+      <div class="navbar-item">
+        <div class="buttons" *ngIf="isLogged$ | async">
+          <strong>{{ username$ | async }}</strong>
+          <span class="icon" title="Logout">
+            <i class="fa fa-sign-out-alt" (click)="logout()"></i>
+          </span>
+        </div>
+
+        <div class="buttons" *ngIf="!(isLogged$ | async)">
+          <a class="button is-primary" routerLink="/register">
+            <strong>Register</strong>
+          </a>
+          <a class="button is-light" routerLink="/login">
+            Log in
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>

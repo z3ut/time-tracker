@@ -1,36 +1,45 @@
-<app-create-activity
-  [projects]="projects$ | async"
-  (create)="createActivity($event)"
-  (update)="activityChanged($event)"
-  (createNewProject)="createNewProjectEvent()"
-  (deleteProject)="deleteProject($event)">
-</app-create-activity>
+<div class="section">
+  <div class="container">
+    <app-create-activity
+      [projects]="projects$ | async"
+      (create)="createActivity($event)"
+      (update)="activityChanged($event)"
+      (createNewProject)="createNewProjectEvent()"
+      (deleteProject)="deleteProject($event)">
+    </app-create-activity>
 
-<app-activities-by-day-list
-  [activities]="activities$ | async"
-  [projects]="projects$ | async"
-  (activityChanged)="activityChanged($event)"
-  (deleteActivity)="deleteActivity($event)"
-  (createNewProject)="createNewProjectEvent()"
-  (deleteProject)="deleteProject($event)">
-</app-activities-by-day-list>
+    <app-activities-by-day-list
+      [activities]="activities$ | async"
+      [projects]="projects$ | async"
+      (activityChanged)="activityChanged($event)"
+      (deleteActivity)="deleteActivity($event)"
+      (createNewProject)="createNewProjectEvent()"
+      (deleteProject)="deleteProject($event)">
+    </app-activities-by-day-list>
 
-
-<button
-    *ngIf="!isLoadingMore"
-    (click)="loadMoreActivities()">
-  Load more
-</button>
-
-<div 
-    *ngIf="isLoadingMore"
-    class="loading-more-indicator">
-  Loading
+    <div class="buttons is-centered">
+      <button class="button" [ngClass]="{'is-loading': isLoadingMore}"
+          (click)="loadMoreActivities()">
+        Load more
+      </button>
+    </div>
+  </div>
 </div>
 
-<app-popup *ngIf="isCreatingNewProject">
-  <app-create-new-project
-    (created)="closeNewProjectPopup()"
-    (canceled)="closeNewProjectPopup()">
-  </app-create-new-project>
-</app-popup>
+<div class="modal is-active" *ngIf="isCreatingNewProject">
+  <div class="modal-background" (click)="closeNewProjectPopup()"></div>
+  <div class="modal-card">
+    <header class="modal-card-head">
+      <p class="modal-card-title">New Project</p>
+      <button class="delete" aria-label="close" (click)="closeNewProjectPopup()"></button>
+    </header>
+    <section class="modal-card-body">
+      <app-create-new-project
+        (created)="closeNewProjectPopup()"
+        (canceled)="closeNewProjectPopup()">
+      </app-create-new-project>
+    </section>
+    <footer class="modal-card-foot">
+    </footer>
+  </div>
+</div>

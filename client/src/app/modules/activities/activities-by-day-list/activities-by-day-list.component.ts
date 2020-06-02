@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
 import { Activity } from 'src/app/models/activity';
 import { Project } from 'src/app/models/project';
 import { calculateActivitiesTotalTimeSeconds } from 'src/app/shared/helpers/time-calculations';
@@ -8,7 +8,7 @@ import { calculateActivitiesTotalTimeSeconds } from 'src/app/shared/helpers/time
   templateUrl: './activities-by-day-list.component.html',
   styleUrls: ['./activities-by-day-list.component.scss']
 })
-export class ActivitiesByDayListComponent implements OnInit, OnChanges {
+export class ActivitiesByDayListComponent implements OnChanges {
 
   @Input() activities: Activity[];
   @Input() projects: Project[];
@@ -18,11 +18,6 @@ export class ActivitiesByDayListComponent implements OnInit, OnChanges {
   @Output() deleteProject = new EventEmitter<Project>();
 
   activitiesByDay: DayActivity[];
-
-  constructor() { }
-
-  ngOnInit() {
-  }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes.activities) {

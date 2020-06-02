@@ -1,22 +1,19 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { Project } from 'src/app/models/project';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-project-list-item',
   templateUrl: './project-list-item.component.html',
   styleUrls: ['./project-list-item.component.scss']
 })
-export class ProjectListItemComponent implements OnInit {
+export class ProjectListItemComponent {
 
-  @Input() project: Project;
+  @Input() name: string;
+  @Input() color = '';
   @Input() isDeletable = false;
+  @Input() isHighlightable = false;
+  @Input() isFixedHeight = false;
   @Output() select = new EventEmitter();
   @Output() delete = new EventEmitter();
-
-  constructor() { }
-
-  ngOnInit() {
-  }
 
   selectClick() {
     this.select.emit();

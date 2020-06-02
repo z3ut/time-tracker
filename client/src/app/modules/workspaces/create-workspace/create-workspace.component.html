@@ -1,32 +1,18 @@
-<form (ngSubmit)="create()"
-    #loginForm="ngForm">
-  <div class="input-container">
-    <p class="new-workspace">New workspace:</p>
-    <label>
-      Name:
-      <input type="text"
-        class="input"
-        name="name"
-        [(ngModel)]="name"
-        #nameInput="ngModel"
-        required>
-    </label>
-    <div [hidden]="nameInput.valid || nameInput.pristine"
-        class="input-error-message">
-      Workspace name is required
-    </div>
+<form (ngSubmit)="create()" #loginForm="ngForm">
+  <div class="field">
+    <label class="label">Name</label>
+    <input type="text" class="input" name="name" [(ngModel)]="name"
+      #nameInput="ngModel" required>
+    <p class="help is-danger" *ngIf="!nameInput.valid && !nameInput.pristine">Workspace name is required</p>
   </div>
 
-  <button
-      type="submit"
-      class="button ctrl-button"
-      [disabled]="!loginForm.form.valid || isLoading">
-    Create
-  </button>
-  
-  <button
-      class="button ctrl-button"
-      (click)="cancel()">
-    Cancel
-  </button>
-</form>
+  <div class="field is-grouped">
+    <div class="control">
+      <button class="button" type="submit"
+        [disabled]="!loginForm.form.valid || isLoading">Create</button>
+    </div>
+    <div class="control">
+      <button class="button" (click)="cancel()">Cancel</button>
+    </div>
+  </div>
+</form> 

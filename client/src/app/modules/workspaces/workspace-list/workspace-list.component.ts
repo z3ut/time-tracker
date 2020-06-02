@@ -52,7 +52,7 @@ export class WorkspaceListComponent implements OnInit, OnDestroy {
       )
       .subscribe(({ payload }) => {
         this.spinnerService.hide();
-        this.toasterService.pop('error', 'Error creating workspace');
+        this.toasterService.pop('error', 'Error deleting workspace');
       });
 
     this.actions$
@@ -93,7 +93,11 @@ export class WorkspaceListComponent implements OnInit, OnDestroy {
   }
 
   selectWorkspace(w: Workspace) {
-    this.store.dispatch(new SelectWorkspace(w.id));
+    const state = this.store.snapshot();
+    const selectedWorkspaceId = state.app.workspaces.selectedWorkspaceId;
+    if (selectedWorkspaceId == null || w.id !== selectedWorkspaceId) {
+      this.store.dispatch(new SelectWorkspace(w.id));
+    }
   }
 
   deleteWorkspace(w: Workspace) {

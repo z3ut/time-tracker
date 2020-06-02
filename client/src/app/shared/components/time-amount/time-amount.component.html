@@ -1,5 +1,6 @@
 <input type="text"
   class="time-amount"
+  [ngClass]="{'readonly':isReadonly}"
   [textMask]="{mask: mask, keepCharPositions: true}"
   [readonly]="isReadonly"
   [(ngModel)]="intervalString"

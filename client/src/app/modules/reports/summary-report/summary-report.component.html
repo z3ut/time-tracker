@@ -4,7 +4,7 @@
       <input [owlDateTime]="dateTimeFromContainer"
         [owlDateTimeTrigger]="dateTimeFromContainer"
         placeholder="From"
-        class="activity-date-input"
+        class="datetime-input"
         [(ngModel)]="dateTimeFrom">
       <owl-date-time #dateTimeFromContainer ></owl-date-time>
     </div>
@@ -13,7 +13,7 @@
       <input [owlDateTime]="dateTimeToContainer"
         [owlDateTimeTrigger]="dateTimeToContainer"
         placeholder="To"
-        class="activity-date-input"
+        class="datetime-input"
         [(ngModel)]="dateTimeTo">
       <owl-date-time #dateTimeToContainer ></owl-date-time>
     </div>
@@ -25,7 +25,6 @@
     Generate
   </button>
 </div>
-
 
 <app-summary-report-table
   [activities]="activities"

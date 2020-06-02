@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, HostListener, ElementRef, ViewChild } from '@angular/core';
+import { Component, Input, Output, EventEmitter, HostListener, ElementRef, ViewChild } from '@angular/core';
 import { Project } from 'src/app/models/project';
 
 @Component({
@@ -6,7 +6,7 @@ import { Project } from 'src/app/models/project';
   templateUrl: './project-selector.component.html',
   styleUrls: ['./project-selector.component.scss']
 })
-export class ProjectSelectorComponent implements OnInit {
+export class ProjectSelectorComponent {
 
   @Input() projects: Project[];
   @Input() selectedProjectId: number;
@@ -24,9 +24,6 @@ export class ProjectSelectorComponent implements OnInit {
   };
 
   constructor(private eRef: ElementRef) { }
-
-  ngOnInit() {
-  }
 
   get selectedProject() {
     if (!Array.isArray(this.projects) || !this.selectedProjectId) {

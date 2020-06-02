@@ -1,37 +1,32 @@
-<div class="container">
-  <div class="create-container">
+<div class="columns is-variable is-1 is-marginless is-vcentered">
+  <div class="column is-paddingless">
     <div [ngSwitch]="createBy">
-        <div *ngSwitchCase="'timer'">
-          <app-create-activity-with-timer
-            [projects]="projects"
-            (createActivity)="createActivity($event)"
-            (updateActivity)="updateActivity($event)"
-            (createNewProject)="createNewProjectEvent()"
-            (deleteProject)="deleteProjectEvent($event)">
-          </app-create-activity-with-timer>
-        </div>
-        <div *ngSwitchCase="'manual'">
-          <app-create-activity-manual
-            [projects]="projects"
-            (createActivity)="createActivity($event)"
-            (createNewProject)="createNewProjectEvent()"
-            (deleteProject)="deleteProjectEvent($event)">
-          </app-create-activity-manual>
-        </div>
+      <div *ngSwitchCase="'timer'">
+        <app-create-activity-with-timer
+          [projects]="projects"
+          (createActivity)="createActivity($event)"
+          (updateActivity)="updateActivity($event)"
+          (createNewProject)="createNewProjectEvent()"
+          (deleteProject)="deleteProjectEvent($event)">
+        </app-create-activity-with-timer>
       </div>
+      <div *ngSwitchCase="'manual'">
+        <app-create-activity-manual
+          [projects]="projects"
+          (createActivity)="createActivity($event)"
+          (createNewProject)="createNewProjectEvent()"
+          (deleteProject)="deleteProjectEvent($event)">
+        </app-create-activity-manual>
+      </div>
+    </div>
   </div>
-  <div class="create-by-control">
-    <button
-        class="control-button"
-        (click)="createBy = 'timer'"
-        [ngClass]="{ 'selected': createBy === 'timer' }">
-      Timer
-    </button>
-    <button
-        class="control-button"
-        (click)="createBy = 'manual'"
-        [ngClass]="{ 'selected': createBy === 'manual' }">
-      Manual
-    </button>
+  <div class="column is-paddingless is-narrow">
+    <span class="icon is-large is-left" (click)="createBy = 'timer'" *ngIf="createBy === 'manual'">
+      <i class="far fa-2x fa-hourglass"></i>
+    </span>
+
+    <span class="icon is-large is-left" (click)="createBy = 'manual'" *ngIf="createBy === 'timer'">
+      <i class="far fa-2x fa-calendar"></i>
+    </span>
   </div>
 </div>

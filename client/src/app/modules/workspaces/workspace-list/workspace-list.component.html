@@ -1,31 +1,28 @@
-<table>
-  <tr *ngFor="let w of workspaces$ | async"
-    class="workspace"
-    [ngClass]="{ 'selected': isWorkspaceSelected(w) }">
-    <td>{{ w.name }}</td>
-    <td>
-      <button *ngIf="isUserOwnsWorkspace(w)"
-          (click)="inviteToWorkspace(w)">
-        Invite
-      </button>
-    </td>
-    <td>
-      <span *ngIf="isUserOwnsWorkspace(w)">
-        <app-delete-icon
-          (delete)="deleteWorkspace(w)"
-          [isDoubleClickRequired]="true">
-        </app-delete-icon>
-      </span>
-      <button *ngIf="!isUserOwnsWorkspace(w)"
-          (click)="leaveWorkspace(w)">
-        Leave
-      </button>
-    </td>
-    <td>
-      <button *ngIf="!isWorkspaceSelected(w)"
-          (click)="selectWorkspace(w)">
-        Select
-      </button>
-    </td>
-  </tr>
+<h5 class="title is-5">Workspaces</h5>
+<table class="table is-fullwidth is-hoverable">
+  <thead>
+    <tr>
+      <th title="Name">Name</th>
+      <th title="Send invite">INV</th>
+      <th title="Delete">DEL</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let w of workspaces$ | async"
+        [ngClass]="{'is-selected': isWorkspaceSelected(w)}">
+      <td class="workspace-name" (click)="selectWorkspace(w)">{{ w.name }}</td>
+      <td>
+        <span class="icon" title="Invite" *ngIf="isUserOwnsWorkspace(w)"
+            (click)="inviteToWorkspace(w)">
+          <i class="fas fa fa-user-plus"></i>
+        </span>
+      </td>
+      <td>
+        <span class="icon" title="Delete" (click)="deleteWorkspace(w)"
+            *ngIf="isUserOwnsWorkspace(w) && !isWorkspaceSelected(w)">
+          <i class="far fa fa-trash-alt"></i>
+        </span>
+      </td>
+    </tr>
+  </tbody>
 </table>

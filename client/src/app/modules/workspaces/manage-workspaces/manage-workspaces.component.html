@@ -1,19 +1,33 @@
-<div class="create-new-workspace">
-  <button
-      class="button"
-      (click)="createWorkspace()">
-    New workspace
-  </button>
+<div class="container">
+  <app-workspace-invites></app-workspace-invites>
 </div>
 
+<div class="container">
+  <div class="buttons">
+    <button class="button" (click)="createWorkspace()">
+      New workspace
+    </button>
+  </div>
+</div>
 
-<app-workspace-invites></app-workspace-invites>
+<div class="container">
+  <app-workspace-list></app-workspace-list>
+</div>
 
-<app-workspace-list></app-workspace-list>
-
-<app-popup *ngIf="isCreatingNewWorkspace">
-  <app-create-workspace
+<div class="modal is-active" *ngIf="isCreatingNewWorkspace">
+  <div class="modal-background" (click)="closeNewProjectPopup()"></div>
+  <div class="modal-card">
+    <header class="modal-card-head">
+      <p class="modal-card-title">New Workspace</p>
+      <button class="delete" aria-label="close" (click)="closeNewWorkspacePopup()"></button>
+    </header>
+    <section class="modal-card-body">
+      <app-create-workspace
     (created)="closeNewWorkspacePopup()"
     (canceled)="closeNewWorkspacePopup()">
   </app-create-workspace>
-</app-popup>
+    </section>
+    <footer class="modal-card-foot">
+    </footer>
+  </div>
+</div>

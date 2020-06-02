@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, OnChanges } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnChanges } from '@angular/core';
 import { Activity } from 'src/app/models/activity';
 import { Project } from 'src/app/models/project';
 
@@ -7,7 +7,7 @@ import { Project } from 'src/app/models/project';
   templateUrl: './editable-activity.component.html',
   styleUrls: ['./editable-activity.component.scss']
 })
-export class EditableActivityComponent implements OnInit, OnChanges {
+export class EditableActivityComponent implements OnChanges {
 
   @Input() activity: Activity;
   @Input() projects: Project[];
@@ -18,11 +18,6 @@ export class EditableActivityComponent implements OnInit, OnChanges {
   intervalSeconds: number;
 
   private passedActivity: Activity;
-
-  constructor() { }
-
-  ngOnInit() {
-  }
 
   ngOnChanges() {
     this.passedActivity = Object.assign({}, this.activity);

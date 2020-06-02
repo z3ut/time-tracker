@@ -17,12 +17,19 @@ export class HeaderComponent {
   @Select(state => state.app.workspaceInvites.workspaceInvites.length)
   numberOfWorkspaceInvites$: Observable<number>;
 
+  isMenuActive = false;
+
   constructor(
       private router: Router,
       private store: Store) { }
 
   logout() {
+    this.isMenuActive = false;
     this.store.dispatch(new UserLogout());
     this.router.navigate(['/']);
+  }
+
+  toggleMenu() {
+    this.isMenuActive = !this.isMenuActive;
   }
 }

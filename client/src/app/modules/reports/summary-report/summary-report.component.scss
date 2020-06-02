@@ -16,3 +16,17 @@
 .generate-report-button {
   width: 15em;
 }
+
+.datetime-input {
+  outline: none;
+  border: none;
+  cursor: pointer;
+  padding: .25em;
+  text-align: center;
+  width: 10em;
+  
+  &:hover {
+    background-color: rgb(200, 200, 200);
+    border-radius: .25em;
+  }
+}

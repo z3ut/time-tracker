@@ -1,43 +1,42 @@
-<form (ngSubmit)="login()"
-    #loginForm="ngForm"
-    class="form">
-  <div class="input-container">
-    <label>
-      Username:
-      <input type="text"
-        class="input"
-        name="username"
-        [(ngModel)]="username"
-        #usernameInput="ngModel"
-        required>
-    </label>
-    <div [hidden]="usernameInput.valid || usernameInput.pristine"
-        class="input-error-message">
-      Username is required
+<section class="hero is-fullheight">
+  <div class="hero-body">
+    <div class="container">
+      <div class="columns is-centered">
+        <div class="column is-5-tablet is-4-desktop is-3-widescreen">
+          <form (ngSubmit)="login()" #loginForm="ngForm" class="box">
+            <div class="field">
+              <label class="label">Username</label>
+              <div class="control has-icons-left">
+                <input type="text" class="input" name="username" placeholder="Username"
+                  [(ngModel)]="username" required #usernameInput="ngModel">
+                <span class="icon is-small is-left">
+                  <i class="fas fa-user"></i>
+                </span>
+              </div>
+              <p class="help is-danger" *ngIf="!usernameInput.valid && !usernameInput.pristine">Username is required</p>
+            </div>
+        
+            <div class="field">
+              <label class="label">Password</label>
+              <div class="control has-icons-left">
+                <input type="password" class="input" name="password" placeholder="Password"
+                  [(ngModel)]="password" required #passwordInput="ngModel">
+                <span class="icon is-small is-left">
+                  <i class="fas fa-lock"></i>
+                </span>
+              </div>
+              <p class="help is-danger" *ngIf="!passwordInput.valid && !passwordInput.pristine">Password is required</p>
+            </div>
+        
+            <div class="buttons">
+              <button class="button is-fullwidth" [ngClass]="{'is-loading': isLoading}"
+                type="submit" [disabled]="isLoading"
+                [disabled]="!loginForm.form.valid || isLoading">Login</button>
+              <a routerLink="/register">Register</a>
+            </div>
+          </form>
+        </div>     
+      </div>
     </div>
   </div>
-  <div class="input-container">
-    <label>
-      Password:
-      <input type="password"
-        class="input"
-        name="password"
-        [(ngModel)]="password"
-        #passwordInput="ngModel"
-        required>
-    </label>
-    <div [hidden]="passwordInput.valid || passwordInput.pristine"
-        class="input-error-message">
-      Password is required
-    </div>
-  </div>
-  <div class="input-container">
-    <button type="submit"
-        class="button"
-        [disabled]="!loginForm.form.valid || isLoading">
-      Login</button>
-  </div>
-  <div class="input-container register">
-    <a routerLink="/register">Register</a>
-  </div>
-</form>
+</section>

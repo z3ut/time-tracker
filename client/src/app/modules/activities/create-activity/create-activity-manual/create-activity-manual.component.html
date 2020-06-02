@@ -1,11 +1,15 @@
-<div class="manual-container">
-  <app-editable-activity
-    [activity]="activity"
-    [projects]="projects"
-    (createNewProject)="createNewProjectEvent()"
-    (deleteProject)="deleteProjectEvent($event)">
-  </app-editable-activity>
-</div>
-<div class="manual-create-button">
-  <button (click)="create(activity)">Create</button>
+<div class="columns is-variable is-1 is-marginless is-vcentered">
+  <div class="column">
+    <app-editable-activity
+      [activity]="activity"
+      [projects]="projects"
+      (createNewProject)="createNewProjectEvent()"
+      (deleteProject)="deleteProjectEvent($event)">
+    </app-editable-activity>
+  </div>
+  <div class="column is-narrow">
+    <span class="icon is-large run-button" (click)="create(activity)">
+      <i class="far fa-2x fa-save"></i>
+    </span>
+  </div>
 </div>

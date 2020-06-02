@@ -1,3 +1,7 @@
+html {
+  overflow-y: hidden;
+}
+
 body, html {
   height: 100%;
   width: 100%;
@@ -31,4 +35,8 @@ input[type=number] {
 table {
 	border-collapse: collapse;
 	border-spacing: 0;
+}
+
+.has-navbar-fixed-top .hero.is-fullheight {
+  min-height: calc(100vh - #{$navbar-height});
 }

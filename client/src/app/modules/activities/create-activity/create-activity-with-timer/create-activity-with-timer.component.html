@@ -1,33 +1,26 @@
-<div class="activity-container">
-  <div class="activity-title-container">
-    <input class="activity-title-input"
-      type="text"
-      [(ngModel)]="activity.title"
-      (keyup.enter)="saveChanges()"
-      (blur)="saveChanges()">
+<div class="columns is-variable is-1 is-marginless is-vcentered">
+  <div class="column">
+    <input type="text" class="input" [(ngModel)]="activity.title"
+      (keyup.enter)="saveChanges()" (blur)="saveChanges()">
   </div>
-
-  <div class="activity-project">
+  <div class="column is-narrow">
     <app-project-selector
       [projects]="projects"
       [selectedProjectId]="activity.projectId"
       (selectProject)="selectProject($event)"
       (createNewProject)="createNewProjectClick()"
       (deleteProject)="deleteProjectClick($event)">
-
     </app-project-selector>
   </div>
-
-  <div class="time-interval-container">
+  <div class="column is-narrow">
     <app-time-amount
       [intervalSeconds]="intervalSeconds"
       [isReadonly]="true">
     </app-time-amount>
   </div>
-
-  <button class="run-button" (click)="runClick()">
-    <span *ngIf="isStarted">Stop</span>
-    <span *ngIf="!isStarted">Start</span>
-  </button>
-
+  <div class="column is-narrow">
+    <span class="icon is-large run-button" (click)="runClick()">
+      <i class="fas fa-2x" [ngClass]="{'fa-stop-circle': isStarted, 'fa-play-circle': !isStarted, 'started': isStarted, 'stopped': !isStarted}"></i>
+    </span>
+  </div>
 </div>

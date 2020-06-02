@@ -1,45 +1,17 @@
-.activity-container {
-  padding: .25em .5em;
-  display: flex;
-  flex-direction: row;
-  border-bottom: 1px solid grey;
-}
-
-.activity-title-container {
-  font-size: 1.2em;
-  flex: 1;
-  padding: .25em 1em;
-}
-
-.activity-title-input {
-  width: 100%;
-  outline: none;
-  border: none;
-}
-
-.activity-project {
-  width: 7em;
-  padding: .25em 1em;
-}
-
-.time-interval-container {
-  font-size: 1.2em;
-  padding: .25em 1em;
-}
-
-.date-range-interval-container {
-  font-size: 1.2em;
-  padding: .25em 1em;
-}
-
 .activity-date-input {
   outline: none;
   border: none;
   cursor: pointer;
   padding: .25em;
+  text-align: center;
+  width: 10em;
   
   &:hover {
     background-color: rgb(200, 200, 200);
     border-radius: .25em;
   }
+}
+
+.columns .column {
+  padding: .25em;
 }

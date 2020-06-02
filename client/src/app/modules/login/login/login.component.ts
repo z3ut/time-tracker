@@ -41,7 +41,6 @@ export class LoginComponent implements OnInit, OnDestroy {
       )
       .subscribe(({ payload }) => {
         this.isLoading = false;
-        this.spinnerService.hide();
         this.router.navigate([this.returnUrl]);
       });
 
@@ -52,7 +51,6 @@ export class LoginComponent implements OnInit, OnDestroy {
       )
       .subscribe(({ payload }) => {
         this.isLoading = false;
-        this.spinnerService.hide();
         this.toasterService.pop('error', 'Login error');
       });
   }
@@ -69,7 +67,6 @@ export class LoginComponent implements OnInit, OnDestroy {
     }
 
     this.isLoading = true;
-    this.spinnerService.show();
     this.store.dispatch(new UserLogin(this.username, this.password));
   }
 

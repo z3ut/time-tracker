@@ -1,32 +1,32 @@
-<div class="container">
-  <div class="header" (click)="toggleProjects()">
-    <app-project-list-item
-      [project]="selectedProject">
-    </app-project-list-item>
-  </div>
-  
-  <div class="dropdown"
-      *ngIf="isProjectsDropdownShown">
-
-    <div class="project"
-        (click)="projectClick()">
-      <app-project-list-item
-        [project]="emptyProject">
+<div class="project-select-container" (click)="toggleProjects()">
+  <div class="project-select">
+    <div class="header">
+      <app-project-list-item *ngIf="selectedProject"
+        [name]="selectedProject.name" [color]="selectedProject.color" [isFixedHeight]="true">
       </app-project-list-item>
     </div>
-
-    <div class="project"
-        *ngFor="let p of projects">
+    
+    <div class="dropdown" *ngIf="isProjectsDropdownShown">
       <app-project-list-item
-        [project]="p"
+        [name]="emptyProject.name"
+        [color]="emptyProject.color"
+        [isHighlightable]="true"
+        (click)="projectClick()">
+      </app-project-list-item>
+
+      <app-project-list-item
+        *ngFor="let p of projects"
+        [name]="p.name"
+        [color]="p.color"
         [isDeletable]="true"
+        [isHighlightable]="true"
         (select)="projectClick(p)"
         (delete)="deleteProjectClick(p)">
       </app-project-list-item>
-    </div>
 
-    <div class="project" (click)="createNewProjectClick()">
-      New project
+      <div class="new-project" (click)="createNewProjectClick()">
+        <i class="fas fa-plus"></i><span>New project</span>
+      </div>
     </div>
-  </div>   
+  </div>
 </div>

@@ -1,31 +1,28 @@
-<div class="list">
-  <div class="day" *ngFor="let dayActivities of activitiesByDay">
-      {{ dayActivities.dayDate.date }} /
-      {{ dayActivities.dayDate.month }} /
-      {{ dayActivities.dayDate.year }}
-      <app-time-amount
-        [intervalSeconds]="dayActivities.totalTimeSeconds"
-        [isReadonly]="true">
-      </app-time-amount>
-    <div class="activities">
-      <div class="activity-container"
-          *ngFor="let a of dayActivities.activities">
-        <div class="activity">
-          <app-editable-activity
-            [activity]="a"
-            [projects]="projects"
-            (activityChanged)="listActivityChanged($event)"
-            (createNewProject)="createNewProjectEvent()"
-            (deleteProject)="deleteProjectEvent($event)">
-          </app-editable-activity>
-        </div>
-        
-        <div class="delete">
-          <app-delete-icon
-            [isDoubleClickRequired]="true"
-            (delete)="deleteActivityClick(a)"></app-delete-icon>
-        </div>
-      </div>
+<div class="container day-container" *ngFor="let dayActivities of activitiesByDay">
+  <div class="day-header">
+    {{ dayActivities.dayDate.date }} /
+    {{ dayActivities.dayDate.month }} /
+    {{ dayActivities.dayDate.year }}
+    <app-time-amount
+      [intervalSeconds]="dayActivities.totalTimeSeconds"
+      [isReadonly]="true">
+    </app-time-amount>
+  </div>
+  <div class="columns is-marginless is-paddingless is-vcentered" *ngFor="let a of dayActivities.activities">
+    <div class="column is-marginless is-paddingless">
+      <app-editable-activity
+        [activity]="a"
+        [projects]="projects"
+        (activityChanged)="listActivityChanged($event)"
+        (createNewProject)="createNewProjectEvent()"
+        (deleteProject)="deleteProjectEvent($event)">
+      </app-editable-activity>
+    </div>
+    <div class="column is-narrow is-marginless is-paddingless">
+      <app-delete-icon
+        [isDoubleClickRequired]="true"
+        (delete)="deleteActivityClick(a)"></app-delete-icon>
     </div>
   </div>
 </div>
+

@@ -1,28 +1,21 @@
-.activity-container {
-  padding: .25em .5em;
-  display: flex;
-  flex-direction: row;
-  border-bottom: 1px solid grey;
+.columns .column {
+  padding: .25em;
 }
 
-.activity-title-container {
-  font-size: 1.2em;
-  flex: 1;
-  padding: .25em 1em;
+.run-button {
+  cursor: pointer;
 }
 
-.activity-title-input {
-  width: 100%;
-  outline: none;
-  border: none;
+.started {
+  color: red;
+  
+  &:hover {
+    color: rgba(255, 37, 37, 0.774);
+  }
 }
 
-.activity-project {
-  width: 7em;
-  padding: .25em 1em;
-}
-
-.time-interval-container {
-  font-size: 1.2em;
-  padding: .25em 1em;
+.stopped {
+  &:hover {
+    color: rgb(201, 201, 201);
+  }
 }

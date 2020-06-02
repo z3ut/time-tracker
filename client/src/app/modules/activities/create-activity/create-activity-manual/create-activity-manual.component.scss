@@ -1,15 +1,11 @@
-$manual-button-create-width: 4em;
-
-.manual-container {
-  width: calc(100% - #{$manual-button-create-width});
-  display: inline-block;
+.columns .column {
+  padding: .25em;
 }
 
-.manual-create-button {
-  width: $manual-button-create-width;
-  display: inline-block;
+.icon {
+  cursor: pointer;
 
-  button {
-    height: 3em;
+  &:hover {
+    color: rgb(201, 201, 201);
   }
 }

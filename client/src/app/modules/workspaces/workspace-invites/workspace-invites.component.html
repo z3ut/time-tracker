@@ -1,9 +1,26 @@
-<div class="workspace-invites" *ngIf="numberOfWorkspaceInvites$ | async">
-  You have {{ numberOfWorkspaceInvites$ | async }} invites:
+<div *ngIf="numberOfWorkspaceInvites$ | async">
+  <h5 class="title is-5">You have {{ numberOfWorkspaceInvites$ | async }}
+    invite<ng-container *ngIf="(numberOfWorkspaceInvites$ | async) > 1">s</ng-container></h5>
 
-  <div class="workspace-invite" *ngFor="let invite of workspaceInvites$ | async">
-    User <span class="invite-inviter-name">{{ invite.inviter.name }}</span> want's to invite you to workspace <span class="invite-workspace-name">{{ invite.workspace.name }}</span>
-    <button (click)="acceptWorkspaceInvite(invite)">Accept</button>
-    <button (click)="declineWorkspaceInvite(invite)">Decline</button>
+  <div class="columns is-vcentered" *ngFor="let invite of workspaceInvites$ | async">
+    <div class="column">
+      User <span class="invite-inviter-name">{{ invite.inviter.name }}</span>
+      wants to invite you to workspace
+      <span class="invite-workspace-name">{{ invite.workspace.name }}</span>
+    </div>
+    <div class="column is-narrow">
+      <button class="button is-small" title="Accept" (click)="acceptWorkspaceInvite(invite)">
+        <span class="icon is-small">
+          <i class="fas fa-check"></i>
+        </span>
+      </button>
+    </div>
+    <div class="column is-narrow">
+      <button class="button is-small" title="Decline" (click)="declineWorkspaceInvite(invite)">
+        <span class="icon is-small">
+          <i class="fas fa-times"></i>
+        </span>
+      </button>
+    </div>
   </div>
 </div>

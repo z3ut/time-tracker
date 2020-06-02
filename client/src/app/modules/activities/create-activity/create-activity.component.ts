@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
+import { Component, Output, EventEmitter, Input } from '@angular/core';
 import { Activity } from 'src/app/models/activity';
 import { Store } from '@ngxs/store';
 import { Project } from 'src/app/models/project';
@@ -8,7 +8,7 @@ import { Project } from 'src/app/models/project';
   templateUrl: './create-activity.component.html',
   styleUrls: ['./create-activity.component.scss']
 })
-export class CreateActivityComponent implements OnInit {
+export class CreateActivityComponent {
 
   @Input() projects: Project[];
   @Output() create = new EventEmitter<Activity>();
@@ -19,8 +19,6 @@ export class CreateActivityComponent implements OnInit {
   createBy: 'timer' | 'manual' = 'timer';
 
   constructor(private store: Store) { }
-
-  ngOnInit() { }
 
   createActivity(activity: Activity) {
     this.create.emit(activity);

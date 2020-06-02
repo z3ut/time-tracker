@@ -1,11 +1,11 @@
-<div class="project-container">
+<div class="project-container" [ngClass]="{'highlightable': isHighlightable, 'fixed-height': isFixedHeight}">
   <div class="project" (click)="selectClick()">
-    <div class="circle" [style.backgroundColor]="project.color"></div>
-    <span>{{ project.name }}</span>
+    <div class="circle" *ngIf="color" [style.backgroundColor]="color"></div>
+    <div class="name">{{ name }}</div>
   </div>
-  <div class="delete"
-      *ngIf="isDeletable">
-    <app-delete-icon
-      (delete)="deleteClick()"></app-delete-icon>
+  <div class="is-pulled-right" *ngIf="isDeletable">
+    <span class="icon" title="Delete project" (click)="deleteClick()">
+      <i class="far fa-trash-alt"></i>
+    </span>
   </div>
 </div>

@@ -1,23 +1,29 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
 
 @Component({
   selector: 'app-delete-icon',
   templateUrl: './delete-icon.component.html',
   styleUrls: ['./delete-icon.component.scss']
 })
-export class DeleteIconComponent implements OnInit {
+export class DeleteIconComponent implements OnDestroy {
 
   @Input() isDoubleClickRequired = false;
   @Input() doubleClickTimeoutMs = 3000;
-  @Input() title = 'Delete';
   @Output() delete = new EventEmitter<void>();
 
   isClickedOnce = false;
   private doubleClickTimeout;
+  private deleteTitle = 'Delete';
+  private confirmationTitle = 'Are you sure?';
 
-  constructor() { }
+  get title() {
+    return this.isClickedOnce ? this.confirmationTitle : this.deleteTitle;
+  }
 
-  ngOnInit() {
+  ngOnDestroy(): void {
+    if (this.doubleClickTimeout) {
+      clearTimeout(this.doubleClickTimeout);
+    }
   }
 
   deleteClick() {

@@ -1,12 +1,11 @@
-.workspace {
-  padding: .5em 1em;
-  margin: .5em;
+tr:not(.is-selected) .workspace-name {
+  cursor: pointer;
 }
 
-.workspace.selected {
-  background-color: #baf2ff;
-}
+.icon {
+  cursor: pointer;
 
-.workspace td {
-  padding: .5em 1em;
+  &:hover {
+    color: rgb(201, 201, 201);
+  }
 }

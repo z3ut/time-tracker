@@ -1,28 +1,75 @@
-.container {
-  width: 7em;
-  height: 2em;
-  background-color: beige;
-  cursor: pointer;
+.project-select-container {
+  height: 2.5em;
+  display: inline-block;
   position: relative;
-}
-
-.header {
-  height: 100%;
+  vertical-align: top;
+  box-sizing: inherit;
 }
 
 .dropdown {
   position: absolute;
   top: 100%;
   left: 0;
-  right: 0;
+  width: 15em;
   z-index: 10;
-  background-color: aliceblue;
+  border: 1px solid #dbdbdb;
+  display: block;
+  background-color: white;;
 }
 
-.project {
-  padding: .25em 0;
+.new-project {
+  position: relative;
+  padding: .25em;
+  min-height: 2em;
+  width: 100%;
 
   &:hover {
-    background-color: aquamarine
+    background-color: #3273dc;
+    color: white;
+  }
+
+  span {
+    padding-left: .25em;
+  }
+}
+
+.project-select {
+  padding-right: 2.5em;
+  cursor: pointer;
+  display: block;
+  font-size: 1em;
+  width: 8em;
+  outline: none;
+  background-color: white;
+  border-radius: 4px;
+  color: #363636;
+  border: 1px solid #dbdbdb;
+  box-shadow: none;
+  height: 2.5em;
+  padding-bottom: calc(0.5em - 1px);
+  padding-left: calc(0.75em - 1px);
+  padding-top: calc(0.25em - 1px);
+  position: relative;
+  margin: 0;
+  box-sizing: inherit;
+
+  &:after {
+    right: 1.125em;
+    z-index: 4;
+    border: 3px solid #3273dc;
+    border-radius: 2px;
+    border-right: 0;
+    border-top: 0;
+    content: " ";
+    display: block;
+    height: 0.625em;
+    margin-top: -0.4375em;
+    pointer-events: none;
+    position: absolute;
+    top: 50%;
+    transform: rotate(-45deg);
+    transform-origin: center;
+    width: 0.625em;
+    box-sizing: inherit;
   }
 }

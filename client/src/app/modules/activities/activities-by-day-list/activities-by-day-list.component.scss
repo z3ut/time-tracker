@@ -1,24 +1,3 @@
-$delete-button-size: 1.5em;
-
-.day {
-  margin-bottom: 2em;
-}
-
-.activity-container {
-  
-}
-
-.container {
-  width: 100%;
-  height: 3em;
-}
-
-.activity {
-  width: calc(100% - #{$delete-button-size});
-  display: inline-block;
-}
-
-.delete {
-  width: $delete-button-size;
-  display: inline-block;
+.day-container {
+  margin-top: 1em;
 }

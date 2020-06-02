@@ -1,21 +1,7 @@
-$control-width: 5em;
+.icon {
+  cursor: pointer;
 
-.create-container {
-  width: calc(100% - #{$control-width});
-  display: inline-block;
-}
-
-.create-by-control {
-  width: $control-width;
-  display: inline-block;
-  vertical-align: top;
-}
-
-.control-button {
-  width: 100%;
-  color: grey;
-}
-
-.control-button.selected {
-  color: black;
+  &:hover {
+    color: rgb(201, 201, 201);
+  }
 }
