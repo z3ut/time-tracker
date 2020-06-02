@@ -39,18 +39,13 @@ namespace TimeTracker.Web.Controllers
         [Route("api/v1/workspaces/{workspaceId}")]
         public ActionResult DeleteWorkspace(int workspaceId)
         {
-            if (workspaceId != UserId)
-            {
-                return BadRequest("Wrong workspace id");
-            }
-
             _workspaceService.Delete(workspaceId, UserId);
             return Ok();
         }
 
         [HttpDelete]
         [ActionName("LeaveWorkspace")]
-        [Route("api/v1/workspaces/{workspaceId}")]
+        [Route("api/v1/users/${userId}/workspaces/{workspaceId}")]
         public ActionResult LeaveWorkspace(int userId, int workspaceId)
         {
             if (userId != UserId)
@@ -60,7 +55,6 @@ namespace TimeTracker.Web.Controllers
 
             _workspaceService.Leave(workspaceId, UserId);
             return Ok();
-
         }
 
         [HttpGet]

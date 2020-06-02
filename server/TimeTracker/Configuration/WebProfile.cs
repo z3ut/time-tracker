@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using TimeTracker.BusinessLogic.Activities;
+using TimeTracker.BusinessLogic.Projects;
 using TimeTracker.BusinessLogic.Users;
 using TimeTracker.BusinessLogic.Workspaces;
 using TimeTracker.Web.Models;
@@ -18,6 +19,7 @@ namespace TimeTracker.Web.Configuration
             CreateMap<User, UserInfoDTO>().ReverseMap();
             CreateMap<User, UserCredentialsDTO>().ReverseMap();
             CreateMap<Activity, ActivityDTO>().ReverseMap();
+            CreateMap<Project, ProjectDTO>().ReverseMap();
             CreateMap<Workspace, WorkspaceDTO>().ReverseMap();
             CreateMap<WorkspaceInvite, WorkspaceInviteDTO>().ReverseMap();
         }
