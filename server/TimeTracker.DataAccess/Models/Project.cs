@@ -11,6 +11,7 @@ namespace TimeTracker.DataAccess.Models
         public int Id { get; set; }
         public string Name { get; set; }
         public string Color { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public DateTime DateTimeCreated { get; set; }
 
         public int UserId { get; set; }

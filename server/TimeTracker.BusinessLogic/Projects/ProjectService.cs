@@ -37,8 +37,6 @@ namespace TimeTracker.BusinessLogic.Projects
 
             var projectDA = _mapper.Map<DataAccess.Models.Project>(project);
 
-            projectDA.DateTimeCreated = DateTime.Now;
-
             _activityContext.Projects.Add(projectDA);
             _activityContext.SaveChanges();
 

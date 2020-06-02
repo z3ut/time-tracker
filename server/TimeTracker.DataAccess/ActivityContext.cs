@@ -118,15 +118,23 @@ namespace TimeTracker.DataAccess
 
         private void SetNotUpdatingProperties(ModelBuilder modelBuilder)
         {
+            //modelBuilder.Entity<Workspace>()
+            //    .Property(e => e.DateTimeCreated)
+            //    .ValueGeneratedOnAddOrUpdate()
+            //    .Metadata.SetAfterSaveBehavior(PropertySaveBehavior.Ignore);
+
+            //modelBuilder.Entity<Project>()
+            //    .Property(e => e.DateTimeCreated)
+            //    .ValueGeneratedOnAddOrUpdate()
+            //    .Metadata.SetAfterSaveBehavior(PropertySaveBehavior.Ignore);
+
             modelBuilder.Entity<Workspace>()
-                .Property(e => e.DateTimeCreated)
-                .ValueGeneratedOnAddOrUpdate()
-                .Metadata.SetAfterSaveBehavior(PropertySaveBehavior.Ignore);
+                .Property(s => s.DateTimeCreated)
+                .HasDefaultValueSql("GETDATE()");
 
             modelBuilder.Entity<Project>()
-                .Property(e => e.DateTimeCreated)
-                .ValueGeneratedOnAddOrUpdate()
-                .Metadata.SetAfterSaveBehavior(PropertySaveBehavior.Ignore);
+                .Property(s => s.DateTimeCreated)
+                .HasDefaultValueSql("GETDATE()");
         }
     }
 }

@@ -31,8 +31,6 @@ namespace TimeTracker.BusinessLogic.Workspaces
 
             var workspaceDA = _mapper.Map<DataAccess.Models.Workspace>(workspace);
 
-            workspaceDA.DateTimeCreated = DateTime.Now;
-
             _activityContext.Workspaces.Add(workspaceDA);
             _activityContext.SaveChanges();
 
