@@ -19,26 +19,23 @@ namespace TimeTracker.Web.Controllers
 {
     [Authorize]
     [ApiController]
+    [ApiVersion("1.0")]
     public class UsersController : ControllerBase
     {
         private readonly IUserService _userService;
         private readonly IUserTokenService _userTokenService;
         private readonly IMapper _mapper;
-        private readonly IConfiguration _config;
 
         public UsersController(IUserService userService,
-            IUserTokenService userTokenService, IMapper mapper,
-            IConfiguration config)
+            IUserTokenService userTokenService, IMapper mapper)
         {
             _userService = userService;
             _userTokenService = userTokenService;
             _mapper = mapper;
-            _config = config;
         }
 
         [AllowAnonymous]
-        [Route("api/v1/users/authenticate")]
-        [HttpPost]
+        [HttpPost("api/v{version:apiVersion}/users/authenticate")]
         public IActionResult Authenticate([FromBody] UserCredentialsDTO userCredentials)
         {
             var user = _userService.Authenticate(userCredentials.Username,
@@ -55,8 +52,7 @@ namespace TimeTracker.Web.Controllers
         }
 
         [AllowAnonymous]
-        [Route("api/v1/users/register")]
-        [HttpPost]
+        [HttpPost("api/v{version:apiVersion}/users/register")]
         public IActionResult Register([FromBody] UserCredentialsDTO userCredentials)
         {
             var user = _mapper.Map<User>(userCredentials);
@@ -68,7 +64,7 @@ namespace TimeTracker.Web.Controllers
             return Ok(userDTO);
         }
 
-        [HttpPut("api/v1/users/{userId}")]
+        [HttpPut("api/v{version:apiVersion}/users/{userId}")]
         public ActionResult<UserDTO> UpdateUser(int userId, [FromBody] UserDTO user)
         {
             if (userId != UserId || UserId != user.Id)
@@ -82,7 +78,7 @@ namespace TimeTracker.Web.Controllers
             return updatedUserDTO;
         }
 
-        [HttpGet("api/v1/workspaces/{workspaceId}/users")]
+        [HttpGet("api/v{version:apiVersion}/workspaces/{workspaceId}/users")]
         public ActionResult<IEnumerable<UserInfoDTO>> GetWorkspaceUsers(int workspaceId)
         {
             var users = _userService.GetWorkspaceUsers(workspaceId, UserId);

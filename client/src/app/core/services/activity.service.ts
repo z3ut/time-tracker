@@ -9,7 +9,7 @@ import { map } from 'rxjs/operators';
 })
 export class ActivityService {
 
-  private apiUrl = 'api/v1/activities';
+  private apiUrl = 'api/v1.0/activities';
 
   constructor(private http: HttpClient) { }
 
@@ -38,7 +38,7 @@ export class ActivityService {
   getUserActivities(userId: number, dateTimeFrom: Date, dateTimeTo: Date,
                     workspaceId: number): Observable<Activity[]> {
     return this.http.get<Activity[]>(
-      `api/v1/users/${userId}/workspaces/${workspaceId}/activities`, {
+      `api/v1.0/users/${userId}/workspaces/${workspaceId}/activities`, {
         params: {
           dateTimeFrom: dateTimeFrom.toISOString(),
           dateTimeTo: dateTimeTo && dateTimeTo.toISOString()
@@ -51,7 +51,7 @@ export class ActivityService {
   getWorkspaceActivities(dateTimeFrom: Date, dateTimeTo: Date,
                          workspaceId: number): Observable<Activity[]>  {
     return this.http.get<Activity[]>(
-      `api/v1/workspaces/${workspaceId}/activities`, {
+      `api/v1.0/workspaces/${workspaceId}/activities`, {
         params: {
           dateTimeFrom: dateTimeFrom.toISOString(),
           dateTimeTo: dateTimeTo && dateTimeTo.toISOString()

@@ -14,6 +14,8 @@ namespace TimeTracker.Web.Controllers
 {
     [Authorize]
     [ApiController]
+    [ApiVersion("1.0")]
+    [Route("api/v{version:apiVersion}/activities")]
     public class ActivitiesController : ControllerBase
     {
         private readonly IActivityService _activityService;
@@ -27,8 +29,6 @@ namespace TimeTracker.Web.Controllers
         }
 
         [HttpPost]
-        [ActionName("CreateActivity")]
-        [Route("api/v1/activities")]
         public ActivityDTO CreateActivity(ActivityDTO activity)
         {
             var activityBL = _mapper.Map<Activity>(activity);
@@ -36,18 +36,14 @@ namespace TimeTracker.Web.Controllers
             return _mapper.Map<ActivityDTO>(createdActivity);
         }
 
-        [HttpDelete]
-        [ActionName("DeleteActivity")]
-        [Route("api/v1/activities/{activityId}")]
+        [HttpDelete("{activityId}")]
         public ActionResult DeleteActivity(int activityId)
         {
             _activityService.Delete(activityId, UserId);
             return Ok();
         }
 
-        [HttpGet]
-        [ActionName("GetWorkspaceActivities")]
-        [Route("api/v1/workspaces/{workspaceId}/activities")]
+        [HttpGet("/api/v{version:apiVersion}/workspaces/{workspaceId}/activities")]
         public IEnumerable<ActivityDTO> GetWorkspaceActivities(
             int workspaceId, [FromQuery] DateTime dateTimeFrom,
             [FromQuery] DateTime dateTimeTo)
@@ -58,8 +54,7 @@ namespace TimeTracker.Web.Controllers
         }
 
         [HttpGet]
-        [ActionName("GetUserWorkspaceActivities")]
-        [Route("api/v1/users/{userId}/workspaces/{workspaceId}/activities")]
+        [Route("/api/v{version:apiVersion}/users/{userId}/workspaces/{workspaceId}/activities")]
         public ActionResult<IEnumerable<ActivityDTO>> GetUserWorkspaceActivities(
             int workspaceId, int userId, [FromQuery] DateTime dateTimeFrom,
             [FromQuery] DateTime dateTimeTo)
@@ -74,9 +69,7 @@ namespace TimeTracker.Web.Controllers
             return _mapper.Map<IEnumerable<ActivityDTO>>(activities).ToList();
         }
 
-        [HttpGet]
-        [ActionName("GetActivity")]
-        [Route("api/v1/activities/{activityId}")]
+        [HttpGet("{activityId}")]
         public ActionResult<ActivityDTO> GetActivity(int activityId)
         {
             var activity = _activityService.Get(activityId, UserId);
@@ -89,9 +82,7 @@ namespace TimeTracker.Web.Controllers
             return _mapper.Map<ActivityDTO>(activity);
         }
 
-        [HttpPut]
-        [ActionName("UpdateActivity")]
-        [Route("api/v1/activities/{activityId}")]
+        [HttpPut("{activityId}")]
         public ActionResult<ActivityDTO> UpdateActivity(int activityId,
             ActivityDTO activity)
         {

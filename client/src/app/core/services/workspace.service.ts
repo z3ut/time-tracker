@@ -9,7 +9,7 @@ import { map } from 'rxjs/operators';
 })
 export class WorkspaceService {
 
-  private apiUrl = 'api/v1/workspaces';
+  private apiUrl = 'api/v1.0/workspaces';
 
   constructor(private http: HttpClient) { }
 

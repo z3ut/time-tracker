@@ -9,7 +9,7 @@ import { Observable } from 'rxjs';
 })
 export class ProjectService {
 
-  private apiUrl = 'api/v1/projects';
+  private apiUrl = 'api/v1.0/projects';
 
   constructor(private http: HttpClient) { }
 
@@ -37,7 +37,7 @@ export class ProjectService {
 
   getUserProjects(userId: number, workspaceId: number): Observable<Project[]> {
     return this.http.get<Project[]>(`
-      api/v1/users/${userId}/workspaces/${workspaceId}/projects`).pipe(
+      api/v1.0/users/${userId}/workspaces/${workspaceId}/projects`).pipe(
         map(p => this.extractProjects(p))
       );
   }

@@ -10,8 +10,8 @@ import { User } from 'src/app/models/user';
 })
 export class AuthService {
 
-  private apiAuthencticateUrl = 'api/v1/users/authenticate';
-  private apiRegisterUrl = 'api/v1/users/register';
+  private apiAuthencticateUrl = 'api/v1.0/users/authenticate';
+  private apiRegisterUrl = 'api/v1.0/users/register';
   private userLocalStorageKey = 'user';
   private behaviorSubject = new BehaviorSubject(false);
 

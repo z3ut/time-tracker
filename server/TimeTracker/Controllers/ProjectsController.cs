@@ -12,6 +12,8 @@ namespace TimeTracker.Web.Controllers
 {
     [Authorize]
     [ApiController]
+    [ApiVersion("1.0")]
+    [Route("api/v{version:apiVersion}/projects")]
     public class ProjectsController : Controller
     {
         private readonly IProjectService _projectService;
@@ -25,8 +27,6 @@ namespace TimeTracker.Web.Controllers
         }
 
         [HttpPost]
-        [ActionName("CreateProject")]
-        [Route("api/v1/projects")]
         public ProjectDTO CreateProject(ProjectDTO project)
         {
             var projectBL = _mapper.Map<Project>(project);
@@ -34,18 +34,14 @@ namespace TimeTracker.Web.Controllers
             return _mapper.Map<ProjectDTO>(projectCreated);
         }
 
-        [HttpDelete]
-        [ActionName("DeleteProject")]
-        [Route("api/v1/projects/{projectId}")]
+        [HttpDelete("{projectId}")]
         public ActionResult DeleteProject(int projectId)
         {
             _projectService.Delete(projectId, UserId);
             return Ok();
         }
 
-        [HttpGet]
-        [ActionName("GetProjects")]
-        [Route("api/v1/users/{userId}/workspaces/{workspaceId}/projects")]
+        [HttpGet("/api/v{version:apiVersion}/users/{userId}/workspaces/{workspaceId}/projects")]
         public ActionResult<IEnumerable<ProjectDTO>> GetProjects(int userId,
             int workspaceId)
         {
@@ -58,9 +54,7 @@ namespace TimeTracker.Web.Controllers
             return _mapper.Map<IEnumerable<ProjectDTO>>(projects).ToList();
         }
 
-        [HttpGet]
-        [ActionName("GetProject")]
-        [Route("api/v1/projects/{projectId}")]
+        [HttpGet("{projectId}")]
         public ActionResult<ProjectDTO> GetProject(int projectId)
         {
             var project = _projectService.Get(projectId, UserId);
@@ -73,9 +67,7 @@ namespace TimeTracker.Web.Controllers
             return _mapper.Map<ProjectDTO>(project); ;
         }
 
-        [HttpPut]
-        [ActionName("UpdateProject")]
-        [Route("api/v1/projects/{projectId}")]
+        [HttpPut("{projectId}")]
         public ActionResult<ProjectDTO> UpdateProject(int projectId, ProjectDTO project)
         {
             if (projectId != project.Id)

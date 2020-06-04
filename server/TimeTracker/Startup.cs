@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -36,6 +37,12 @@ namespace TimeTracker
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
             services.AddMvc();
+
+            services.AddApiVersioning(options =>
+            {
+                options.AssumeDefaultVersionWhenUnspecified = true;
+                options.DefaultApiVersion = new ApiVersion(1, 0);
+            });
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

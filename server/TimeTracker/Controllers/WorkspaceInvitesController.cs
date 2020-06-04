@@ -12,23 +12,20 @@ namespace TimeTracker.Web.Controllers
 {
     [Authorize]
     [ApiController]
+    [ApiVersion("1.0")]
     public class WorkspaceInvitesController : ControllerBase
     {
-        private readonly IWorkspaceService _workspaceService;
         private readonly IWorkspaceInviteService _workspaceInviteService;
         private readonly IMapper _mapper;
 
-        public WorkspaceInvitesController(IWorkspaceService workspaceService,
-            IWorkspaceInviteService workspaceInviteService, IMapper mapper)
+        public WorkspaceInvitesController(IMapper mapper,
+            IWorkspaceInviteService workspaceInviteService)
         {
-            _workspaceService = workspaceService;
             _workspaceInviteService = workspaceInviteService;
             _mapper = mapper;
         }
 
-        [HttpGet]
-        [ActionName("GetWorkspaceInvites")]
-        [Route("api/v1/workspaces/{workspaceId}/invites")]
+        [HttpGet("api/v{version:apiVersion}/workspaces/{workspaceId}/invites")]
         public IEnumerable<WorkspaceInviteDTO> GetWorkspaceInvites(int workspaceId)
         {
             var workspaceInvites = _workspaceInviteService
@@ -36,9 +33,7 @@ namespace TimeTracker.Web.Controllers
             return _mapper.Map<IEnumerable<WorkspaceInviteDTO>>(workspaceInvites);
         }
 
-        [HttpGet]
-        [ActionName("GetUserWorkspaceInvites")]
-        [Route("api/v1/users/{userId}/invites")]
+        [HttpGet("api/v{version:apiVersion}/users/{userId}/invites")]
         public IEnumerable<WorkspaceInviteDTO> GetUserWorkspaceInvites(int userId)
         {
             var userWorkspaceInvites = _workspaceInviteService
@@ -51,9 +46,7 @@ namespace TimeTracker.Web.Controllers
             public string RecipientUsername { get; set; }
         }
 
-        [HttpPost]
-        [ActionName("InviteUserToWorkspace")]
-        [Route("api/v1/workspaces/{workspaceId}/invites")]
+        [HttpPost("api/v{version:apiVersion}/workspaces/{workspaceId}/invites")]
         public ActionResult<WorkspaceInviteDTO> InviteUserToWorkspace(
              [FromBody] WorkspaceInvite workspaceInvite, int workspaceId)
         {
@@ -63,9 +56,7 @@ namespace TimeTracker.Web.Controllers
             return _mapper.Map<WorkspaceInviteDTO>(createdWorkspaceInvite);
         }
 
-        [HttpPut]
-        [ActionName("AcceptWorkspaceInvite")]
-        [Route("api/v1/users/{userId}/invites/{inviteId}")]
+        [HttpPut("api/v{version:apiVersion}/users/{userId}/invites/{inviteId}")]
         public ActionResult<WorkspaceDTO> AcceptWorkspaceInvite(int userId,
             int inviteId)
         {
@@ -79,9 +70,7 @@ namespace TimeTracker.Web.Controllers
             return _mapper.Map<WorkspaceDTO>(workspace);
         }
 
-        [HttpDelete]
-        [ActionName("DeclineWorkspaceInvite")]
-        [Route("api/v1/users/{userId}/invites/{inviteId}")]
+        [HttpDelete("api/v{version:apiVersion}/users/{userId}/invites/{inviteId}")]
         public ActionResult DeclineWorkspaceInvite(int userId, int inviteId)
         {
             if (userId != UserId)

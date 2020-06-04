@@ -13,25 +13,25 @@ export class WorkspaceInviteService {
   constructor(private http: HttpClient) { }
 
   getUserWorkspaceInvites(userId: number): Observable<WorkspaceInvite[]> {
-    return this.http.get<WorkspaceInvite[]>(`api/v1/users/${userId}/invites`).pipe(
+    return this.http.get<WorkspaceInvite[]>(`api/v1.0/users/${userId}/invites`).pipe(
       map(workspaceInvites => this.extractWorkspaceInvites(workspaceInvites))
     );
   }
 
   inviteUserToWorkspace(recipientUsername: string, workspaceId: number): Observable<any> {
-    return this.http.post(`api/v1/workspaces/${workspaceId}/invites`, {
+    return this.http.post(`api/v1.0/workspaces/${workspaceId}/invites`, {
       recipientUsername
     });
   }
 
   acceptWorkspaceInvite(userId: number, workspaceId: number, id: number): Observable<Workspace> {
-    return this.http.put<Workspace>(`api/v1/users/${userId}/invites/${id}`, null).pipe(
+    return this.http.put<Workspace>(`api/v1.0/users/${userId}/invites/${id}`, null).pipe(
       map(w => this.extractWorkspace(w))
     );
   }
 
   declineWorkspaceInvite(userId: number, workspaceId: number, id: number): Observable<any> {
-    return this.http.delete(`api/v1/users/${userId}/invites/${id}`);
+    return this.http.delete(`api/v1.0/users/${userId}/invites/${id}`);
   }
 
   private extractWorkspaceInvites(workspacesInvites: WorkspaceInvite[]): WorkspaceInvite[] {

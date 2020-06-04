@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
 })
 export class UserService {
 
-  private apiUrl = 'api/v1/users';
+  private apiUrl = 'api/v1.0/users';
 
   constructor(private http: HttpClient) { }
 
@@ -21,6 +21,6 @@ export class UserService {
   }
 
   getWorkspaceUsers(workspaceId: number): Observable<User[]> {
-    return this.http.get<User[]>(`api/v1/workspaces/${workspaceId}/users`);
+    return this.http.get<User[]>(`api/v1.0/workspaces/${workspaceId}/users`);
   }
 }

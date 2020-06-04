@@ -12,6 +12,8 @@ namespace TimeTracker.Web.Controllers
 {
     [Authorize]
     [ApiController]
+    [ApiVersion("1.0")]
+    [Route("api/v{version:apiVersion}/workspaces")]
     public class WorkspacesController : ControllerBase
     {
         private readonly IWorkspaceService _workspaceService;
@@ -25,8 +27,6 @@ namespace TimeTracker.Web.Controllers
         }
 
         [HttpPost]
-        [ActionName("CreateWorkspace")]
-        [Route("api/v1/workspaces")]
         public WorkspaceDTO CreateWorkspace(WorkspaceDTO workspace)
         {
             var workspaceBL = _mapper.Map<Workspace>(workspace);
@@ -34,18 +34,14 @@ namespace TimeTracker.Web.Controllers
             return _mapper.Map<WorkspaceDTO>(createdWorkspace);
         }
 
-        [HttpDelete]
-        [ActionName("DeleteWorkspace")]
-        [Route("api/v1/workspaces/{workspaceId}")]
+        [HttpDelete("{workspaceId}")]
         public ActionResult DeleteWorkspace(int workspaceId)
         {
             _workspaceService.Delete(workspaceId, UserId);
             return Ok();
         }
 
-        [HttpDelete]
-        [ActionName("LeaveWorkspace")]
-        [Route("api/v1/users/${userId}/workspaces/{workspaceId}")]
+        [HttpDelete("/api/v{version:apiVersion}/users/${userId}/workspaces/{workspaceId}")]
         public ActionResult LeaveWorkspace(int userId, int workspaceId)
         {
             if (userId != UserId)
@@ -58,17 +54,13 @@ namespace TimeTracker.Web.Controllers
         }
 
         [HttpGet]
-        [ActionName("GetUserWorkspaces")]
-        [Route("api/v1/workspaces")]
         public ActionResult<IEnumerable<WorkspaceDTO>> GetUserWorkspaces()
         {
             var workspaces = _workspaceService.GetUserWorkspaces(UserId);
             return _mapper.Map<IEnumerable<WorkspaceDTO>>(workspaces).ToList();
         }
 
-        [HttpGet]
-        [ActionName("GetWorkspace")]
-        [Route("api/v1/workspaces/{workspaceId}")]
+        [HttpGet("{workspaceId}")]
         public ActionResult<WorkspaceDTO> GetWorkspace(int workspaceId)
         {
             var workspace = _workspaceService.Get(workspaceId, UserId);
@@ -81,9 +73,7 @@ namespace TimeTracker.Web.Controllers
             return _mapper.Map<WorkspaceDTO>(workspace);
         }
 
-        [HttpPut]
-        [ActionName("UpdateWorkspace")]
-        [Route("api/v1/workspaces/{workspaceId}")]
+        [HttpPut("{workspaceId}")]
         public ActionResult<WorkspaceDTO> UpdateWorkspace(int workspaceId,
             WorkspaceDTO workspace)
         {
@@ -98,9 +88,7 @@ namespace TimeTracker.Web.Controllers
             return updatedWorkspaceDTO;
         }
 
-        [HttpGet]
-        [ActionName("GetUserSelectedWorkspace")]
-        [Route("api/v1/workspaces/selected")]
+        [HttpGet("selected")]
         public ActionResult<WorkspaceDTO> GetUserSelectedWorkspace()
         {
             var workspace = _workspaceService.GetUserSelectedWorkspace(UserId);
@@ -108,9 +96,7 @@ namespace TimeTracker.Web.Controllers
             return workspaceDTO;
         }
 
-        [HttpPut]
-        [ActionName("SetUserSelectedWorkspace")]
-        [Route("api/v1/workspaces/selected/{workspaceId}")]
+        [HttpPut("selected/{workspaceId}")]
         public ActionResult<WorkspaceDTO> SetUserSelectedWorkspace(int workspaceId)
         {
             var workspace = _workspaceService
