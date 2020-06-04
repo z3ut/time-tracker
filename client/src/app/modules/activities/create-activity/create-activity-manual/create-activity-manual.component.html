@@ -1,5 +1,5 @@
 <div class="columns is-variable is-1 is-marginless is-vcentered">
-  <div class="column">
+  <div class="column is-paddingless">
     <app-editable-activity
       [activity]="activity"
       [projects]="projects"
@@ -8,7 +8,7 @@
     </app-editable-activity>
   </div>
   <div class="column is-narrow">
-    <span class="icon is-large run-button" (click)="create(activity)">
+    <span class="icon is-large" (click)="create(activity)">
       <i class="far fa-2x fa-save"></i>
     </span>
   </div>
