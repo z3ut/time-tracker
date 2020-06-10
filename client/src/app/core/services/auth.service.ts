@@ -39,7 +39,17 @@ export class AuthService {
   }
 
   isLogged(): boolean {
-    return !!localStorage.getItem(this.userLocalStorageKey);
+    try {
+      const userStr = localStorage.getItem(this.userLocalStorageKey);
+      if (!userStr) {
+        return false;
+      }
+      const user = JSON.parse(userStr) as User;
+      const payload = this.getTokenPayload(user.token);
+      return Date.now() < payload.exp * 1000;
+    } catch (e) {
+      return false;
+    }
   }
 
   getUser(): User {
@@ -53,5 +63,11 @@ export class AuthService {
       localStorage.setItem(this.userLocalStorageKey, JSON.stringify(user));
       this.behaviorSubject.next(true);
     }
+  }
+
+  private getTokenPayload(token: string) {
+    const payload = token.split('.')[1];
+    const payloadStr = atob(payload);
+    return JSON.parse(payloadStr);
   }
 }
