@@ -6,7 +6,6 @@ import {
 } from '../actions/auth';
 import { User } from 'src/app/models/user';
 import { AuthService } from 'src/app/core/services/auth.service';
-import { SelectWorkspaceSuccess } from '../actions/workspace';
 import { UserService } from 'src/app/core/services/user.service';
 import { UpdateUserSuccess, UpdateUserError, UpdateUser } from '../actions/auth';
 import { Injectable } from '@angular/core';
@@ -36,6 +35,10 @@ export class AuthState implements NgxsOnInit  {
   checkIsLogged(ctx: StateContext<AuthStateModel>) {
     if (this.authService.isLogged()) {
       const user = this.authService.getUser();
+      ctx.patchState({
+        user,
+        isLogged: true
+      });
       ctx.dispatch(new LoginSuccess(user));
     }
   }
@@ -45,6 +48,10 @@ export class AuthState implements NgxsOnInit  {
     this.authService
       .login({ username: action.username, password: action.password })
       .subscribe(user => {
+        ctx.patchState({
+          user,
+          isLogged: true
+        });
         ctx.dispatch(new LoginSuccess(user));
       }, err => {
         ctx.dispatch(new LoginFailed());
@@ -59,20 +66,17 @@ export class AuthState implements NgxsOnInit  {
     });
   }
 
-  @Action(LoginSuccess)
-  loginSuccess(ctx: StateContext<AuthStateModel>, action: LoginSuccess) {
-    ctx.patchState({
-      user: action.user,
-      isLogged: true
-    });
-  }
-
   @Action(UserRegister)
   userRegister(ctx: StateContext<AuthStateModel>, action: UserRegister) {
     return this.authService
       .register({ username: action.username, password: action.password })
       .subscribe(user => {
+        ctx.patchState({
+          user,
+          isLogged: true
+        });
         ctx.dispatch(new RegisterSuccess(user));
+        ctx.dispatch(new LoginSuccess(user));
       }, err => {
         ctx.dispatch(new RegisterFailed());
       });
@@ -84,14 +88,6 @@ export class AuthState implements NgxsOnInit  {
       user: action.user,
       isLogged: true
     });
-  }
-
-  @Action(SelectWorkspaceSuccess)
-  selectWorkspaceSuccess(ctx: StateContext<AuthStateModel>, action: SelectWorkspaceSuccess) {
-    const state = ctx.getState();
-    const user = state.user;
-    user.selectedWorkspaceId = action.workspace.id;
-    ctx.dispatch(new UpdateUser(user));
   }
 
   @Action(UpdateUser)
