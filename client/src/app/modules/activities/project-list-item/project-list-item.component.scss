@@ -1,3 +1,5 @@
+@import 'main';
+
 .project-container {
   position: relative;
   padding: 0 .25em;
@@ -41,6 +43,6 @@
   cursor: pointer;
 
   &:hover {
-    color: rgb(201, 201, 201);
+    color: $icon-hover-color;
   }
 }

@@ -1,8 +1,10 @@
+@import 'main';
+
 .icon {
   cursor: pointer;
 
   &:hover {
-    color: rgb(201, 201, 201);
+    color: $icon-hover-color;
   }
 
   &.warning {

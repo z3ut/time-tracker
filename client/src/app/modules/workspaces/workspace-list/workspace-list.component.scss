@@ -1,3 +1,5 @@
+@import 'main';
+
 tr:not(.is-selected) .workspace-name {
   cursor: pointer;
 }
@@ -6,6 +8,6 @@ tr:not(.is-selected) .workspace-name {
   cursor: pointer;
 
   &:hover {
-    color: rgb(201, 201, 201);
+    color: $icon-hover-color;
   }
 }
