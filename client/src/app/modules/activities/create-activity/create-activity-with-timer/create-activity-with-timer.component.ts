@@ -64,6 +64,8 @@ export class CreateActivityWithTimerComponent implements OnInit {
     if (this.isStarted) {
       this.activity.dateTimeEnd = new Date();
       this.stopTimer();
+      this.activity.amountSeconds = Math.floor((this.activity.dateTimeEnd.getTime() -
+        this.activity.dateTimeStart.getTime()) / 1000);
       this.setActivityUserAndWorkspace(this.activity);
       this.updateActivity.emit(this.activity);
       this.intervalSeconds = 0;

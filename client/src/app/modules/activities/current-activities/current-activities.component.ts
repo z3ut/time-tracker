@@ -25,7 +25,6 @@ export class CurrentActivitiesComponent implements OnInit, OnDestroy {
               private store: Store,
               private actions$: Actions) { }
 
-  newActivity: Activity;
   userId: number;
   isLoadingMore = false;
   isCreatingNewProject = false;
@@ -38,8 +37,6 @@ export class CurrentActivitiesComponent implements OnInit, OnDestroy {
   ngOnInit() {
     const store = this.store.snapshot();
     this.userId = store.app.auth.user.id;
-
-    this.generateNewActivity();
 
     this.actions$
       .pipe(
@@ -58,16 +55,6 @@ export class CurrentActivitiesComponent implements OnInit, OnDestroy {
       .subscribe(({ payload }) => {
         this.toasterService.pop('error', 'Error loading more activities');
         this.isLoadingMore = false;
-      });
-
-
-    this.actions$
-      .pipe(
-        ofActionDispatched(CreateActivitySuccess),
-        takeUntil(this.ngUnsubscribe)
-      )
-      .subscribe(({ payload }) => {
-        this.generateNewActivity();
       });
 
     this.actions$
@@ -114,10 +101,6 @@ export class CurrentActivitiesComponent implements OnInit, OnDestroy {
     this.ngUnsubscribe.complete();
   }
 
-  saveActivity() {
-    this.store.dispatch(new CreateActivity(this.newActivity));
-  }
-
   activityChanged(activity: Activity) {
     this.store.dispatch(new UpdateActivity(activity));
   }
@@ -149,13 +132,5 @@ export class CurrentActivitiesComponent implements OnInit, OnDestroy {
 
   createActivity(activity: Activity) {
     this.store.dispatch(new CreateActivity(activity));
-  }
-
-  private generateNewActivity() {
-    this.newActivity = {
-      userId: this.userId,
-      title: '',
-      dateTimeStart: new Date()
-    };
   }
 }

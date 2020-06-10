@@ -25,41 +25,7 @@ export class ActivitiesByDayListComponent implements OnChanges {
         this.activitiesByDay = [];
         return;
       }
-
-      const dayDates: DayDate[] = [];
-
-      this.activities.forEach(a => {
-        const dayDate = {
-          year: a.dateTimeStart.getFullYear(),
-          month: a.dateTimeStart.getMonth(),
-          date: a.dateTimeStart.getDate()
-        };
-
-        if (!dayDates.some(dd => dd.year === dayDate.year &&
-            dd.month === dayDate.month && dd.date === dayDate.date)) {
-          dayDates.push(dayDate);
-        }
-      });
-
-      const activitiesByDay: DayActivity[] = dayDates
-        .sort((dd1, dd2) => {
-          return dd2.year - dd1.year ||
-            dd2.month - dd1.month ||
-            dd2.date - dd1.date;
-        })
-        .map(dayDate => {
-          const dayActivities = this.activities
-            .filter(a => this.isSameDay(a.dateTimeStart, dayDate))
-            .sort((a1, a2) => a2.dateTimeStart.getTime() - a1.dateTimeStart.getTime());
-          return {
-            dayDate,
-            totalTimeSeconds: Math.floor(
-              calculateActivitiesTotalTimeSeconds(dayActivities)),
-            activities: dayActivities
-          };
-        });
-
-      this.activitiesByDay = activitiesByDay;
+      this.calculateActivitiesByDay();
     }
   }
 
@@ -77,6 +43,43 @@ export class ActivitiesByDayListComponent implements OnChanges {
 
   deleteProjectEvent(project: Project) {
     this.deleteProject.emit(project);
+  }
+
+  private calculateActivitiesByDay() {
+    const dayDates: DayDate[] = [];
+
+    this.activities.forEach(a => {
+      const dayDate = {
+        year: a.dateTimeStart.getFullYear(),
+        month: a.dateTimeStart.getMonth(),
+        date: a.dateTimeStart.getDate()
+      };
+
+      if (!dayDates.some(dd => dd.year === dayDate.year &&
+          dd.month === dayDate.month && dd.date === dayDate.date)) {
+        dayDates.push(dayDate);
+      }
+    });
+
+    const activitiesByDay: DayActivity[] = dayDates
+      .sort((dd1, dd2) => {
+        return dd2.year - dd1.year ||
+          dd2.month - dd1.month ||
+          dd2.date - dd1.date;
+      })
+      .map(dayDate => {
+        const dayActivities = this.activities
+          .filter(a => this.isSameDay(a.dateTimeStart, dayDate))
+          .sort((a1, a2) => a2.dateTimeStart.getTime() - a1.dateTimeStart.getTime());
+        return {
+          dayDate,
+          totalTimeSeconds: Math.floor(
+            calculateActivitiesTotalTimeSeconds(dayActivities)),
+          activities: dayActivities
+        };
+      });
+
+    this.activitiesByDay = activitiesByDay;
   }
 
   private isSameDay(date: Date, dayDate: DayDate): boolean {

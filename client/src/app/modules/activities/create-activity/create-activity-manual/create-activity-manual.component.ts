@@ -27,6 +27,10 @@ export class CreateActivityManualComponent implements OnInit {
     const store = this.store.snapshot();
     activity.userId = store.app.auth.user.id;
     activity.workspaceId = store.app.workspaces.selectedWorkspaceId;
+    if (activity.dateTimeStart && activity.dateTimeEnd) {
+      activity.amountSeconds = Math.floor((activity.dateTimeEnd.getTime() -
+        activity.dateTimeStart.getTime()) / 1000);
+    }
     this.createActivity.emit(activity);
     this.generateNewActivity();
   }
