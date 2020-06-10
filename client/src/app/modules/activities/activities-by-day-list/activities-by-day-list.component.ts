@@ -51,7 +51,7 @@ export class ActivitiesByDayListComponent implements OnChanges {
     this.activities.forEach(a => {
       const dayDate = {
         year: a.dateTimeStart.getFullYear(),
-        month: a.dateTimeStart.getMonth(),
+        month: a.dateTimeStart.getMonth() + 1,
         date: a.dateTimeStart.getDate()
       };
 
@@ -84,7 +84,7 @@ export class ActivitiesByDayListComponent implements OnChanges {
 
   private isSameDay(date: Date, dayDate: DayDate): boolean {
     return date.getFullYear() === dayDate.year &&
-      date.getMonth() === dayDate.month &&
+      date.getMonth() + 1 === dayDate.month &&
       date.getDate() === dayDate.date;
   }
 }
