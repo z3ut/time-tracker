@@ -1,7 +1,5 @@
 # Time tracker
 
-TODO:
-- Return appropriate error status code and message for API error calls
-- Activity tags
-- More Reports
-- Decent UI
+Web time tracker made with .NET Core, MS SQL and Angular. Provides activities, projects, shared workspaces and basic reports.
+
+<img src="img/activities.png" width="500">
